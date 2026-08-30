@@ -16,13 +16,13 @@ To avoid excessive JavaScript geometry computation (forced synchronous layout / 
 ```
 +-------------------------------------------------------------+
 | 1. Layout Layer (primitive placement)                       |
-|    - <ui-stack>, <ui-cluster>, <ui-grid>                    |
+|    - <yk-vstack>, <yk-cluster>, <yk-grid>                   |
 |    - Role: gap, wrapping, alignment (CSS Flex/Grid)         |
 +-------------------------------------------------------------+
                               | (contains)
 +-------------------------------------------------------------+
 | 2. Component Layer (standalone UI)                          |
-|    - <ui-card>, <ui-button>, <ui-badge>, etc.               |
+|    - <yk-card>, <yk-button>, <yk-badge>, etc.               |
 |    - Role: encapsulate internals (Shadow DOM),              |
 |      composition via slots                                  |
 +-------------------------------------------------------------+
@@ -45,7 +45,7 @@ To avoid excessive JavaScript geometry computation (forced synchronous layout / 
 
 2. **Transparent design token inheritance (CSS Custom Properties)**
    - Hardcoding direct fixed values inside components (color codes, fixed pixel spacing) is prohibited.
-   - All properties are written as `var(--ui-*, fallback)` so that design tokens set on the global `:root` or a parent element are inherited transparently.
+   - All properties are written as `var(--yk-*, fallback)` so that design tokens set on the global `:root` or a parent element are inherited transparently.
 
 3. **Open structure (slots) and extension hooks (CSS Shadow Parts)**
    - Internal content can be freely injected from the call site via `<slot>`.
@@ -55,28 +55,28 @@ To avoid excessive JavaScript geometry computation (forced synchronous layout / 
 
 ## 4. Implementation Templates
 
-### A. Layout Primitive implementation example (`<ui-stack>`)
+### A. Layout Primitive implementation example (`<yk-vstack>`)
 
 A layout component specialized for vertical spacing control.
 
-#### `src/layout/ui-stack.css`
+#### `src/layout/yk-vstack.css`
 
 ```css
 :host {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: var(--ui-stack-gap, var(--ui-space-md, 1rem));
+  gap: var(--yk-vstack-gap, var(--yk-space-md, 1rem));
 }
 ```
 
-#### `src/layout/ui-stack.js`
+#### `src/layout/yk-vstack.js`
 
 ```javascript
-import sheet from './ui-stack.css' with { type: 'css' };
+import sheet from './yk-vstack.css' with { type: 'css' };
 
 
-class UIStack extends HTMLElement {
+class YKVstack extends HTMLElement {
   constructor() {
     super();
     const shadowRoot = this.attachShadow({ mode: 'open' });
@@ -86,45 +86,45 @@ class UIStack extends HTMLElement {
 }
 
 
-if (!customElements.get('ui-stack')) {
-  customElements.define('ui-stack', UIStack);
+if (!customElements.get('yk-vstack')) {
+  customElements.define('yk-vstack', YKVstack);
 }
 ```
 
 ---
 
-### B. State-Aware Component implementation example (`<ui-toggle-card>`)
+### B. State-Aware Component implementation example (`<yk-toggle-card>`)
 
 A component that declares its own state to the browser and notifies the outside.
 
-#### `src/components/ui-toggle-card.css`
+#### `src/components/yk-toggle-card.css`
 
 ```css
 :host {
   display: block;
-  padding: var(--ui-card-padding, var(--ui-space-md, 1rem));
-  background-color: var(--ui-card-bg, var(--ui-surface, #ffffff));
-  color: var(--ui-card-color, var(--ui-text-primary, inherit));
-  border: 1px solid var(--ui-card-border, var(--ui-border-color, #e0e0e0));
-  border-radius: var(--ui-card-radius, var(--ui-radius-md, 4px));
+  padding: var(--yk-card-padding, var(--yk-space-md, 1rem));
+  background-color: var(--yk-card-bg, var(--yk-surface, #ffffff));
+  color: var(--yk-card-color, var(--yk-text-primary, inherit));
+  border: 1px solid var(--yk-card-border, var(--yk-border-color, #e0e0e0));
+  border-radius: var(--yk-card-radius, var(--yk-radius-md, 4px));
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 
 :host(:state(active)) {
-  border-color: var(--ui-color-primary, #0066cc);
-  box-shadow: 0 0 0 1px var(--ui-color-primary, #0066cc);
+  border-color: var(--yk-color-primary, #0066cc);
+  box-shadow: 0 0 0 1px var(--yk-color-primary, #0066cc);
 }
 ```
 
-#### `src/components/ui-toggle-card.js`
+#### `src/components/yk-toggle-card.js`
 
 ```javascript
-import sheet from './ui-toggle-card.css' with { type: 'css' };
+import sheet from './yk-toggle-card.css' with { type: 'css' };
 
 
-class UIToggleCard extends HTMLElement {
+class YKToggleCard extends HTMLElement {
   constructor() {
     super();
     this.internals = this.attachInternals();
@@ -148,7 +148,7 @@ class UIToggleCard extends HTMLElement {
     }
 
 
-    this.dispatchEvent(new CustomEvent('ui-toggle', {
+    this.dispatchEvent(new CustomEvent('yk-toggle', {
       bubbles: true,
       composed: true,
       detail: { active: !isActive }
@@ -157,8 +157,8 @@ class UIToggleCard extends HTMLElement {
 }
 
 
-if (!customElements.get('ui-toggle-card')) {
-  customElements.define('ui-toggle-card', UIToggleCard);
+if (!customElements.get('yk-toggle-card')) {
+  customElements.define('yk-toggle-card', YKToggleCard);
 }
 ```
 
@@ -171,17 +171,17 @@ yk-elements/
 ├── tokens.css                  # Site-wide design token definitions (:root)
 ├── src/
 │   ├── layout/
-│   │   ├── ui-stack.css
-│   │   ├── ui-stack.js         # Vertical stack
-│   │   ├── ui-cluster.css
-│   │   ├── ui-cluster.js       # Horizontal alignment & wrapping
-│   │   ├── ui-grid.css
-│   │   └── ui-grid.js          # Auto equal-width grid
+│   │   ├── yk-vstack.css
+│   │   ├── yk-vstack.js        # Vertical stack
+│   │   ├── yk-cluster.css
+│   │   ├── yk-cluster.js       # Horizontal alignment & wrapping
+│   │   ├── yk-grid.css
+│   │   └── yk-grid.js          # Auto equal-width grid
 │   └── components/
-│       ├── ui-toggle-card.css
-│       ├── ui-toggle-card.js
-│       ├── ui-badge.css
-│       └── ui-badge.js
+│       ├── yk-toggle-card.css
+│       ├── yk-toggle-card.js
+│       ├── yk-badge.css
+│       └── yk-badge.js
 └── index.js                    # Single entry point importing all components
 ```
 
