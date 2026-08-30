@@ -1,0 +1,198 @@
+# Web Components Library — Core Design Concept
+
+## 1. Core Philosophy
+
+- **Zero Config, Just Put** — no class names or complex scripting required; structured, self-organizing layout and UI emerge just by placing HTML tags.
+- **Lean & Native-First** — reject excessive abstraction (early introduction of base classes, unnecessary framework dependencies) and use Web standard APIs (Custom Elements v1, Shadow DOM v1, CSS Module Scripts, ElementInternals) directly.
+- **Clear File Separation** — keep JavaScript and CSS clearly separated into distinct files to maximize the benefits of editor syntax highlighting, code completion, linters, and formatters.
+- **Self-Registering** — self-contained modules that automatically call `customElements.define` as soon as the module is loaded.
+
+---
+
+## 2. Architecture and Separation of Responsibilities
+
+To avoid excessive JavaScript geometry computation (forced synchronous layout / layout thrashing) and balance performance with maintainability, responsibilities are separated into three layers:
+
+```
++-------------------------------------------------------------+
+| 1. Layout Layer (primitive placement)                       |
+|    - <ui-stack>, <ui-cluster>, <ui-grid>                    |
+|    - Role: gap, wrapping, alignment (CSS Flex/Grid)         |
++-------------------------------------------------------------+
+                              | (contains)
++-------------------------------------------------------------+
+| 2. Component Layer (standalone UI)                          |
+|    - <ui-card>, <ui-button>, <ui-badge>, etc.               |
+|    - Role: encapsulate internals (Shadow DOM),              |
+|      composition via slots                                  |
++-------------------------------------------------------------+
+                              | (coordinate)
++-------------------------------------------------------------+
+| 3. Coordination Layer (state & notifications)               |
+|    - Role: declare state via ElementInternals.states        |
+|      (:state()); loosely coupled notification via           |
+|      CustomEvent (composed: true)                           |
++-------------------------------------------------------------+
+```
+
+---
+
+## 3. Styling and File Separation Conventions
+
+1. **Stylesheet loading via CSS Module Scripts**
+   - All styles are written in standalone `.css` files and imported from JavaScript as `import sheet from './xxx.css' with { type: 'css' };`.
+   - The imported `CSSStyleSheet` object is assigned to `shadowRoot.adoptedStyleSheets = [sheet]`, maximizing memory efficiency and parse performance.
+
+2. **Transparent design token inheritance (CSS Custom Properties)**
+   - Hardcoding direct fixed values inside components (color codes, fixed pixel spacing) is prohibited.
+   - All properties are written as `var(--ui-*, fallback)` so that design tokens set on the global `:root` or a parent element are inherited transparently.
+
+3. **Open structure (slots) and extension hooks (CSS Shadow Parts)**
+   - Internal content can be freely injected from the call site via `<slot>`.
+   - Elements that need localized style overrides from outside are given `part="..."`, allowing safe customization via `::part()`.
+
+---
+
+## 4. Implementation Templates
+
+### A. Layout Primitive implementation example (`<ui-stack>`)
+
+A layout component specialized for vertical spacing control.
+
+#### `src/layout/ui-stack.css`
+
+```css
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--ui-stack-gap, var(--ui-space-md, 1rem));
+}
+```
+
+#### `src/layout/ui-stack.js`
+
+```javascript
+import sheet from './ui-stack.css' with { type: 'css' };
+
+
+class UIStack extends HTMLElement {
+  constructor() {
+    super();
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.adoptedStyleSheets = [sheet];
+    shadowRoot.innerHTML = `<slot></slot>`;
+  }
+}
+
+
+if (!customElements.get('ui-stack')) {
+  customElements.define('ui-stack', UIStack);
+}
+```
+
+---
+
+### B. State-Aware Component implementation example (`<ui-toggle-card>`)
+
+A component that declares its own state to the browser and notifies the outside.
+
+#### `src/components/ui-toggle-card.css`
+
+```css
+:host {
+  display: block;
+  padding: var(--ui-card-padding, var(--ui-space-md, 1rem));
+  background-color: var(--ui-card-bg, var(--ui-surface, #ffffff));
+  color: var(--ui-card-color, var(--ui-text-primary, inherit));
+  border: 1px solid var(--ui-card-border, var(--ui-border-color, #e0e0e0));
+  border-radius: var(--ui-card-radius, var(--ui-radius-md, 4px));
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+:host(:state(active)) {
+  border-color: var(--ui-color-primary, #0066cc);
+  box-shadow: 0 0 0 1px var(--ui-color-primary, #0066cc);
+}
+```
+
+#### `src/components/ui-toggle-card.js`
+
+```javascript
+import sheet from './ui-toggle-card.css' with { type: 'css' };
+
+
+class UIToggleCard extends HTMLElement {
+  constructor() {
+    super();
+    this.internals = this.attachInternals();
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.adoptedStyleSheets = [sheet];
+    shadowRoot.innerHTML = `<slot></slot>`;
+  }
+
+
+  connectedCallback() {
+    this.addEventListener('click', () => this.toggle());
+  }
+
+
+  toggle() {
+    const isActive = this.internals.states.has('active');
+    if (isActive) {
+      this.internals.states.delete('active');
+    } else {
+      this.internals.states.add('active');
+    }
+
+
+    this.dispatchEvent(new CustomEvent('ui-toggle', {
+      bubbles: true,
+      composed: true,
+      detail: { active: !isActive }
+    }));
+  }
+}
+
+
+if (!customElements.get('ui-toggle-card')) {
+  customElements.define('ui-toggle-card', UIToggleCard);
+}
+```
+
+---
+
+## 5. Directory Structure
+
+```text
+yk-elements/
+├── tokens.css                  # Site-wide design token definitions (:root)
+├── src/
+│   ├── layout/
+│   │   ├── ui-stack.css
+│   │   ├── ui-stack.js         # Vertical stack
+│   │   ├── ui-cluster.css
+│   │   ├── ui-cluster.js       # Horizontal alignment & wrapping
+│   │   ├── ui-grid.css
+│   │   └── ui-grid.js          # Auto equal-width grid
+│   └── components/
+│       ├── ui-toggle-card.css
+│       ├── ui-toggle-card.js
+│       ├── ui-badge.css
+│       └── ui-badge.js
+└── index.js                    # Single entry point importing all components
+```
+
+---
+
+## References
+
+- [WHATWG HTML Standard: Custom elements](https://html.spec.whatwg.org/multipage/custom-elements.html)
+- [TC39: Import Attributes Specification](https://tc39.es/proposal-import-attributes/)
+- [CSS Module Scripts (web.dev)](https://web.dev/articles/css-module-scripts)
+- [MDN Web Docs: ShadowRoot.adoptedStyleSheets](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot/adoptedStyleSheets)
+- [MDN Web Docs: CustomStateSet](https://developer.mozilla.org/en-US/docs/Web/API/CustomStateSet)
+- [MDN Web Docs: ElementInternals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
+- [Every Layout: Relearn CSS layout by example](https://every-layout.dev/)
