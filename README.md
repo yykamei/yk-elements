@@ -66,6 +66,18 @@ are inherited by components. Local overrides work the same way:
 </yk-vstack>
 ```
 
+## Component catalog
+
+Browse the component catalog at
+`https://yykamei.github.io/yk-elements/` (once GitHub Pages is enabled and
+the deploy workflow has run). To preview locally, serve the repository root
+and open `/catalog/`:
+
+```bash
+npm run preview
+# open http://localhost:3000/catalog/
+```
+
 ## Development
 
 ```bash

@@ -1,0 +1,125 @@
+/**
+ * Styles for the yk-elements component catalog page.
+ *
+ * The catalog is a hand-written static page (catalog/index.html) that loads
+ * the library as-is via ../index.js and ../tokens.css. Each component gets a
+ * section with one or more variations; adding a component means adding a
+ * section in the HTML. No build step is involved.
+ *
+ * The page follows the library's token philosophy: a small set of
+ * --yk-catalog-* custom properties is declared once on .catalog and the
+ * color palette references them, so the look can be themed in one place.
+ */
+.catalog {
+  --yk-catalog-fg: #1f2933;
+  --yk-catalog-fg-muted: #52606d;
+  --yk-catalog-border: #d9e2ec;
+  --yk-catalog-title-bg: #e4e7eb;
+  --yk-catalog-demo-bg: #f5f7fa;
+  --yk-catalog-demo-item-bg: #ffffff;
+  --yk-catalog-code-bg: #1f2933;
+  --yk-catalog-code-fg: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-lg);
+  max-inline-size: 48rem;
+  margin-inline: auto;
+  padding: var(--yk-space-lg);
+  color: var(--yk-catalog-fg);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.catalog__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-sm);
+}
+
+.catalog__title {
+  margin-block: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.catalog__tagline {
+  margin-block: 0;
+  color: var(--yk-catalog-fg-muted);
+}
+
+.catalog__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-lg);
+}
+
+.catalog__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-md);
+}
+
+.catalog__sectionTitle {
+  margin-block: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.catalog__description {
+  margin-block: 0;
+  color: var(--yk-catalog-fg-muted);
+}
+
+.catalog__variation {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--yk-catalog-border);
+  border-radius: 0.5rem;
+}
+
+.catalog__variationTitle {
+  padding: var(--yk-space-sm) var(--yk-space-md);
+  background-color: var(--yk-catalog-title-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.catalog__demo {
+  padding: var(--yk-space-lg);
+  background-color: var(--yk-catalog-demo-bg);
+}
+
+.catalog__code {
+  margin: 0;
+  padding: var(--yk-space-md);
+  overflow-x: auto;
+  background-color: var(--yk-catalog-code-bg);
+  color: var(--yk-catalog-code-fg);
+  font-size: 0.85rem;
+}
+
+.catalog__footer {
+  color: var(--yk-catalog-fg-muted);
+}
+
+.catalog__footer a {
+  color: inherit;
+}
+
+/**
+ * Reusable demo content box used inside catalog variations.
+ *
+ * ```html
+ * <yk-vstack>
+ *   <p class="demoItem">First item</p>
+ * </yk-vstack>
+ * ```
+ */
+.demoItem {
+  margin: 0;
+  padding: var(--yk-space-sm) var(--yk-space-md);
+  border: 1px solid var(--yk-catalog-border);
+  border-radius: 0.375rem;
+  background-color: var(--yk-catalog-demo-item-bg);
+}
