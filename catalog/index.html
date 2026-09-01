@@ -113,6 +113,45 @@
 &lt;/yk-hstack&gt;</code></pre>
           </figure>
         </section>
+
+        <section class="catalog__section" id="yk-cluster">
+          <h2 class="catalog__sectionTitle">&lt;yk-cluster&gt;</h2>
+          <p class="catalog__description">
+            Layout primitive that places children in a centered, wrapping horizontal flow.
+          </p>
+
+          <figure class="catalog__variation">
+            <figcaption class="catalog__variationTitle">Default</figcaption>
+            <div class="catalog__demo">
+              <yk-cluster>
+                <p class="demoItem">First item</p>
+                <p class="demoItem">Second item</p>
+                <p class="demoItem">Third item</p>
+              </yk-cluster>
+            </div>
+            <pre class="catalog__code"><code>&lt;yk-cluster&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-cluster&gt;</code></pre>
+          </figure>
+
+          <figure class="catalog__variation">
+            <figcaption class="catalog__variationTitle">Custom gap</figcaption>
+            <div class="catalog__demo">
+              <yk-cluster style="--yk-cluster-gap: 2rem">
+                <p class="demoItem">First item</p>
+                <p class="demoItem">Second item</p>
+                <p class="demoItem">Third item</p>
+              </yk-cluster>
+            </div>
+            <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-gap: 2rem"&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-cluster&gt;</code></pre>
+          </figure>
+        </section>
       </main>
 
       <footer class="catalog__footer">

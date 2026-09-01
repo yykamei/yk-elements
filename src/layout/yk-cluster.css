@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--yk-cluster-justify, center);
+  align-items: var(--yk-cluster-align, center);
+  gap: var(--yk-cluster-gap, var(--yk-space-md, 1rem));
+}
