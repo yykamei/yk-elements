@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-cluster&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-cluster">
+    <div class="catalog">
+      <aside class="catalog__sidebar" data-sidebar></aside>
+
+      <main class="catalog__main">
+        <header class="catalog__componentHeader" data-component-header></header>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Default</figcaption>
+          <div class="catalog__demo">
+            <yk-cluster>
+              <p class="demoItem">First item</p>
+              <p class="demoItem">Second item</p>
+              <p class="demoItem">Third item</p>
+            </yk-cluster>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-cluster&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-cluster&gt;</code></pre>
+        </figure>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Custom gap</figcaption>
+          <div class="catalog__demo">
+            <yk-cluster style="--yk-cluster-gap: 2rem">
+              <p class="demoItem">First item</p>
+              <p class="demoItem">Second item</p>
+              <p class="demoItem">Third item</p>
+            </yk-cluster>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-gap: 2rem"&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-cluster&gt;</code></pre>
+        </figure>
+      </main>
+
+      <footer class="catalog__footer">
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

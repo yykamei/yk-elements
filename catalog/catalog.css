@@ -1,10 +1,12 @@
 /**
- * Styles for the yk-elements component catalog page.
+ * Styles for the yk-elements component catalog.
  *
- * The catalog is a hand-written static page (catalog/index.html) that loads
- * the library as-is via ../index.js and ../tokens.css. Each component gets a
- * section with one or more variations; adding a component means adding a
- * section in the HTML. No build step is involved.
+ * The catalog is a set of hand-written static pages (catalog/*.html) that
+ * load the library as-is via ../index.js and ../tokens.css. A shared module
+ * (catalog/catalog.js) renders the sidebar navigation, the landing-page
+ * cards, and each component page's header from a single component list.
+ * Adding a component means adding a page with its variations and one entry
+ * in that list. No build step is involved.
  *
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on .catalog and the
@@ -19,10 +21,9 @@
   --yk-catalog-demo-item-bg: #ffffff;
   --yk-catalog-code-bg: #1f2933;
   --yk-catalog-code-fg: #f5f7fa;
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-lg);
-  max-inline-size: 48rem;
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  max-inline-size: 72rem;
   margin-inline: auto;
   padding: var(--yk-space-lg);
   color: var(--yk-catalog-fg);
@@ -30,7 +31,64 @@
   line-height: 1.6;
 }
 
-.catalog__header {
+.catalog__sidebar {
+  position: sticky;
+  inset-block-start: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-md);
+  padding: var(--yk-space-md);
+  border: 1px solid var(--yk-catalog-border);
+  border-radius: 0.5rem;
+  background-color: var(--yk-catalog-demo-bg);
+}
+
+.catalog__brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--yk-catalog-fg);
+  text-decoration: none;
+}
+
+.catalog__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-xs);
+}
+
+.catalog__navLink {
+  padding: var(--yk-space-xs) var(--yk-space-sm);
+  border-radius: 0.375rem;
+  color: var(--yk-catalog-fg-muted);
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--yk-catalog-border);
+    color: var(--yk-catalog-fg);
+  }
+}
+
+.catalog__navLink--active {
+  background-color: var(--yk-catalog-title-bg);
+  color: var(--yk-catalog-fg);
+  font-weight: 600;
+}
+
+.catalog__navLink--active:hover {
+  background-color: var(--yk-catalog-title-bg);
+}
+
+.catalog__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-lg);
+  min-inline-size: 0;
+}
+
+.catalog__overviewHeader {
   display: flex;
   flex-direction: column;
   gap: var(--yk-space-sm);
@@ -47,26 +105,55 @@
   color: var(--yk-catalog-fg-muted);
 }
 
-.catalog__main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-lg);
-}
-
-.catalog__section {
-  display: flex;
-  flex-direction: column;
+.catalog__landing {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   gap: var(--yk-space-md);
 }
 
-.catalog__sectionTitle {
+.catalog__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-sm);
+  padding: var(--yk-space-md);
+  border: 1px solid var(--yk-catalog-border);
+  border-radius: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--yk-catalog-fg-muted);
+  }
+}
+
+.catalog__cardTitle {
   margin-block: 0;
   font-family: ui-monospace, monospace;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
-.catalog__description {
+.catalog__componentHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-sm);
+}
+
+.catalog__componentTitle {
+  margin-block: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/**
+ * Reusable description text shown in landing cards and component headers.
+ *
+ * ```html
+ * <p class="catalogDescription">Layout primitive ...</p>
+ * ```
+ */
+.catalogDescription {
   margin-block: 0;
   color: var(--yk-catalog-fg-muted);
 }
@@ -100,11 +187,29 @@
 }
 
 .catalog__footer {
+  grid-column: 1 / -1;
   color: var(--yk-catalog-fg-muted);
 }
 
 .catalog__footer a {
   color: inherit;
+}
+
+@media (width < 56rem) {
+  .catalog {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog__sidebar {
+    position: static;
+    align-self: auto;
+    overflow-x: auto;
+  }
+
+  .catalog__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
 
 /**

@@ -4,197 +4,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>yk-elements — Component catalog</title>
+    <script>
+      // A bare /catalog URL (no trailing slash) makes ./catalog.css and
+      // ./catalog.js resolve against the parent directory and fail to load,
+      // so normalize it to the trailing-slash form before resources load.
+      if (
+        !location.pathname.endsWith('/') &&
+        !location.pathname.endsWith('.html')
+      ) {
+        location.replace(`${location.pathname}/`);
+      }
+    </script>
     <link rel="stylesheet" href="../tokens.css" />
     <link rel="stylesheet" href="./catalog.css" />
     <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
   </head>
   <body>
     <div class="catalog">
-      <header class="catalog__header">
-        <h1 class="catalog__title">yk-elements</h1>
-        <p class="catalog__tagline">Zero-config Web Components library. Just put, just works.</p>
-      </header>
+      <aside class="catalog__sidebar" data-sidebar></aside>
 
       <main class="catalog__main">
-        <section class="catalog__section" id="yk-vstack">
-          <h2 class="catalog__sectionTitle">&lt;yk-vstack&gt;</h2>
-          <p class="catalog__description">
-            Layout primitive that stacks its children vertically with a consistent gap.
+        <header class="catalog__overviewHeader">
+          <h1 class="catalog__title">yk-elements</h1>
+          <p class="catalog__tagline">
+            Zero-config Web Components library. Just put, just works.
           </p>
+        </header>
 
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Default</figcaption>
-            <div class="catalog__demo">
-              <yk-vstack>
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-vstack>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-vstack&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-vstack&gt;</code></pre>
-          </figure>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Custom gap</figcaption>
-            <div class="catalog__demo">
-              <yk-vstack style="--yk-vstack-gap: 2rem">
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-vstack>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-vstack style="--yk-vstack-gap: 2rem"&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-vstack&gt;</code></pre>
-          </figure>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Nested stacks</figcaption>
-            <div class="catalog__demo">
-              <yk-vstack>
-                <p class="demoItem">Section heading</p>
-                <yk-vstack style="--yk-vstack-gap: 0.25rem">
-                  <p class="demoItem">Sub item</p>
-                  <p class="demoItem">Sub item</p>
-                </yk-vstack>
-              </yk-vstack>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-vstack&gt;
-  &lt;p&gt;Section heading&lt;/p&gt;
-  &lt;yk-vstack style="--yk-vstack-gap: 0.25rem"&gt;
-    &lt;p&gt;Sub item&lt;/p&gt;
-    &lt;p&gt;Sub item&lt;/p&gt;
-  &lt;/yk-vstack&gt;
-&lt;/yk-vstack&gt;</code></pre>
-          </figure>
-        </section>
-
-        <section class="catalog__section" id="yk-hstack">
-          <h2 class="catalog__sectionTitle">&lt;yk-hstack&gt;</h2>
-          <p class="catalog__description">
-            Layout primitive that stacks its children horizontally with a consistent gap.
-          </p>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Default</figcaption>
-            <div class="catalog__demo">
-              <yk-hstack>
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-hstack>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-hstack&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-hstack&gt;</code></pre>
-          </figure>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Custom gap</figcaption>
-            <div class="catalog__demo">
-              <yk-hstack style="--yk-hstack-gap: 2rem">
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-hstack>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-hstack style="--yk-hstack-gap: 2rem"&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-hstack&gt;</code></pre>
-          </figure>
-        </section>
-
-        <section class="catalog__section" id="yk-cluster">
-          <h2 class="catalog__sectionTitle">&lt;yk-cluster&gt;</h2>
-          <p class="catalog__description">
-            Layout primitive that places children in a centered, wrapping horizontal flow.
-          </p>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Default</figcaption>
-            <div class="catalog__demo">
-              <yk-cluster>
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-cluster>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-cluster&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-cluster&gt;</code></pre>
-          </figure>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Custom gap</figcaption>
-            <div class="catalog__demo">
-              <yk-cluster style="--yk-cluster-gap: 2rem">
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-              </yk-cluster>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-gap: 2rem"&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-&lt;/yk-cluster&gt;</code></pre>
-          </figure>
-        </section>
-
-        <section class="catalog__section" id="yk-grid">
-          <h2 class="catalog__sectionTitle">&lt;yk-grid&gt;</h2>
-          <p class="catalog__description">
-            Layout primitive that places children in an auto-equal-width grid.
-          </p>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Default</figcaption>
-            <div class="catalog__demo">
-              <yk-grid>
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-                <p class="demoItem">Fourth item</p>
-              </yk-grid>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-grid&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-  &lt;p&gt;Fourth item&lt;/p&gt;
-&lt;/yk-grid&gt;</code></pre>
-          </figure>
-
-          <figure class="catalog__variation">
-            <figcaption class="catalog__variationTitle">Custom min column width</figcaption>
-            <div class="catalog__demo">
-              <yk-grid style="--yk-grid-min: 12rem">
-                <p class="demoItem">First item</p>
-                <p class="demoItem">Second item</p>
-                <p class="demoItem">Third item</p>
-                <p class="demoItem">Fourth item</p>
-              </yk-grid>
-            </div>
-            <pre class="catalog__code"><code>&lt;yk-grid style="--yk-grid-min: 12rem"&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-  &lt;p&gt;Fourth item&lt;/p&gt;
-&lt;/yk-grid&gt;</code></pre>
-          </figure>
-        </section>
+        <div class="catalog__landing" data-landing></div>
       </main>
 
       <footer class="catalog__footer">
