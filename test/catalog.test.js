@@ -26,8 +26,17 @@ test('catalog shows the yk-vstack section with three variations', async () => {
   expect(section.querySelectorAll('.catalog__variation').length).toBe(3);
 });
 
+test('catalog shows the yk-hstack section with two variations', async () => {
+  const doc = await fetchCatalogHtml();
+  const section = doc.querySelector('#yk-hstack');
+
+  expect(section).not.toBeNull();
+  expect(section.querySelectorAll('.catalog__variation').length).toBe(2);
+});
+
 test('library entry point and tokens load successfully', async () => {
   await import('/index.js');
   expect(customElements.get('yk-vstack')).toBeDefined();
+  expect(customElements.get('yk-hstack')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });

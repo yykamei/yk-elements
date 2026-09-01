@@ -74,6 +74,45 @@
 &lt;/yk-vstack&gt;</code></pre>
           </figure>
         </section>
+
+        <section class="catalog__section" id="yk-hstack">
+          <h2 class="catalog__sectionTitle">&lt;yk-hstack&gt;</h2>
+          <p class="catalog__description">
+            Layout primitive that stacks its children horizontally with a consistent gap.
+          </p>
+
+          <figure class="catalog__variation">
+            <figcaption class="catalog__variationTitle">Default</figcaption>
+            <div class="catalog__demo">
+              <yk-hstack>
+                <p class="demoItem">First item</p>
+                <p class="demoItem">Second item</p>
+                <p class="demoItem">Third item</p>
+              </yk-hstack>
+            </div>
+            <pre class="catalog__code"><code>&lt;yk-hstack&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-hstack&gt;</code></pre>
+          </figure>
+
+          <figure class="catalog__variation">
+            <figcaption class="catalog__variationTitle">Custom gap</figcaption>
+            <div class="catalog__demo">
+              <yk-hstack style="--yk-hstack-gap: 2rem">
+                <p class="demoItem">First item</p>
+                <p class="demoItem">Second item</p>
+                <p class="demoItem">Third item</p>
+              </yk-hstack>
+            </div>
+            <pre class="catalog__code"><code>&lt;yk-hstack style="--yk-hstack-gap: 2rem"&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+  &lt;p&gt;Third item&lt;/p&gt;
+&lt;/yk-hstack&gt;</code></pre>
+          </figure>
+        </section>
       </main>
 
       <footer class="catalog__footer">

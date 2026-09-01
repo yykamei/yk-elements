@@ -1,0 +1,6 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: var(--yk-hstack-gap, var(--yk-space-md, 1rem));
+}
