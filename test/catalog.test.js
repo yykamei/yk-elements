@@ -5,7 +5,7 @@ import { components } from '../catalog/catalog.js';
 const VARIATIONS = {
   'yk-vstack': 3,
   'yk-hstack': 2,
-  'yk-cluster': 2,
+  'yk-cluster': 15,
   'yk-grid': 2,
 };
 
