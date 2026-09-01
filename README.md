@@ -42,15 +42,15 @@ imported individually, for example
 
 ### Use from npm
 
-Once the package is installed (`npm install yk-elements`), import the entry
-point or individual components through the package exports:
+Once the package is installed (`npm install @yykamei/yk-elements`), import the
+entry point or individual components through the package exports:
 
 ```html
-<link rel="stylesheet" href="yk-elements/tokens.css" />
+<link rel="stylesheet" href="@yykamei/yk-elements/tokens.css" />
 <script type="module">
-  import 'yk-elements';
+  import '@yykamei/yk-elements';
   // or a single component:
-  // import 'yk-elements/layout/yk-vstack.js';
+  // import '@yykamei/yk-elements/layout/yk-vstack.js';
 </script>
 ```
 

@@ -1,9 +1,12 @@
 {
-  "name": "yk-elements",
+  "name": "@yykamei/yk-elements",
   "version": "0.1.0",
   "description": "Zero-config Web Components library. Just put, just works.",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Yutaka Kamei",
   "repository": {
     "type": "git",
