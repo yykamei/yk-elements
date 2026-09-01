@@ -1,4 +1,5 @@
 import { readdirSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { build } from 'esbuild';
 
@@ -26,6 +27,10 @@ function listSourceFiles() {
   files.push('index.js', 'tokens.css');
   return files;
 }
+
+// esbuild only overwrites files it emits; clear dist/ first so components
+// removed from src/ do not leave stale files that CDNs would keep serving.
+await rm('dist', { recursive: true, force: true });
 
 await build({
   entryPoints: listSourceFiles(),
