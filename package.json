@@ -32,9 +32,13 @@
   "files": [
     "index.js",
     "tokens.css",
-    "src"
+    "src",
+    "dist"
   ],
   "scripts": {
+    "build": "node scripts/build.mjs",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build",
     "test": "vitest run",
     "lint": "biome check .",
     "format": "biome format --write .",
@@ -43,6 +47,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.11",
     "@vitest/browser-playwright": "^4.1.11",
+    "esbuild": "^0.28.2",
     "playwright": "^1.62.1",
     "serve": "^14.2.6",
     "vitest": "^4.1.11"

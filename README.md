@@ -5,7 +5,8 @@ Zero-config Web Components library. Just put, just works.
 Structured, self-organizing layout and UI emerge just by placing HTML tags — no
 class names, no scripting. Built directly on Web standard APIs (Custom Elements
 v1, Shadow DOM v1, CSS Module Scripts, ElementInternals) with no framework
-dependency and no build step.
+dependency. Consumers never need a build step: the source modules run in the
+browser as-is, and a minified copy ships in `dist/` for CDN delivery.
 
 See [docs/concept.md](docs/concept.md) for the core design concept.
 
@@ -54,6 +55,27 @@ entry point or individual components through the package exports:
 </script>
 ```
 
+### Use from a CDN
+
+Load the minified entry point from a CDN such as unpkg or jsDelivr. Importing
+`dist/index.js` self-registers every component:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@yykamei/yk-elements@0.1.0/dist/tokens.css" />
+<script type="module" src="https://unpkg.com/@yykamei/yk-elements@0.1.0/dist/index.js"></script>
+
+<yk-vstack>
+  <h2>Title</h2>
+  <p>First paragraph</p>
+  <p>Second paragraph</p>
+</yk-vstack>
+```
+
+`dist/` mirrors the source tree with minified files, so `dist/index.js`,
+`dist/tokens.css`, and individual component modules such as
+`dist/src/layout/yk-vstack.js` resolve relative to each other. The unminified
+source files (`index.js`, `src/`) are served the same way.
+
 ### Customize
 
 Design tokens defined on `:root` (see `tokens.css`) or on any ancestor element
@@ -81,6 +103,7 @@ npm run preview
 ## Development
 
 ```bash
+npm run build  # minify source into dist/ (also runs before test and publish)
 npm run test   # run tests (Vitest Browser Mode, Chromium headless)
 npm run lint   # lint and check formatting (Biome)
 npm run format # format all files (Biome)

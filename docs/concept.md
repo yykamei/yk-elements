@@ -187,6 +187,21 @@ yk-elements/
 
 ---
 
+## 6. Distribution
+
+The source tree is the single source of truth. Consumers in a browser or on a
+bundler import these files directly as ESM modules (`index.js`, `src/**`),
+relying on CSS Module Scripts and custom element self-registration — no
+consumer-side build step is involved.
+
+For CDN delivery, a minified mirror of the same tree is generated under
+`dist/` by `npm run build` (via esbuild). Each file is minified in place
+without bundling, so relative imports and `with { type: 'css' }` imports keep
+resolving. The build is internal to this package: the source files remain the
+authored, readable versions and are the ones served from npm.
+
+---
+
 ## References
 
 - [WHATWG HTML Standard: Custom elements](https://html.spec.whatwg.org/multipage/custom-elements.html)
