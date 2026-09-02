@@ -16,8 +16,9 @@ To avoid excessive JavaScript geometry computation (forced synchronous layout / 
 ```
 +-------------------------------------------------------------+
 | 1. Layout Layer (primitive placement)                       |
-|    - <yk-vstack>, <yk-cluster>, <yk-grid>                   |
-|    - Role: gap, wrapping, alignment (CSS Flex/Grid)         |
+|    - <yk-vstack>, <yk-cluster>, <yk-grid>, <yk-pad>         |
+|    - Role: gap, wrapping, alignment (CSS Flex/Grid),        |
+|      padding (CSS inset)                                    |
 +-------------------------------------------------------------+
                               | (contains)
 +-------------------------------------------------------------+
@@ -176,7 +177,9 @@ yk-elements/
 │   │   ├── yk-cluster.css
 │   │   ├── yk-cluster.js       # Horizontal alignment & wrapping
 │   │   ├── yk-grid.css
-│   │   └── yk-grid.js          # Auto equal-width grid
+│   │   ├── yk-grid.js          # Auto equal-width grid
+│   │   ├── yk-pad.css
+│   │   └── yk-pad.js           # Consistent inset from the host edges
 │   └── components/
 │       ├── yk-toggle-card.css
 │       ├── yk-toggle-card.js

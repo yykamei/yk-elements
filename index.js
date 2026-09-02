@@ -13,3 +13,4 @@ import './src/layout/yk-vstack.js';
 import './src/layout/yk-hstack.js';
 import './src/layout/yk-cluster.js';
 import './src/layout/yk-grid.js';
+import './src/layout/yk-pad.js';

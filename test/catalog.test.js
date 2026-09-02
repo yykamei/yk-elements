@@ -7,6 +7,7 @@ const VARIATIONS = {
   'yk-hstack': 2,
   'yk-cluster': 15,
   'yk-grid': 2,
+  'yk-pad': 4,
 };
 
 afterEach(() => {
@@ -129,5 +130,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-hstack')).toBeDefined();
   expect(customElements.get('yk-cluster')).toBeDefined();
   expect(customElements.get('yk-grid')).toBeDefined();
+  expect(customElements.get('yk-pad')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });

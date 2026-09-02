@@ -41,6 +41,11 @@ export const components = [
     description:
       'Layout primitive that places children in an auto-equal-width grid.',
   },
+  {
+    tag: 'yk-pad',
+    description:
+      'Layout primitive that pads its children with a consistent inset from the host edges.',
+  },
 ];
 
 const pageFor = (tag) => `./${tag}.html`;

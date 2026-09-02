@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-pad&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-pad">
+    <div class="catalog">
+      <aside class="catalog__sidebar" data-sidebar></aside>
+
+      <main class="catalog__main">
+        <header class="catalog__componentHeader" data-component-header></header>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Default</figcaption>
+          <div class="catalog__demo">
+            <yk-pad style="background: rgba(0, 0, 0, 0.04)">
+              <p class="demoItem">First item</p>
+              <p class="demoItem">Second item</p>
+            </yk-pad>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-pad&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+&lt;/yk-pad&gt;</code></pre>
+        </figure>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Custom padding</figcaption>
+          <div class="catalog__demo">
+            <yk-pad style="--yk-pad-padding: 2rem; background: rgba(0, 0, 0, 0.04)">
+              <p class="demoItem">First item</p>
+              <p class="demoItem">Second item</p>
+            </yk-pad>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-pad style="--yk-pad-padding: 2rem"&gt;
+  &lt;p&gt;First item&lt;/p&gt;
+  &lt;p&gt;Second item&lt;/p&gt;
+&lt;/yk-pad&gt;</code></pre>
+        </figure>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Per-axis padding</figcaption>
+          <div class="catalog__demo">
+            <yk-pad
+              style="
+                --yk-pad-padding-block: 0.25rem;
+                --yk-pad-padding-inline: 2rem;
+                background: rgba(0, 0, 0, 0.04);
+              "
+            >
+              <p class="demoItem">Tight vertical rhythm, wide horizontal inset</p>
+            </yk-pad>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-pad
+  style="--yk-pad-padding-block: 0.25rem; --yk-pad-padding-inline: 2rem"
+&gt;
+  &lt;p&gt;Tight vertical rhythm, wide horizontal inset&lt;/p&gt;
+&lt;/yk-pad&gt;</code></pre>
+        </figure>
+
+        <figure class="catalog__variation">
+          <figcaption class="catalog__variationTitle">Composed with yk-vstack</figcaption>
+          <div class="catalog__demo">
+            <yk-pad style="background: rgba(0, 0, 0, 0.04)">
+              <yk-vstack>
+                <p class="demoItem">Section heading</p>
+                <p class="demoItem">First paragraph</p>
+                <p class="demoItem">Second paragraph</p>
+              </yk-vstack>
+            </yk-pad>
+          </div>
+          <pre class="catalog__code"><code>&lt;yk-pad&gt;
+  &lt;yk-vstack&gt;
+    &lt;p&gt;Section heading&lt;/p&gt;
+    &lt;p&gt;First paragraph&lt;/p&gt;
+    &lt;p&gt;Second paragraph&lt;/p&gt;
+  &lt;/yk-vstack&gt;
+&lt;/yk-pad&gt;</code></pre>
+        </figure>
+      </main>
+
+      <footer class="catalog__footer">
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
