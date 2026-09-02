@@ -2,7 +2,8 @@
  * Shared chrome for the yk-elements component catalog.
  *
  * Load it on every catalog page. It owns the single source of truth for the
- * component list and renders three pieces of shared chrome from it:
+ * component list and the design tokens, and renders the catalog's shared
+ * chrome from them:
  *
  * - the sidebar navigation (brand + Overview + one link per component),
  *   marking the current page as active based on the URL
@@ -10,6 +11,10 @@
  *   hosts a [data-landing] container
  * - the header (title + description) on each component page, whose <body>
  *   carries data-component="yk-xxx"
+ * - the Interface section on each component page, listing the component's
+ *   configurable CSS custom properties
+ * - the design-token table on the landing page, which hosts a [data-tokens]
+ *   container linking back from each component's property defaults
  *
  * Adding a component means adding one entry here plus one HTML page that
  * lists its variations. The variations are hand-written; everything else
@@ -117,6 +122,25 @@ export const components = [
   },
 ];
 
+export const tokens = [
+  {
+    name: '--yk-space-sm',
+    value: '0.5rem',
+    description: 'Small spacing unit; used for tight gaps and insets.',
+  },
+  {
+    name: '--yk-space-md',
+    value: '1rem',
+    description:
+      'Default spacing unit; the fallback default for component gaps and insets.',
+  },
+  {
+    name: '--yk-space-lg',
+    value: '1.5rem',
+    description: 'Large spacing unit; used for roomier paddings and gaps.',
+  },
+];
+
 const pageFor = (tag) => `./${tag}.html`;
 
 function currentComponent() {
@@ -172,13 +196,42 @@ function renderComponentHeader() {
   `;
 }
 
+/**
+ * Replaces every occurrence of a known token name with a link to its row in
+ * the landing-page token table.
+ *
+ * A single regex pass over the original text keeps overlapping token names
+ * (e.g. `--yk-space` and `--yk-space-md`) from matching inside the `<a>` tag
+ * inserted for a longer name. The alternation is ordered by descending length
+ * so the longest name is always matched first.
+ */
+const linkTokens = (() => {
+  const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const anchors = new Map(
+    tokens.map(({ name }) => [name, `./index.html#${name.slice(2)}`]),
+  );
+  const pattern = new RegExp(
+    [...anchors.keys()]
+      .sort((a, b) => b.length - a.length)
+      .map(escapeRegex)
+      .join('|'),
+    'g',
+  );
+  return (text) =>
+    text.replace(
+      pattern,
+      (name) =>
+        `<a class="catalog__tokenLink" href="${anchors.get(name)}">${name}</a>`,
+    );
+})();
+
 const rowsFor = (items) =>
   items
     .map(
       ({ name, default: fallback, description }) => `
       <tr>
         <td class="catalog__propertyName">${name}</td>
-        <td class="catalog__propertyDefault">${fallback}</td>
+        <td class="catalog__propertyDefault">${linkTokens(fallback)}</td>
         <td>${description}</td>
       </tr>`,
     )
@@ -218,7 +271,32 @@ function renderInterface() {
     : '';
 }
 
+function renderTokens() {
+  const section = document.querySelector('[data-tokens]');
+  if (!section) return;
+  section.innerHTML = `
+    <h2 class="catalog__tokensTitle">Design tokens</h2>
+    <table class="catalog__interfaceTable catalog__tokensTable">
+      <caption class="catalog__interfaceCaption">Design tokens</caption>
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Description</th></tr>
+      </thead>
+      <tbody>${tokens
+        .map(
+          ({ name, value, description }) => `
+        <tr>
+          <td class="catalog__propertyName" id="${name.slice(2)}">${name}</td>
+          <td class="catalog__propertyDefault">${value}</td>
+          <td>${description}</td>
+        </tr>`,
+        )
+        .join('')}</tbody>
+    </table>
+  `;
+}
+
 renderSidebar();
 renderLanding();
 renderComponentHeader();
 renderInterface();
+renderTokens();

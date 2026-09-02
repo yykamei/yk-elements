@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test, vi } from 'vitest';
-import { components } from '../catalog/catalog.js';
+import { components, tokens } from '../catalog/catalog.js';
 
 const VARIATIONS = {
   'yk-vstack': 3,
@@ -63,6 +63,7 @@ test('every catalog page references the library entry point, tokens, and shared 
 test('landing page declares the overview layout with a landing container', async () => {
   const doc = await fetchHtml('/catalog/index.html');
   expect(doc.querySelector('[data-landing]')).not.toBeNull();
+  expect(doc.querySelector('[data-tokens]')).not.toBeNull();
 });
 
 test('bare /catalog URL is normalized to the trailing-slash form', async () => {
@@ -124,6 +125,26 @@ test('each component page renders the sidebar with its own entry active and a he
   }
 });
 
+test('overview page renders the design tokens section', async () => {
+  const iframe = await loadIframe('/catalog/index.html');
+  const doc = iframe.contentDocument;
+  const section = doc.querySelector('[data-tokens]');
+  expect(section).not.toBeNull();
+
+  const rows = [...section.querySelectorAll('tbody tr')];
+  expect(rows.length).toBe(tokens.length);
+
+  const names = rows.map((row) =>
+    row.querySelector('.catalog__propertyName').textContent.trim(),
+  );
+  for (const { name } of tokens) {
+    expect(names).toContain(name);
+  }
+
+  const ids = rows.map((row) => row.querySelector('.catalog__propertyName').id);
+  expect(ids).toEqual(tokens.map(({ name }) => name.slice(2)));
+});
+
 test('each component page renders its declared interface', async () => {
   for (const { tag, cssProperties, attributes } of components) {
     const iframe = await loadIframe(`/catalog/${tag}.html`);
@@ -147,6 +168,24 @@ test('each component page renders its declared interface', async () => {
       '.catalog__attributeTable',
     );
     expect(attributeTables.length, tag).toBe(attributes.length);
+
+    for (const [
+      index,
+      { name, default: fallback },
+    ] of cssProperties.entries()) {
+      const row = rows[index];
+      const hrefs = [
+        ...row.querySelectorAll('.catalog__propertyDefault a'),
+      ].map((link) => link.getAttribute('href'));
+      const expected = [];
+      for (const token of tokens) {
+        const count = fallback.split(token.name).length - 1;
+        for (let i = 0; i < count; i += 1) {
+          expected.push(`./index.html#${token.name.slice(2)}`);
+        }
+      }
+      expect(hrefs.sort(), `${tag} ${name}`).toEqual(expected.sort());
+    }
   }
 });
 

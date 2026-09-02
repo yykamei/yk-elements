@@ -147,22 +147,23 @@
 }
 
 /**
- * Per-component interface section: lists the configurable CSS custom
- * properties (and, in the future, HTML attributes) that a component exposes,
- * so a developer can see at a glance what is customizable without reading the
- * source stylesheet.
+ * Section used on component pages (Interface) and on the landing page
+ * (Design tokens): a stacked heading over a bordered table.
  *
  * ```html
  * <section class="catalog__interface" data-interface></section>
+ * <section class="catalog__tokens" data-tokens></section>
  * ```
  */
-.catalog__interface {
+.catalog__interface,
+.catalog__tokens {
   display: flex;
   flex-direction: column;
   gap: var(--yk-space-sm);
 }
 
-.catalog__interfaceTitle {
+.catalog__interfaceTitle,
+.catalog__tokensTitle {
   margin-block: 0;
   font-size: 1.125rem;
   font-weight: 700;
