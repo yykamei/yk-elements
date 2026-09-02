@@ -147,6 +147,69 @@
 }
 
 /**
+ * Per-component interface section: lists the configurable CSS custom
+ * properties (and, in the future, HTML attributes) that a component exposes,
+ * so a developer can see at a glance what is customizable without reading the
+ * source stylesheet.
+ *
+ * ```html
+ * <section class="catalog__interface" data-interface></section>
+ * ```
+ */
+.catalog__interface {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-space-sm);
+}
+
+.catalog__interfaceTitle {
+  margin-block: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.catalog__interfaceTable {
+  width: 100%;
+  border: 1px solid var(--yk-catalog-border);
+  border-radius: 0.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow-x: auto;
+  font-size: 0.875rem;
+}
+
+.catalog__interfaceCaption {
+  padding: var(--yk-space-sm) var(--yk-space-md);
+  background-color: var(--yk-catalog-title-bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: start;
+  caption-side: top;
+}
+
+.catalog__interfaceTable th,
+.catalog__interfaceTable td {
+  padding: var(--yk-space-sm) var(--yk-space-md);
+  border-block-start: 1px solid var(--yk-catalog-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.catalog__interfaceTable th {
+  font-weight: 600;
+}
+
+.catalog__propertyName {
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+}
+
+.catalog__propertyDefault {
+  font-family: ui-monospace, monospace;
+  color: var(--yk-catalog-fg-muted);
+}
+
+/**
  * Reusable description text shown in landing cards and component headers.
  *
  * ```html

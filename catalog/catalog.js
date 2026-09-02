@@ -25,26 +25,95 @@ export const components = [
     tag: 'yk-vstack',
     description:
       'Layout primitive that stacks its children vertically with a consistent gap.',
+    cssProperties: [
+      {
+        name: '--yk-vstack-gap',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Spacing between adjacent children.',
+      },
+    ],
+    attributes: [],
   },
   {
     tag: 'yk-hstack',
     description:
       'Layout primitive that stacks its children horizontally with a consistent gap.',
+    cssProperties: [
+      {
+        name: '--yk-hstack-gap',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Spacing between adjacent children.',
+      },
+    ],
+    attributes: [],
   },
   {
     tag: 'yk-cluster',
     description:
       'Layout primitive that places children in a centered, wrapping horizontal flow.',
+    cssProperties: [
+      {
+        name: '--yk-cluster-justify',
+        default: 'center',
+        description:
+          'Main-axis alignment of children (any CSS justify-content value).',
+      },
+      {
+        name: '--yk-cluster-align',
+        default: 'center',
+        description:
+          'Cross-axis alignment of children (any CSS align-items value).',
+      },
+      {
+        name: '--yk-cluster-gap',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Spacing between adjacent children.',
+      },
+    ],
+    attributes: [],
   },
   {
     tag: 'yk-grid',
     description:
       'Layout primitive that places children in an auto-equal-width grid.',
+    cssProperties: [
+      {
+        name: '--yk-grid-min',
+        default: '20rem',
+        description: 'Minimum column width; columns wrap below it.',
+      },
+      {
+        name: '--yk-grid-gap',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Spacing between grid tracks.',
+      },
+    ],
+    attributes: [],
   },
   {
     tag: 'yk-pad',
     description:
       'Layout primitive that pads its children with a consistent inset from the host edges.',
+    cssProperties: [
+      {
+        name: '--yk-pad-padding',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Uniform inset from the host edges to the children.',
+      },
+      {
+        name: '--yk-pad-padding-block',
+        default: 'var(--yk-pad-padding, var(--yk-space-md, 1rem))',
+        description:
+          'Vertical inset; overrides --yk-pad-padding on the block axis.',
+      },
+      {
+        name: '--yk-pad-padding-inline',
+        default: 'var(--yk-pad-padding, var(--yk-space-md, 1rem))',
+        description:
+          'Horizontal inset; overrides --yk-pad-padding on the inline axis.',
+      },
+    ],
+    attributes: [],
   },
 ];
 
@@ -103,6 +172,53 @@ function renderComponentHeader() {
   `;
 }
 
+const rowsFor = (items) =>
+  items
+    .map(
+      ({ name, default: fallback, description }) => `
+      <tr>
+        <td class="catalog__propertyName">${name}</td>
+        <td class="catalog__propertyDefault">${fallback}</td>
+        <td>${description}</td>
+      </tr>`,
+    )
+    .join('');
+
+function renderInterface() {
+  const section = document.querySelector('[data-interface]');
+  const tag = document.body.dataset.component;
+  if (!section || !tag) return;
+  const component = components.find(({ tag: known }) => known === tag);
+  if (!component) return;
+
+  const groups = [];
+  if (component.cssProperties.length) {
+    groups.push(`
+      <table class="catalog__interfaceTable catalog__propertyTable">
+        <caption class="catalog__interfaceCaption">CSS custom properties</caption>
+        <thead>
+          <tr><th>Property</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>${rowsFor(component.cssProperties)}</tbody>
+      </table>`);
+  }
+  if (component.attributes.length) {
+    groups.push(`
+      <table class="catalog__interfaceTable catalog__attributeTable">
+        <caption class="catalog__interfaceCaption">HTML attributes</caption>
+        <thead>
+          <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>${rowsFor(component.attributes)}</tbody>
+      </table>`);
+  }
+
+  section.innerHTML = groups.length
+    ? `<h2 class="catalog__interfaceTitle">Interface</h2>${groups.join('')}`
+    : '';
+}
+
 renderSidebar();
 renderLanding();
 renderComponentHeader();
+renderInterface();

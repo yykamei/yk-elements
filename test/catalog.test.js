@@ -124,6 +124,32 @@ test('each component page renders the sidebar with its own entry active and a he
   }
 });
 
+test('each component page renders its declared interface', async () => {
+  for (const { tag, cssProperties, attributes } of components) {
+    const iframe = await loadIframe(`/catalog/${tag}.html`);
+    const doc = iframe.contentDocument;
+    const section = doc.querySelector('[data-interface]');
+    expect(section, tag).not.toBeNull();
+
+    const rows = [
+      ...section.querySelectorAll('.catalog__propertyTable tbody tr'),
+    ];
+    expect(rows.length, tag).toBe(cssProperties.length);
+
+    const names = rows.map((row) =>
+      row.querySelector('.catalog__propertyName').textContent.trim(),
+    );
+    for (const { name } of cssProperties) {
+      expect(names, tag).toContain(name);
+    }
+
+    const attributeTables = section.querySelectorAll(
+      '.catalog__attributeTable',
+    );
+    expect(attributeTables.length, tag).toBe(attributes.length);
+  }
+});
+
 test('library entry point and tokens load successfully', async () => {
   await import('/index.js');
   expect(customElements.get('yk-vstack')).toBeDefined();
