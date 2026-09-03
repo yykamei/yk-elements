@@ -8,6 +8,14 @@
  * Adding a component means adding a page with its variations and one entry
  * in that list. No build step is involved.
  *
+ * The catalog dogfoods the library: spacing between siblings is owned by
+ * yk-vstack / yk-grid parents and demo insets by yk-pad, so this file keeps
+ * only the catalog's own visual identity (colors, borders, typography).
+ * Two layout exceptions remain here: the outer .catalog two-column shell,
+ * which no existing primitive reproduces, and .catalog__nav, whose vertical
+ * stack must switch to a wrapping row in the mobile media query (a switch
+ * neither yk-vstack nor yk-cluster can express from outside Shadow DOM).
+ *
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on .catalog and the
  * color palette references them, so the look can be themed in one place.
@@ -31,13 +39,16 @@
   line-height: 1.6;
 }
 
+/* Grid-item blowout guard for the outer shell: lets <main> shrink below
+ * the intrinsic width of wide children (e.g. code blocks). */
+.catalog > main {
+  min-inline-size: 0;
+}
+
 .catalog__sidebar {
   position: sticky;
   inset-block-start: 0;
   align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-md);
   padding: var(--yk-space-md);
   border: 1px solid var(--yk-catalog-border);
   border-radius: 0.5rem;
@@ -51,14 +62,21 @@
   text-decoration: none;
 }
 
+/**
+ * The sidebar nav keeps its own flex CSS (see the file header): the stack
+ * must switch to a wrapping row in the mobile media query below, which no
+ * existing yk-* primitive can express from outside Shadow DOM.
+ */
 .catalog__nav {
   display: flex;
   flex-direction: column;
-  gap: var(--yk-space-xs);
+  /* --yk-space-xs is not a defined token; the tight 0.25rem step is written out. */
+  gap: 0.25rem;
 }
 
 .catalog__navLink {
-  padding: var(--yk-space-xs) var(--yk-space-sm);
+  /* See above: --yk-space-xs is not a defined token. */
+  padding: 0.25rem var(--yk-space-sm);
   border-radius: 0.375rem;
   color: var(--yk-catalog-fg-muted);
   font-family: ui-monospace, monospace;
@@ -81,19 +99,6 @@
   background-color: var(--yk-catalog-title-bg);
 }
 
-.catalog__main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-lg);
-  min-inline-size: 0;
-}
-
-.catalog__overviewHeader {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-sm);
-}
-
 .catalog__title {
   margin-block: 0;
   font-size: 1.75rem;
@@ -105,16 +110,7 @@
   color: var(--yk-catalog-fg-muted);
 }
 
-.catalog__landing {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: var(--yk-space-md);
-}
-
 .catalog__card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-sm);
   padding: var(--yk-space-md);
   border: 1px solid var(--yk-catalog-border);
   border-radius: 0.5rem;
@@ -133,33 +129,11 @@
   font-weight: 700;
 }
 
-.catalog__componentHeader {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-sm);
-}
-
 .catalog__componentTitle {
   margin-block: 0;
   font-family: ui-monospace, monospace;
   font-size: 1.5rem;
   font-weight: 700;
-}
-
-/**
- * Section used on component pages (Interface) and on the landing page
- * (Design tokens): a stacked heading over a bordered table.
- *
- * ```html
- * <section class="catalog__interface" data-interface></section>
- * <section class="catalog__tokens" data-tokens></section>
- * ```
- */
-.catalog__interface,
-.catalog__tokens {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-space-sm);
 }
 
 .catalog__interfaceTitle,
@@ -237,7 +211,6 @@
 }
 
 .catalog__demo {
-  padding: var(--yk-space-lg);
   background-color: var(--yk-catalog-demo-bg);
 }
 

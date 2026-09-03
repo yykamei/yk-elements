@@ -20,6 +20,12 @@
  * lists its variations. The variations are hand-written; everything else
  * comes from this module.
  *
+ * The catalog dogfoods the library: spacing between siblings is owned by
+ * yk-vstack / yk-grid parents and demo insets by yk-pad. The sidebar nav
+ * keeps its own flex CSS because neither yk-vstack nor yk-cluster can switch
+ * between a vertical stack and a wrapping row in the mobile media query
+ * (direction is encapsulated in Shadow DOM).
+ *
  * ```html
  * <aside class="catalog__sidebar" data-sidebar></aside>
  * <script type="module" src="./catalog.js"></script>
@@ -157,28 +163,34 @@ function renderSidebar() {
   const linkClass = (active) =>
     active ? 'catalog__navLink catalog__navLink--active' : 'catalog__navLink';
   sidebar.innerHTML = `
-    <a class="catalog__brand" href="./index.html">yk-elements</a>
-    <nav class="catalog__nav" aria-label="Components">
-      <a class="${linkClass(current === null)}" href="./index.html">Overview</a>
-      ${components
-        .map(
-          ({ tag }) => `
+    <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
+      <a class="catalog__brand" href="./index.html">yk-elements</a>
+      <nav class="catalog__nav" aria-label="Components">
+        <a class="${linkClass(current === null)}" href="./index.html">Overview</a>
+        ${components
+          .map(
+            ({ tag }) => `
         <a class="${linkClass(current === tag)}" href="${pageFor(tag)}">&lt;${tag}&gt;</a>`,
-        )
-        .join('')}
-    </nav>
+          )
+          .join('')}
+      </nav>
+    </yk-vstack>
   `;
 }
 
 function renderLanding() {
+  // Descriptions are trusted internal strings; escape them if they ever
+  // become external or author-supplied input.
   const landing = document.querySelector('[data-landing]');
   if (!landing) return;
   landing.innerHTML = components
     .map(
       ({ tag, description }) => `
     <a class="catalog__card" href="${pageFor(tag)}">
-      <h2 class="catalog__cardTitle">&lt;${tag}&gt;</h2>
-      <p class="catalogDescription">${description}</p>
+      <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+        <h2 class="catalog__cardTitle">&lt;${tag}&gt;</h2>
+        <p class="catalogDescription">${description}</p>
+      </yk-vstack>
     </a>`,
     )
     .join('');
@@ -191,8 +203,10 @@ function renderComponentHeader() {
   const component = components.find(({ tag: known }) => known === tag);
   if (!component) return;
   header.innerHTML = `
-    <h1 class="catalog__componentTitle">&lt;${tag}&gt;</h1>
-    <p class="catalogDescription">${component.description}</p>
+    <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+      <h1 class="catalog__componentTitle">&lt;${tag}&gt;</h1>
+      <p class="catalogDescription">${component.description}</p>
+    </yk-vstack>
   `;
 }
 
@@ -267,7 +281,8 @@ function renderInterface() {
   }
 
   section.innerHTML = groups.length
-    ? `<h2 class="catalog__interfaceTitle">Interface</h2>${groups.join('')}`
+    ? `<yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">` +
+      `<h2 class="catalog__interfaceTitle">Interface</h2>${groups.join('')}</yk-vstack>`
     : '';
 }
 
@@ -275,6 +290,7 @@ function renderTokens() {
   const section = document.querySelector('[data-tokens]');
   if (!section) return;
   section.innerHTML = `
+    <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
     <h2 class="catalog__tokensTitle">Design tokens</h2>
     <table class="catalog__interfaceTable catalog__tokensTable">
       <caption class="catalog__interfaceCaption">Design tokens</caption>
@@ -292,6 +308,7 @@ function renderTokens() {
         )
         .join('')}</tbody>
     </table>
+    </yk-vstack>
   `;
 }
 

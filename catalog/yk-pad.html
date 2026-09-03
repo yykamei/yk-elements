@@ -13,19 +13,20 @@
     <div class="catalog">
       <aside class="catalog__sidebar" data-sidebar></aside>
 
-      <main class="catalog__main">
-        <header class="catalog__componentHeader" data-component-header></header>
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
 
-        <section class="catalog__interface" data-interface></section>
+          <section data-interface></section>
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Default</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-pad style="background: rgba(0, 0, 0, 0.04)">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
             </yk-pad>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-pad&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -34,12 +35,12 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Custom padding</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-pad style="--yk-pad-padding: 2rem; background: rgba(0, 0, 0, 0.04)">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
             </yk-pad>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-pad style="--yk-pad-padding: 2rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -48,7 +49,7 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Per-axis padding</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-pad
               style="
                 --yk-pad-padding-block: 0.25rem;
@@ -58,7 +59,7 @@
             >
               <p class="demoItem">Tight vertical rhythm, wide horizontal inset</p>
             </yk-pad>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-pad
   style="--yk-pad-padding-block: 0.25rem; --yk-pad-padding-inline: 2rem"
 &gt;
@@ -68,7 +69,7 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Composed with yk-vstack</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-pad style="background: rgba(0, 0, 0, 0.04)">
               <yk-vstack>
                 <p class="demoItem">Section heading</p>
@@ -76,7 +77,7 @@
                 <p class="demoItem">Second paragraph</p>
               </yk-vstack>
             </yk-pad>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-pad&gt;
   &lt;yk-vstack&gt;
     &lt;p&gt;Section heading&lt;/p&gt;
@@ -85,6 +86,7 @@
   &lt;/yk-vstack&gt;
 &lt;/yk-pad&gt;</code></pre>
         </figure>
+        </yk-vstack>
       </main>
 
       <footer class="catalog__footer">

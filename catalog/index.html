@@ -24,17 +24,21 @@
     <div class="catalog">
       <aside class="catalog__sidebar" data-sidebar></aside>
 
-      <main class="catalog__main">
-        <header class="catalog__overviewHeader">
-          <h1 class="catalog__title">yk-elements</h1>
-          <p class="catalog__tagline">
-            Zero-config Web Components library. Just put, just works.
-          </p>
-        </header>
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header>
+            <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+              <h1 class="catalog__title">yk-elements</h1>
+              <p class="catalog__tagline">
+                Zero-config Web Components library. Just put, just works.
+              </p>
+            </yk-vstack>
+          </header>
 
-        <div class="catalog__landing" data-landing></div>
+          <yk-grid data-landing style="--yk-grid-min: 15rem"></yk-grid>
 
-        <section class="catalog__tokens" data-tokens></section>
+          <section data-tokens></section>
+        </yk-vstack>
       </main>
 
       <footer class="catalog__footer">

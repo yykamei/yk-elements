@@ -13,21 +13,22 @@
     <div class="catalog">
       <aside class="catalog__sidebar" data-sidebar></aside>
 
-      <main class="catalog__main">
-        <header class="catalog__componentHeader" data-component-header></header>
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
 
-        <section class="catalog__interface" data-interface></section>
+          <section data-interface></section>
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Default</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-grid>
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
               <p class="demoItem">Fourth item</p>
             </yk-grid>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-grid&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -38,14 +39,14 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Custom min column width</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-grid style="--yk-grid-min: 12rem">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
               <p class="demoItem">Fourth item</p>
             </yk-grid>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-grid style="--yk-grid-min: 12rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -53,6 +54,7 @@
   &lt;p&gt;Fourth item&lt;/p&gt;
 &lt;/yk-grid&gt;</code></pre>
         </figure>
+        </yk-vstack>
       </main>
 
       <footer class="catalog__footer">

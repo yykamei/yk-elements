@@ -105,6 +105,29 @@ test('landing page renders the sidebar and one card per component', async () => 
   ).toBe('Overview');
 });
 
+test('catalog chrome dogfoods the library components', async () => {
+  const landing = await loadIframe('/catalog/index.html');
+  const landingDoc = landing.contentDocument;
+  expect(landingDoc.querySelector('[data-landing]').tagName).toBe('YK-GRID');
+  expect(landingDoc.querySelector('[data-sidebar] yk-vstack')).not.toBeNull();
+  expect(landingDoc.querySelector('.catalog__card yk-vstack')).not.toBeNull();
+  expect(landingDoc.querySelector('[data-tokens] yk-vstack')).not.toBeNull();
+
+  for (const tag of tags) {
+    const iframe = await loadIframe(`/catalog/${tag}.html`);
+    const doc = iframe.contentDocument;
+    expect(
+      doc.querySelector('[data-component-header] yk-vstack'),
+    ).not.toBeNull();
+    expect(doc.querySelector('[data-interface] yk-vstack')).not.toBeNull();
+    const variations = [...doc.querySelectorAll('.catalog__variation')];
+    expect(variations.length).toBeGreaterThan(0);
+    for (const variation of variations) {
+      expect(variation.querySelector('.catalog__demo').tagName).toBe('YK-PAD');
+    }
+  }
+});
+
 test('each component page renders the sidebar with its own entry active and a header', async () => {
   for (const tag of tags) {
     const iframe = await loadIframe(`/catalog/${tag}.html`);

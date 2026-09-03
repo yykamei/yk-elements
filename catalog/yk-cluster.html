@@ -13,20 +13,21 @@
     <div class="catalog">
       <aside class="catalog__sidebar" data-sidebar></aside>
 
-      <main class="catalog__main">
-        <header class="catalog__componentHeader" data-component-header></header>
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
 
-        <section class="catalog__interface" data-interface></section>
+          <section data-interface></section>
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Default</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster>
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -36,7 +37,7 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Wrapping</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="inline-size: 16rem">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
@@ -44,7 +45,7 @@
               <p class="demoItem">Fourth item</p>
               <p class="demoItem">Fifth item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="inline-size: 16rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -56,13 +57,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: flex-start</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: flex-start">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: flex-start"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -72,13 +73,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: center</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: center">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: center"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -88,13 +89,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: flex-end</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: flex-end">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: flex-end"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -104,13 +105,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: space-between</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: space-between">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: space-between"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -120,13 +121,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: space-around</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: space-around">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: space-around"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -136,13 +137,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Justify content: space-evenly</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-justify: space-evenly">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-justify: space-evenly"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -152,13 +153,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Align items: flex-start</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-align: flex-start">
               <p class="demoItem">Short item</p>
               <p class="demoItem" style="inline-size: 7rem">A longer item that wraps onto several lines</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-align: flex-start"&gt;
   &lt;p&gt;Short item&lt;/p&gt;
   &lt;p style="inline-size: 7rem"&gt;A longer item that wraps onto several lines&lt;/p&gt;
@@ -168,13 +169,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Align items: center</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-align: center">
               <p class="demoItem">Short item</p>
               <p class="demoItem" style="inline-size: 7rem">A longer item that wraps onto several lines</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-align: center"&gt;
   &lt;p&gt;Short item&lt;/p&gt;
   &lt;p style="inline-size: 7rem"&gt;A longer item that wraps onto several lines&lt;/p&gt;
@@ -184,13 +185,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Align items: flex-end</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-align: flex-end">
               <p class="demoItem">Short item</p>
               <p class="demoItem" style="inline-size: 7rem">A longer item that wraps onto several lines</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-align: flex-end"&gt;
   &lt;p&gt;Short item&lt;/p&gt;
   &lt;p style="inline-size: 7rem"&gt;A longer item that wraps onto several lines&lt;/p&gt;
@@ -200,13 +201,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Align items: baseline</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-align: baseline">
               <p class="demoItem">Short item</p>
               <p class="demoItem" style="inline-size: 7rem">A longer item that wraps onto several lines</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-align: baseline"&gt;
   &lt;p&gt;Short item&lt;/p&gt;
   &lt;p style="inline-size: 7rem"&gt;A longer item that wraps onto several lines&lt;/p&gt;
@@ -216,13 +217,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Align items: stretch</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-align: stretch">
               <p class="demoItem">Short item</p>
               <p class="demoItem" style="inline-size: 7rem">A longer item that wraps onto several lines</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-align: stretch"&gt;
   &lt;p&gt;Short item&lt;/p&gt;
   &lt;p style="inline-size: 7rem"&gt;A longer item that wraps onto several lines&lt;/p&gt;
@@ -232,13 +233,13 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Gap: single value</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-gap: 2rem">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
               <p class="demoItem">Third item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-gap: 2rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -248,7 +249,7 @@
 
         <figure class="catalog__variation">
           <figcaption class="catalog__variationTitle">Gap: row and column</figcaption>
-          <div class="catalog__demo">
+          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-cluster style="--yk-cluster-gap: 2rem 0.5rem; inline-size: 16rem">
               <p class="demoItem">First item</p>
               <p class="demoItem">Second item</p>
@@ -256,7 +257,7 @@
               <p class="demoItem">Fourth item</p>
               <p class="demoItem">Fifth item</p>
             </yk-cluster>
-          </div>
+          </yk-pad>
           <pre class="catalog__code"><code>&lt;yk-cluster style="--yk-cluster-gap: 2rem 0.5rem; inline-size: 16rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
@@ -265,6 +266,7 @@
   &lt;p&gt;Fifth item&lt;/p&gt;
 &lt;/yk-cluster&gt;</code></pre>
         </figure>
+        </yk-vstack>
       </main>
 
       <footer class="catalog__footer">
