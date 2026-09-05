@@ -161,7 +161,7 @@ function renderSidebar() {
   if (!sidebar) return;
   const current = currentComponent();
   const linkClass = (active) =>
-    active ? 'catalog__navLink catalog__navLink--active' : 'catalog__navLink';
+    active ? 'catalog__nav-link is-active' : 'catalog__nav-link';
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
       <a class="catalog__brand" href="./index.html">yk-elements</a>
@@ -188,8 +188,8 @@ function renderLanding() {
       ({ tag, description }) => `
     <a class="catalog__card" href="${pageFor(tag)}">
       <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-        <h2 class="catalog__cardTitle">&lt;${tag}&gt;</h2>
-        <p class="catalogDescription">${description}</p>
+        <h2 class="catalog__card-title">&lt;${tag}&gt;</h2>
+        <p class="catalog-description">${description}</p>
       </yk-vstack>
     </a>`,
     )
@@ -204,8 +204,8 @@ function renderComponentHeader() {
   if (!component) return;
   header.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-      <h1 class="catalog__componentTitle">&lt;${tag}&gt;</h1>
-      <p class="catalogDescription">${component.description}</p>
+      <h1 class="catalog__component-title">&lt;${tag}&gt;</h1>
+      <p class="catalog-description">${component.description}</p>
     </yk-vstack>
   `;
 }
@@ -235,7 +235,7 @@ const linkTokens = (() => {
     text.replace(
       pattern,
       (name) =>
-        `<a class="catalog__tokenLink" href="${anchors.get(name)}">${name}</a>`,
+        `<a class="catalog__token-link" href="${anchors.get(name)}">${name}</a>`,
     );
 })();
 
@@ -244,8 +244,8 @@ const rowsFor = (items) =>
     .map(
       ({ name, default: fallback, description }) => `
       <tr>
-        <td class="catalog__propertyName">${name}</td>
-        <td class="catalog__propertyDefault">${linkTokens(fallback)}</td>
+        <td class="catalog__property-name">${name}</td>
+        <td class="catalog__property-default">${linkTokens(fallback)}</td>
         <td>${description}</td>
       </tr>`,
     )
@@ -261,7 +261,7 @@ function renderInterface() {
   const groups = [];
   if (component.cssProperties.length) {
     groups.push(`
-      <table class="catalog__interfaceTable catalog__propertyTable">
+      <table class="catalog__interfaceTable" data-table="properties">
         <caption class="catalog__interfaceCaption">CSS custom properties</caption>
         <thead>
           <tr><th>Property</th><th>Default</th><th>Description</th></tr>
@@ -271,7 +271,7 @@ function renderInterface() {
   }
   if (component.attributes.length) {
     groups.push(`
-      <table class="catalog__interfaceTable catalog__attributeTable">
+      <table class="catalog__interfaceTable" data-table="attributes">
         <caption class="catalog__interfaceCaption">HTML attributes</caption>
         <thead>
           <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
@@ -292,7 +292,7 @@ function renderTokens() {
   section.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
     <h2 class="catalog__tokensTitle">Design tokens</h2>
-    <table class="catalog__interfaceTable catalog__tokensTable">
+    <table class="catalog__interfaceTable" data-table="tokens">
       <caption class="catalog__interfaceCaption">Design tokens</caption>
       <thead>
         <tr><th>Token</th><th>Value</th><th>Description</th></tr>
@@ -301,8 +301,8 @@ function renderTokens() {
         .map(
           ({ name, value, description }) => `
         <tr>
-          <td class="catalog__propertyName" id="${name.slice(2)}">${name}</td>
-          <td class="catalog__propertyDefault">${value}</td>
+          <td class="catalog__property-name" id="${name.slice(2)}">${name}</td>
+          <td class="catalog__property-default">${value}</td>
           <td>${description}</td>
         </tr>`,
         )

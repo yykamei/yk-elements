@@ -75,7 +75,7 @@ test('bare /catalog URL is normalized to the trailing-slash form', async () => {
   expect(doc.querySelector('.catalog__brand').textContent.trim()).toBe(
     'yk-elements',
   );
-  expect(doc.querySelectorAll('.catalog__navLink').length).toBeGreaterThan(0);
+  expect(doc.querySelectorAll('.catalog__nav-link').length).toBeGreaterThan(0);
 });
 
 test('each component page declares its component and lists its variations', async () => {
@@ -95,13 +95,13 @@ test('landing page renders the sidebar and one card per component', async () => 
   expect(doc.querySelector('.catalog__brand').textContent.trim()).toBe(
     'yk-elements',
   );
-  const labels = [...doc.querySelectorAll('.catalog__navLink')].map((link) =>
+  const labels = [...doc.querySelectorAll('.catalog__nav-link')].map((link) =>
     link.textContent.trim(),
   );
   expect(labels).toEqual(['Overview', ...tags.map((tag) => `<${tag}>`)]);
   expect(doc.querySelectorAll('.catalog__card').length).toBe(components.length);
   expect(
-    doc.querySelector('.catalog__navLink--active').textContent.trim(),
+    doc.querySelector('.catalog__nav-link.is-active').textContent.trim(),
   ).toBe('Overview');
 });
 
@@ -133,15 +133,15 @@ test('each component page renders the sidebar with its own entry active and a he
     const iframe = await loadIframe(`/catalog/${tag}.html`);
     const doc = iframe.contentDocument;
     expect(
-      doc.querySelector('.catalog__navLink--active').textContent.trim(),
+      doc.querySelector('.catalog__nav-link.is-active').textContent.trim(),
       tag,
     ).toBe(`<${tag}>`);
     expect(
-      doc.querySelector('.catalog__componentTitle').textContent.trim(),
+      doc.querySelector('.catalog__component-title').textContent.trim(),
       tag,
     ).toBe(`<${tag}>`);
     expect(
-      doc.querySelector('.catalogDescription').textContent.trim(),
+      doc.querySelector('.catalog-description').textContent.trim(),
       tag,
     ).not.toBe('');
     expect(doc.querySelector('[data-landing]'), tag).toBeNull();
@@ -158,13 +158,15 @@ test('overview page renders the design tokens section', async () => {
   expect(rows.length).toBe(tokens.length);
 
   const names = rows.map((row) =>
-    row.querySelector('.catalog__propertyName').textContent.trim(),
+    row.querySelector('.catalog__property-name').textContent.trim(),
   );
   for (const { name } of tokens) {
     expect(names).toContain(name);
   }
 
-  const ids = rows.map((row) => row.querySelector('.catalog__propertyName').id);
+  const ids = rows.map(
+    (row) => row.querySelector('.catalog__property-name').id,
+  );
   expect(ids).toEqual(tokens.map(({ name }) => name.slice(2)));
 });
 
@@ -176,19 +178,19 @@ test('each component page renders its declared interface', async () => {
     expect(section, tag).not.toBeNull();
 
     const rows = [
-      ...section.querySelectorAll('.catalog__propertyTable tbody tr'),
+      ...section.querySelectorAll('[data-table="properties"] tbody tr'),
     ];
     expect(rows.length, tag).toBe(cssProperties.length);
 
     const names = rows.map((row) =>
-      row.querySelector('.catalog__propertyName').textContent.trim(),
+      row.querySelector('.catalog__property-name').textContent.trim(),
     );
     for (const { name } of cssProperties) {
       expect(names, tag).toContain(name);
     }
 
     const attributeTables = section.querySelectorAll(
-      '.catalog__attributeTable',
+      '[data-table="attributes"]',
     );
     expect(attributeTables.length, tag).toBe(attributes.length);
 
@@ -198,7 +200,7 @@ test('each component page renders its declared interface', async () => {
     ] of cssProperties.entries()) {
       const row = rows[index];
       const hrefs = [
-        ...row.querySelectorAll('.catalog__propertyDefault a'),
+        ...row.querySelectorAll('.catalog__property-default a'),
       ].map((link) => link.getAttribute('href'));
       const expected = [];
       for (const token of tokens) {

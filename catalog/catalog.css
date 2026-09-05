@@ -21,14 +21,15 @@
  * color palette references them, so the look can be themed in one place.
  */
 .catalog {
-  --yk-catalog-fg: #1f2933;
-  --yk-catalog-fg-muted: #52606d;
-  --yk-catalog-border: #d9e2ec;
-  --yk-catalog-title-bg: #e4e7eb;
-  --yk-catalog-demo-bg: #f5f7fa;
-  --yk-catalog-demo-item-bg: #ffffff;
-  --yk-catalog-code-bg: #1f2933;
-  --yk-catalog-code-fg: #f5f7fa;
+  --yk-catalog-fg: oklch(0.276 0.023 248.68);
+  --yk-catalog-fg-muted: oklch(0.482 0.027 246.41);
+  --yk-catalog-border: oklch(0.909 0.017 250.85);
+  --yk-catalog-title-bg: oklch(0.927 0.006 255.48);
+  --yk-catalog-demo-bg: oklch(0.976 0.005 258.32);
+  --yk-catalog-demo-item-bg: oklch(1 0 0);
+  --yk-catalog-code-bg: oklch(0.276 0.023 248.68);
+  --yk-catalog-code-fg: oklch(0.976 0.005 258.32);
+  --yk-catalog-space-xs: 0.25rem;
   display: grid;
   grid-template-columns: 16rem minmax(0, 1fr);
   max-inline-size: 72rem;
@@ -70,13 +71,11 @@
 .catalog__nav {
   display: flex;
   flex-direction: column;
-  /* --yk-space-xs is not a defined token; the tight 0.25rem step is written out. */
-  gap: 0.25rem;
+  gap: var(--yk-catalog-space-xs);
 }
 
-.catalog__navLink {
-  /* See above: --yk-space-xs is not a defined token. */
-  padding: 0.25rem var(--yk-space-sm);
+.catalog__nav-link {
+  padding: var(--yk-catalog-space-xs) var(--yk-space-sm);
   border-radius: 0.375rem;
   color: var(--yk-catalog-fg-muted);
   font-family: ui-monospace, monospace;
@@ -89,14 +88,10 @@
   }
 }
 
-.catalog__navLink--active {
+.catalog__nav-link.is-active {
   background-color: var(--yk-catalog-title-bg);
   color: var(--yk-catalog-fg);
   font-weight: 600;
-}
-
-.catalog__navLink--active:hover {
-  background-color: var(--yk-catalog-title-bg);
 }
 
 .catalog__title {
@@ -122,14 +117,14 @@
   }
 }
 
-.catalog__cardTitle {
+.catalog__card-title {
   margin-block: 0;
   font-family: ui-monospace, monospace;
   font-size: 1rem;
   font-weight: 700;
 }
 
-.catalog__componentTitle {
+.catalog__component-title {
   margin-block: 0;
   font-family: ui-monospace, monospace;
   font-size: 1.5rem;
@@ -147,7 +142,6 @@
   width: 100%;
   border: 1px solid var(--yk-catalog-border);
   border-radius: 0.5rem;
-  border-collapse: separate;
   border-spacing: 0;
   overflow-x: auto;
   font-size: 0.875rem;
@@ -174,12 +168,12 @@
   font-weight: 600;
 }
 
-.catalog__propertyName {
+.catalog__property-name {
   font-family: ui-monospace, monospace;
   white-space: nowrap;
 }
 
-.catalog__propertyDefault {
+.catalog__property-default {
   font-family: ui-monospace, monospace;
   color: var(--yk-catalog-fg-muted);
 }
@@ -188,10 +182,10 @@
  * Reusable description text shown in landing cards and component headers.
  *
  * ```html
- * <p class="catalogDescription">Layout primitive ...</p>
+ * <p class="catalog-description">Layout primitive ...</p>
  * ```
  */
-.catalogDescription {
+.catalog-description {
   margin-block: 0;
   color: var(--yk-catalog-fg-muted);
 }
@@ -254,11 +248,11 @@
  *
  * ```html
  * <yk-vstack>
- *   <p class="demoItem">First item</p>
+ *   <p class="demo-item">First item</p>
  * </yk-vstack>
  * ```
  */
-.demoItem {
+.demo-item {
   margin: 0;
   padding: var(--yk-space-sm) var(--yk-space-md);
   border: 1px solid var(--yk-catalog-border);
