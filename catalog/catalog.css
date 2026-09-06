@@ -138,11 +138,16 @@
   font-weight: 700;
 }
 
+/**
+ * `display: block` turns the table itself into a scroll container: `overflow-x`
+ * does not apply to table boxes, so without it wide tables would overflow the
+ * page instead of scrolling (e.g. on mobile viewports).
+ */
 .catalog__interfaceTable {
+  display: block;
   width: 100%;
   border: 1px solid var(--yk-catalog-border);
   border-radius: 0.5rem;
-  border-spacing: 0;
   overflow-x: auto;
   font-size: 0.875rem;
 }
@@ -153,7 +158,6 @@
   font-size: 0.875rem;
   font-weight: 600;
   text-align: start;
-  caption-side: top;
 }
 
 .catalog__interfaceTable th,
