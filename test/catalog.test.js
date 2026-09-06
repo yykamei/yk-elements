@@ -72,10 +72,8 @@ test('bare /catalog URL is normalized to the trailing-slash form', async () => {
     expect(iframe.contentWindow.location.pathname.endsWith('/')).toBe(true);
   });
   const doc = iframe.contentDocument;
-  expect(doc.querySelector('.catalog__brand').textContent.trim()).toBe(
-    'yk-elements',
-  );
-  expect(doc.querySelectorAll('.catalog__nav-link').length).toBeGreaterThan(0);
+  expect(doc.querySelector('.brand').textContent.trim()).toBe('yk-elements');
+  expect(doc.querySelectorAll('nav a').length).toBeGreaterThan(0);
 });
 
 test('each component page declares its component and lists its variations', async () => {
@@ -85,23 +83,23 @@ test('each component page declares its component and lists its variations', asyn
     const doc = await fetchHtml(`/catalog/${tag}.html`);
     expect(doc.body.dataset.component).toBe(tag);
     expect(doc.querySelector('[data-component-header]')).not.toBeNull();
-    expect(doc.querySelectorAll('.catalog__variation').length).toBe(variations);
+    expect(doc.querySelectorAll('figure').length).toBe(variations);
   }
 });
 
 test('landing page renders the sidebar and one card per component', async () => {
   const iframe = await loadIframe('/catalog/index.html');
   const doc = iframe.contentDocument;
-  expect(doc.querySelector('.catalog__brand').textContent.trim()).toBe(
-    'yk-elements',
-  );
-  const labels = [...doc.querySelectorAll('.catalog__nav-link')].map((link) =>
+  expect(doc.querySelector('.brand').textContent.trim()).toBe('yk-elements');
+  const labels = [...doc.querySelectorAll('nav a')].map((link) =>
     link.textContent.trim(),
   );
   expect(labels).toEqual(['Overview', ...tags.map((tag) => `<${tag}>`)]);
-  expect(doc.querySelectorAll('.catalog__card').length).toBe(components.length);
+  expect(doc.querySelectorAll('[data-landing] > a').length).toBe(
+    components.length,
+  );
   expect(
-    doc.querySelector('.catalog__nav-link.is-active').textContent.trim(),
+    doc.querySelector('nav a[aria-current="page"]').textContent.trim(),
   ).toBe('Overview');
 });
 
@@ -110,7 +108,9 @@ test('catalog chrome dogfoods the library components', async () => {
   const landingDoc = landing.contentDocument;
   expect(landingDoc.querySelector('[data-landing]').tagName).toBe('YK-GRID');
   expect(landingDoc.querySelector('[data-sidebar] yk-vstack')).not.toBeNull();
-  expect(landingDoc.querySelector('.catalog__card yk-vstack')).not.toBeNull();
+  expect(
+    landingDoc.querySelector('[data-landing] > a yk-vstack'),
+  ).not.toBeNull();
   expect(landingDoc.querySelector('[data-tokens] yk-vstack')).not.toBeNull();
 
   for (const tag of tags) {
@@ -120,10 +120,10 @@ test('catalog chrome dogfoods the library components', async () => {
       doc.querySelector('[data-component-header] yk-vstack'),
     ).not.toBeNull();
     expect(doc.querySelector('[data-interface] yk-vstack')).not.toBeNull();
-    const variations = [...doc.querySelectorAll('.catalog__variation')];
+    const variations = [...doc.querySelectorAll('figure')];
     expect(variations.length).toBeGreaterThan(0);
     for (const variation of variations) {
-      expect(variation.querySelector('.catalog__demo').tagName).toBe('YK-PAD');
+      expect(variation.querySelector('yk-pad').tagName).toBe('YK-PAD');
     }
   }
 });
@@ -133,17 +133,16 @@ test('each component page renders the sidebar with its own entry active and a he
     const iframe = await loadIframe(`/catalog/${tag}.html`);
     const doc = iframe.contentDocument;
     expect(
-      doc.querySelector('.catalog__nav-link.is-active').textContent.trim(),
+      doc.querySelector('nav a[aria-current="page"]').textContent.trim(),
       tag,
     ).toBe(`<${tag}>`);
     expect(
-      doc.querySelector('.catalog__component-title').textContent.trim(),
+      doc.querySelector('[data-component-header] h1').textContent.trim(),
       tag,
     ).toBe(`<${tag}>`);
-    expect(
-      doc.querySelector('.catalog-description').textContent.trim(),
-      tag,
-    ).not.toBe('');
+    expect(doc.querySelector('.description').textContent.trim(), tag).not.toBe(
+      '',
+    );
     expect(doc.querySelector('[data-landing]'), tag).toBeNull();
   }
 });
@@ -158,15 +157,13 @@ test('overview page renders the design tokens section', async () => {
   expect(rows.length).toBe(tokens.length);
 
   const names = rows.map((row) =>
-    row.querySelector('.catalog__property-name').textContent.trim(),
+    row.querySelector('.property-name').textContent.trim(),
   );
   for (const { name } of tokens) {
     expect(names).toContain(name);
   }
 
-  const ids = rows.map(
-    (row) => row.querySelector('.catalog__property-name').id,
-  );
+  const ids = rows.map((row) => row.querySelector('.property-name').id);
   expect(ids).toEqual(tokens.map(({ name }) => name.slice(2)));
 });
 
@@ -183,7 +180,7 @@ test('each component page renders its declared interface', async () => {
     expect(rows.length, tag).toBe(cssProperties.length);
 
     const names = rows.map((row) =>
-      row.querySelector('.catalog__property-name').textContent.trim(),
+      row.querySelector('.property-name').textContent.trim(),
     );
     for (const { name } of cssProperties) {
       expect(names, tag).toContain(name);
@@ -199,9 +196,9 @@ test('each component page renders its declared interface', async () => {
       { name, default: fallback },
     ] of cssProperties.entries()) {
       const row = rows[index];
-      const hrefs = [
-        ...row.querySelectorAll('.catalog__property-default a'),
-      ].map((link) => link.getAttribute('href'));
+      const hrefs = [...row.querySelectorAll('.property-default a')].map(
+        (link) => link.getAttribute('href'),
+      );
       const expected = [];
       for (const token of tokens) {
         const count = fallback.split(token.name).length - 1;

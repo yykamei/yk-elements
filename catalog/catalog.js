@@ -6,7 +6,8 @@
  * chrome from them:
  *
  * - the sidebar navigation (brand + Overview + one link per component),
- *   marking the current page as active based on the URL
+ *   marking the current page as active based on the URL via the platform's
+ *   own aria-current state
  * - the component cards on the landing page (catalog/index.html), which
  *   hosts a [data-landing] container
  * - the header (title + description) on each component page, whose <body>
@@ -27,7 +28,7 @@
  * (direction is encapsulated in Shadow DOM).
  *
  * ```html
- * <aside class="catalog__sidebar" data-sidebar></aside>
+ * <aside data-sidebar></aside>
  * <script type="module" src="./catalog.js"></script>
  * ```
  */
@@ -160,17 +161,18 @@ function renderSidebar() {
   const sidebar = document.querySelector('[data-sidebar]');
   if (!sidebar) return;
   const current = currentComponent();
-  const linkClass = (active) =>
-    active ? 'catalog__nav-link is-active' : 'catalog__nav-link';
+  // The platform's aria-current state carries "active" for styling (see
+  // catalog.css) — no invented class needed.
+  const isActive = (isActive) => (isActive ? ' aria-current="page"' : '');
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
-      <a class="catalog__brand" href="./index.html">yk-elements</a>
-      <nav class="catalog__nav" aria-label="Components">
-        <a class="${linkClass(current === null)}" href="./index.html">Overview</a>
+      <a class="brand" href="./index.html">yk-elements</a>
+      <nav aria-label="Components">
+        <a href="./index.html"${isActive(current === null)}>Overview</a>
         ${components
           .map(
             ({ tag }) => `
-        <a class="${linkClass(current === tag)}" href="${pageFor(tag)}">&lt;${tag}&gt;</a>`,
+        <a href="${pageFor(tag)}"${isActive(current === tag)}>&lt;${tag}&gt;</a>`,
           )
           .join('')}
       </nav>
@@ -186,10 +188,10 @@ function renderLanding() {
   landing.innerHTML = components
     .map(
       ({ tag, description }) => `
-    <a class="catalog__card" href="${pageFor(tag)}">
+    <a href="${pageFor(tag)}">
       <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-        <h2 class="catalog__card-title">&lt;${tag}&gt;</h2>
-        <p class="catalog-description">${description}</p>
+        <h2>&lt;${tag}&gt;</h2>
+        <p class="description">${description}</p>
       </yk-vstack>
     </a>`,
     )
@@ -204,8 +206,8 @@ function renderComponentHeader() {
   if (!component) return;
   header.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-      <h1 class="catalog__component-title">&lt;${tag}&gt;</h1>
-      <p class="catalog-description">${component.description}</p>
+      <h1>&lt;${tag}&gt;</h1>
+      <p class="description">${component.description}</p>
     </yk-vstack>
   `;
 }
@@ -234,8 +236,7 @@ const linkTokens = (() => {
   return (text) =>
     text.replace(
       pattern,
-      (name) =>
-        `<a class="catalog__token-link" href="${anchors.get(name)}">${name}</a>`,
+      (name) => `<a href="${anchors.get(name)}">${name}</a>`,
     );
 })();
 
@@ -244,8 +245,8 @@ const rowsFor = (items) =>
     .map(
       ({ name, default: fallback, description }) => `
       <tr>
-        <td class="catalog__property-name">${name}</td>
-        <td class="catalog__property-default">${linkTokens(fallback)}</td>
+        <td class="property-name">${name}</td>
+        <td class="property-default">${linkTokens(fallback)}</td>
         <td>${description}</td>
       </tr>`,
     )
@@ -261,8 +262,8 @@ function renderInterface() {
   const groups = [];
   if (component.cssProperties.length) {
     groups.push(`
-      <table class="catalog__interfaceTable" data-table="properties">
-        <caption class="catalog__interfaceCaption">CSS custom properties</caption>
+      <table data-table="properties">
+        <caption>CSS custom properties</caption>
         <thead>
           <tr><th>Property</th><th>Default</th><th>Description</th></tr>
         </thead>
@@ -271,8 +272,8 @@ function renderInterface() {
   }
   if (component.attributes.length) {
     groups.push(`
-      <table class="catalog__interfaceTable" data-table="attributes">
-        <caption class="catalog__interfaceCaption">HTML attributes</caption>
+      <table data-table="attributes">
+        <caption>HTML attributes</caption>
         <thead>
           <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
         </thead>
@@ -282,7 +283,7 @@ function renderInterface() {
 
   section.innerHTML = groups.length
     ? `<yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">` +
-      `<h2 class="catalog__interfaceTitle">Interface</h2>${groups.join('')}</yk-vstack>`
+      `<h2>Interface</h2>${groups.join('')}</yk-vstack>`
     : '';
 }
 
@@ -291,9 +292,9 @@ function renderTokens() {
   if (!section) return;
   section.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-    <h2 class="catalog__tokensTitle">Design tokens</h2>
-    <table class="catalog__interfaceTable" data-table="tokens">
-      <caption class="catalog__interfaceCaption">Design tokens</caption>
+    <h2>Design tokens</h2>
+    <table data-table="tokens">
+      <caption>Design tokens</caption>
       <thead>
         <tr><th>Token</th><th>Value</th><th>Description</th></tr>
       </thead>
@@ -301,8 +302,8 @@ function renderTokens() {
         .map(
           ({ name, value, description }) => `
         <tr>
-          <td class="catalog__property-name" id="${name.slice(2)}">${name}</td>
-          <td class="catalog__property-default">${value}</td>
+          <td class="property-name" id="${name.slice(2)}">${name}</td>
+          <td class="property-default">${value}</td>
           <td>${description}</td>
         </tr>`,
         )

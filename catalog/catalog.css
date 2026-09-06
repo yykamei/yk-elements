@@ -8,262 +8,268 @@
  * Adding a component means adding a page with its variations and one entry
  * in that list. No build step is involved.
  *
+ * All rules live in a single `@scope (.catalog)` block: the page shell is
+ * the only named class, and parts are reached through element selectors,
+ * data attributes, and the few part classes the scope cannot say (.brand,
+ * .title, .description, .property-name, .property-default, .demo-item).
+ * The nav's current page uses the platform's own [aria-current="page"]
+ * state instead of an invented class. `@scope` is Baseline Newly
+ * Available (Chrome 118+, Safari 17.4+, Firefox 146+); the catalog
+ * deliberately ships no fallback — only these dogfooding pages use it,
+ * the library itself never does.
+ *
  * The catalog dogfoods the library: spacing between siblings is owned by
  * yk-vstack / yk-grid parents and demo insets by yk-pad, so this file keeps
  * only the catalog's own visual identity (colors, borders, typography).
  * Two layout exceptions remain here: the outer .catalog two-column shell,
- * which no existing primitive reproduces, and .catalog__nav, whose vertical
- * stack must switch to a wrapping row in the mobile media query (a switch
- * neither yk-vstack nor yk-cluster can express from outside Shadow DOM).
+ * which no existing primitive reproduces, and the sidebar nav, whose
+ * vertical stack must switch to a wrapping row in the mobile media query
+ * (a switch neither yk-vstack nor yk-cluster can express from outside
+ * Shadow DOM).
  *
  * The page follows the library's token philosophy: a small set of
- * --yk-catalog-* custom properties is declared once on .catalog and the
- * color palette references them, so the look can be themed in one place.
+ * --yk-catalog-* custom properties is declared once on the scope root and
+ * the color palette references them, so the look can be themed in one place.
  */
-.catalog {
-  --yk-catalog-fg: oklch(0.276 0.023 248.68);
-  --yk-catalog-fg-muted: oklch(0.482 0.027 246.41);
-  --yk-catalog-border: oklch(0.909 0.017 250.85);
-  --yk-catalog-title-bg: oklch(0.927 0.006 255.48);
-  --yk-catalog-demo-bg: oklch(0.976 0.005 258.32);
-  --yk-catalog-demo-item-bg: oklch(1 0 0);
-  --yk-catalog-code-bg: oklch(0.276 0.023 248.68);
-  --yk-catalog-code-fg: oklch(0.976 0.005 258.32);
-  --yk-catalog-space-xs: 0.25rem;
-  --yk-catalog-radius-md: 0.5rem;
-  --yk-catalog-radius-sm: 0.375rem;
-  --yk-catalog-font-mono: ui-monospace, monospace;
-  --yk-catalog-text-sm: 0.875rem;
-  display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
-  max-inline-size: 72rem;
-  margin-inline: auto;
-  padding: var(--yk-space-lg);
-  color: var(--yk-catalog-fg);
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-}
+@scope (.catalog) {
+  :scope {
+    --yk-catalog-fg: oklch(0.276 0.023 248.68);
+    --yk-catalog-fg-muted: oklch(0.482 0.027 246.41);
+    --yk-catalog-border: oklch(0.909 0.017 250.85);
+    --yk-catalog-title-bg: oklch(0.927 0.006 255.48);
+    --yk-catalog-demo-bg: oklch(0.976 0.005 258.32);
+    --yk-catalog-demo-item-bg: oklch(1 0 0);
+    --yk-catalog-code-bg: oklch(0.276 0.023 248.68);
+    --yk-catalog-code-fg: oklch(0.976 0.005 258.32);
+    --yk-catalog-space-xs: 0.25rem;
+    --yk-catalog-radius-md: 0.5rem;
+    --yk-catalog-radius-sm: 0.375rem;
+    --yk-catalog-font-mono: ui-monospace, monospace;
+    --yk-catalog-text-sm: 0.875rem;
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+    max-inline-size: 72rem;
+    margin-inline: auto;
+    padding: var(--yk-space-lg);
+    color: var(--yk-catalog-fg);
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+  }
 
-/* Grid-item blowout guard for the outer shell: lets <main> shrink below
- * the intrinsic width of wide children (e.g. code blocks). */
-.catalog > main {
-  min-inline-size: 0;
-}
+  /* Headings, paragraphs, figures, and code blocks sit in yk-vstack / yk-grid
+   * containers whose gap owns all spacing, so strip their default margins;
+   * :where() keeps the reset trivially overridable. */
+  :where(h1, h2, p, figure, pre) {
+    margin: 0;
+  }
 
-.catalog__sidebar {
-  position: sticky;
-  inset-block-start: 0;
-  align-self: stretch;
-  padding: var(--yk-space-md);
-  border: 1px solid var(--yk-catalog-border);
-  border-radius: var(--yk-catalog-radius-md);
-  background-color: var(--yk-catalog-demo-bg);
-}
+  /* Grid-item blowout guard for the outer shell: lets <main> shrink below
+   * the intrinsic width of wide children (e.g. code blocks). */
+  :scope > main {
+    min-inline-size: 0;
+  }
 
-.catalog__brand {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--yk-catalog-fg);
-  text-decoration: none;
-}
+  aside {
+    position: sticky;
+    inset-block-start: 0;
+    align-self: stretch;
+    padding: var(--yk-space-md);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
+    background-color: var(--yk-catalog-demo-bg);
+  }
 
-/**
- * The sidebar nav keeps its own flex CSS (see the file header): the stack
- * must switch to a wrapping row in the mobile media query below, which no
- * existing yk-* primitive can express from outside Shadow DOM.
- */
-.catalog__nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--yk-catalog-space-xs);
-}
+  .brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--yk-catalog-fg);
+    text-decoration: none;
+  }
 
-.catalog__nav-link {
-  padding: var(--yk-catalog-space-xs) var(--yk-space-sm);
-  border-radius: var(--yk-catalog-radius-sm);
-  color: var(--yk-catalog-fg-muted);
-  font-family: var(--yk-catalog-font-mono);
-  font-size: var(--yk-catalog-text-sm);
-  text-decoration: none;
+  /**
+   * The sidebar nav keeps its own flex CSS (see the file header): the stack
+   * must switch to a wrapping row in the mobile media query below, which no
+   * existing yk-* primitive can express from outside Shadow DOM.
+   */
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yk-catalog-space-xs);
+  }
 
-  &:hover {
+  nav a {
+    padding: var(--yk-catalog-space-xs) var(--yk-space-sm);
+    border-radius: var(--yk-catalog-radius-sm);
+    color: var(--yk-catalog-fg-muted);
+    font-family: var(--yk-catalog-font-mono);
+    font-size: var(--yk-catalog-text-sm);
+    text-decoration: none;
+  }
+
+  nav a:hover {
     background-color: var(--yk-catalog-border);
     color: var(--yk-catalog-fg);
   }
-}
 
-.catalog__nav-link.is-active {
-  background-color: var(--yk-catalog-title-bg);
-  color: var(--yk-catalog-fg);
-  font-weight: 600;
-}
+  /* Declared after the :hover rule so hovering the active link keeps its
+   * palette: equal specificity, source order decides. */
+  nav a[aria-current="page"] {
+    background-color: var(--yk-catalog-title-bg);
+    color: var(--yk-catalog-fg);
+    font-weight: 600;
+  }
 
-.catalog__title {
-  margin-block: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-}
+  .description {
+    color: var(--yk-catalog-fg-muted);
+  }
 
-.catalog__tagline {
-  margin-block: 0;
-  color: var(--yk-catalog-fg-muted);
-}
+  .title {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
 
-.catalog__card {
-  padding: var(--yk-space-md);
-  border: 1px solid var(--yk-catalog-border);
-  border-radius: var(--yk-catalog-radius-md);
-  color: inherit;
-  text-decoration: none;
+  [data-component-header] h1 {
+    font-family: var(--yk-catalog-font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
 
-  &:hover {
+  /* The landing cards are the only direct-child links of the landing grid;
+   * their titles are the only <h2> elements inside it. */
+  [data-landing] > a {
+    padding: var(--yk-space-md);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  [data-landing] > a:hover {
     border-color: var(--yk-catalog-fg-muted);
   }
-}
 
-.catalog__card-title {
-  margin-block: 0;
-  font-family: var(--yk-catalog-font-mono);
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.catalog__component-title {
-  margin-block: 0;
-  font-family: var(--yk-catalog-font-mono);
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.catalog__interfaceTitle,
-.catalog__tokensTitle {
-  margin-block: 0;
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
-/**
- * `display: block` turns the table itself into a scroll container: `overflow-x`
- * does not apply to table boxes, so without it wide tables would overflow the
- * page instead of scrolling (e.g. on mobile viewports).
- */
-.catalog__interfaceTable {
-  display: block;
-  width: 100%;
-  border: 1px solid var(--yk-catalog-border);
-  border-radius: var(--yk-catalog-radius-md);
-  overflow-x: auto;
-  font-size: var(--yk-catalog-text-sm);
-}
-
-.catalog__interfaceCaption {
-  padding: var(--yk-space-sm) var(--yk-space-md);
-  background-color: var(--yk-catalog-title-bg);
-  font-size: var(--yk-catalog-text-sm);
-  font-weight: 600;
-  text-align: start;
-}
-
-.catalog__interfaceTable th,
-.catalog__interfaceTable td {
-  padding: var(--yk-space-sm) var(--yk-space-md);
-  border-block-start: 1px solid var(--yk-catalog-border);
-  text-align: start;
-  vertical-align: top;
-}
-
-.catalog__interfaceTable th {
-  font-weight: 600;
-}
-
-.catalog__property-name {
-  font-family: var(--yk-catalog-font-mono);
-  white-space: nowrap;
-}
-
-.catalog__property-default {
-  font-family: var(--yk-catalog-font-mono);
-  color: var(--yk-catalog-fg-muted);
-}
-
-/**
- * Reusable description text shown in landing cards and component headers.
- *
- * ```html
- * <p class="catalog-description">Layout primitive ...</p>
- * ```
- */
-.catalog-description {
-  margin-block: 0;
-  color: var(--yk-catalog-fg-muted);
-}
-
-.catalog__variation {
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid var(--yk-catalog-border);
-  border-radius: var(--yk-catalog-radius-md);
-}
-
-.catalog__variationTitle {
-  padding: var(--yk-space-sm) var(--yk-space-md);
-  background-color: var(--yk-catalog-title-bg);
-  font-size: var(--yk-catalog-text-sm);
-  font-weight: 600;
-}
-
-.catalog__demo {
-  background-color: var(--yk-catalog-demo-bg);
-}
-
-.catalog__code {
-  margin: 0;
-  padding: var(--yk-space-md);
-  overflow-x: auto;
-  background-color: var(--yk-catalog-code-bg);
-  color: var(--yk-catalog-code-fg);
-  font-size: 0.85rem;
-}
-
-.catalog__footer {
-  grid-column: 1 / -1;
-  color: var(--yk-catalog-fg-muted);
-}
-
-.catalog__footer a {
-  color: inherit;
-}
-
-@media (width < 56rem) {
-  .catalog {
-    grid-template-columns: 1fr;
+  [data-landing] h2 {
+    font-family: var(--yk-catalog-font-mono);
+    font-size: 1rem;
+    font-weight: 700;
   }
 
-  .catalog__sidebar {
-    position: static;
-    align-self: auto;
+  [data-interface] h2,
+  [data-tokens] h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  /**
+   * `display: block` turns the table itself into a scroll container: `overflow-x`
+   * does not apply to table boxes, so without it wide tables would overflow the
+   * page instead of scrolling (e.g. on mobile viewports).
+   */
+  table {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
     overflow-x: auto;
+    font-size: var(--yk-catalog-text-sm);
   }
 
-  .catalog__nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+  caption {
+    padding: var(--yk-space-sm) var(--yk-space-md);
+    background-color: var(--yk-catalog-title-bg);
+    font-size: var(--yk-catalog-text-sm);
+    font-weight: 600;
+    text-align: start;
   }
-}
 
-/**
- * Reusable demo content box used inside catalog variations.
- *
- * ```html
- * <yk-vstack>
- *   <p class="demo-item">First item</p>
- * </yk-vstack>
- * ```
- */
-.demo-item {
-  margin: 0;
-  padding: var(--yk-space-sm) var(--yk-space-md);
-  border: 1px solid var(--yk-catalog-border);
-  border-radius: var(--yk-catalog-radius-sm);
-  background-color: var(--yk-catalog-demo-item-bg);
+  th,
+  td {
+    padding: var(--yk-space-sm) var(--yk-space-md);
+    border-block-start: 1px solid var(--yk-catalog-border);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  th {
+    font-weight: 600;
+  }
+
+  /* Two <td> roles in the same row (property name vs default) are
+   * indistinguishable for element selectors, so these part classes remain. */
+  .property-name {
+    font-family: var(--yk-catalog-font-mono);
+    white-space: nowrap;
+  }
+
+  .property-default {
+    font-family: var(--yk-catalog-font-mono);
+    color: var(--yk-catalog-fg-muted);
+  }
+
+  figure {
+    overflow: hidden;
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
+  }
+
+  figcaption {
+    padding: var(--yk-space-sm) var(--yk-space-md);
+    background-color: var(--yk-catalog-title-bg);
+    font-size: var(--yk-catalog-text-sm);
+    font-weight: 600;
+  }
+
+  yk-pad {
+    background-color: var(--yk-catalog-demo-bg);
+  }
+
+  pre {
+    padding: var(--yk-space-md);
+    overflow-x: auto;
+    background-color: var(--yk-catalog-code-bg);
+    color: var(--yk-catalog-code-fg);
+    font-size: 0.85rem;
+  }
+
+  footer {
+    grid-column: 1 / -1;
+    color: var(--yk-catalog-fg-muted);
+  }
+
+  footer a {
+    color: inherit;
+  }
+
+  /**
+   * Reusable demo content box used inside catalog variations.
+   *
+   * ```html
+   * <yk-vstack>
+   *   <p class="demo-item">First item</p>
+   * </yk-vstack>
+   * ```
+   */
+  .demo-item {
+    padding: var(--yk-space-sm) var(--yk-space-md);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-sm);
+    background-color: var(--yk-catalog-demo-item-bg);
+  }
+
+  @media (width < 56rem) {
+    :scope {
+      grid-template-columns: 1fr;
+    }
+
+    aside {
+      position: static;
+      align-self: auto;
+      overflow-x: auto;
+    }
+
+    nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
 }

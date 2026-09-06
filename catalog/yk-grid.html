@@ -11,7 +11,7 @@
   </head>
   <body data-component="yk-grid">
     <div class="catalog">
-      <aside class="catalog__sidebar" data-sidebar></aside>
+      <aside data-sidebar></aside>
 
       <main>
         <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
@@ -19,9 +19,9 @@
 
           <section data-interface></section>
 
-        <figure class="catalog__variation">
-          <figcaption class="catalog__variationTitle">Default</figcaption>
-          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-grid>
               <p class="demo-item">First item</p>
               <p class="demo-item">Second item</p>
@@ -29,7 +29,7 @@
               <p class="demo-item">Fourth item</p>
             </yk-grid>
           </yk-pad>
-          <pre class="catalog__code"><code>&lt;yk-grid&gt;
+          <pre><code>&lt;yk-grid&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
   &lt;p&gt;Third item&lt;/p&gt;
@@ -37,9 +37,9 @@
 &lt;/yk-grid&gt;</code></pre>
         </figure>
 
-        <figure class="catalog__variation">
-          <figcaption class="catalog__variationTitle">Custom min column width</figcaption>
-          <yk-pad class="catalog__demo" style="--yk-pad-padding: var(--yk-space-lg)">
+        <figure>
+          <figcaption>Custom min column width</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-grid style="--yk-grid-min: 12rem">
               <p class="demo-item">First item</p>
               <p class="demo-item">Second item</p>
@@ -47,7 +47,7 @@
               <p class="demo-item">Fourth item</p>
             </yk-grid>
           </yk-pad>
-          <pre class="catalog__code"><code>&lt;yk-grid style="--yk-grid-min: 12rem"&gt;
+          <pre><code>&lt;yk-grid style="--yk-grid-min: 12rem"&gt;
   &lt;p&gt;First item&lt;/p&gt;
   &lt;p&gt;Second item&lt;/p&gt;
   &lt;p&gt;Third item&lt;/p&gt;
@@ -57,7 +57,7 @@
         </yk-vstack>
       </main>
 
-      <footer class="catalog__footer">
+      <footer>
         <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
       </footer>
     </div>
