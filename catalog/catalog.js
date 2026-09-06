@@ -52,6 +52,12 @@ export const components = [
       'Layout primitive that stacks its children horizontally with a consistent gap.',
     cssProperties: [
       {
+        name: '--yk-hstack-align',
+        default: 'stretch',
+        description:
+          'Cross-axis alignment of children (any CSS align-items value).',
+      },
+      {
         name: '--yk-hstack-gap',
         default: 'var(--yk-space-md, 1rem)',
         description: 'Spacing between adjacent children.',

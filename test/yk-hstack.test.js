@@ -42,3 +42,18 @@ test('prefers the component-level gap token over the global one', () => {
 
   expect(getComputedStyle(host).gap).toBe('5px');
 });
+
+test('aligns children via the component-level alignment token', () => {
+  const host = document.createElement('yk-hstack');
+  host.style.setProperty('--yk-hstack-align', 'center');
+  document.body.appendChild(host);
+
+  expect(getComputedStyle(host).alignItems).toBe('center');
+});
+
+test('keeps the default cross-axis stretch when no alignment token is set', () => {
+  const host = document.createElement('yk-hstack');
+  document.body.appendChild(host);
+
+  expect(getComputedStyle(host).alignItems).toBe('stretch');
+});
