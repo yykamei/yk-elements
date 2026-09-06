@@ -161,16 +161,25 @@
   }
 
   /**
-   * `display: block` turns the table itself into a scroll container: `overflow-x`
-   * does not apply to table boxes, so without it wide tables would overflow the
-   * page instead of scrolling (e.g. on mobile viewports).
+   * Wide interface tables overflow their container, and `overflow-x` does not
+   * apply to table boxes — so the table itself cannot be the scroll
+   * container. Converting the table to `display: block` scrolls, but the
+   * anonymous inner table shrink-to-fits, leaving the caption and row
+   * separators short of the box border on wide screens. The scroll wrapper
+   * keeps both properties working: the box frame (border, radius, scroll)
+   * stays at the container width while the inner table fills or overflows it.
    */
-  table {
-    display: block;
-    width: 100%;
+  .table-scroll {
     border: 1px solid var(--yk-catalog-border);
     border-radius: var(--yk-catalog-radius-md);
     overflow-x: auto;
+  }
+
+  /* Distributes the columns over the full width; without it the UA's default
+   * 2px spacing would break the per-cell border-block-start separators. */
+  table {
+    width: 100%;
+    border-spacing: 0;
     font-size: var(--yk-catalog-text-sm);
   }
 

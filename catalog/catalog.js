@@ -169,7 +169,7 @@ function renderSidebar() {
   const current = currentComponent();
   // The platform's aria-current state carries "active" for styling (see
   // catalog.css) — no invented class needed.
-  const isActive = (isActive) => (isActive ? ' aria-current="page"' : '');
+  const isActive = (active) => (active ? ' aria-current="page"' : '');
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
       <a class="brand" href="./index.html">yk-elements</a>
@@ -268,23 +268,27 @@ function renderInterface() {
   const groups = [];
   if (component.cssProperties.length) {
     groups.push(`
-      <table data-table="properties">
-        <caption>CSS custom properties</caption>
-        <thead>
-          <tr><th>Property</th><th>Default</th><th>Description</th></tr>
-        </thead>
-        <tbody>${rowsFor(component.cssProperties)}</tbody>
-      </table>`);
+      <div class="table-scroll">
+        <table data-table="properties">
+          <caption>CSS custom properties</caption>
+          <thead>
+            <tr><th>Property</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>${rowsFor(component.cssProperties)}</tbody>
+        </table>
+      </div>`);
   }
   if (component.attributes.length) {
     groups.push(`
-      <table data-table="attributes">
-        <caption>HTML attributes</caption>
-        <thead>
-          <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
-        </thead>
-        <tbody>${rowsFor(component.attributes)}</tbody>
-      </table>`);
+      <div class="table-scroll">
+        <table data-table="attributes">
+          <caption>HTML attributes</caption>
+          <thead>
+            <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>${rowsFor(component.attributes)}</tbody>
+        </table>
+      </div>`);
   }
 
   section.innerHTML = groups.length
@@ -299,6 +303,7 @@ function renderTokens() {
   section.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
     <h2>Design tokens</h2>
+    <div class="table-scroll">
     <table data-table="tokens">
       <caption>Design tokens</caption>
       <thead>
@@ -315,6 +320,7 @@ function renderTokens() {
         )
         .join('')}</tbody>
     </table>
+    </div>
     </yk-vstack>
   `;
 }
