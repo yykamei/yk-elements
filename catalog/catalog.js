@@ -32,6 +32,45 @@
  * <script type="module" src="./catalog.js"></script>
  * ```
  */
+const buttonFaceProperties = [
+  {
+    name: '--yk-button-padding-block',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Vertical padding of the face.',
+  },
+  {
+    name: '--yk-button-padding-inline',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Horizontal padding of the face.',
+  },
+  {
+    name: '--yk-button-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the face.',
+  },
+  {
+    name: '--yk-button-bg',
+    default: '#fff',
+    description: 'Background of the default light face.',
+  },
+  {
+    name: '--yk-button-color',
+    default: 'oklch(26.2% 0.009 248.2)',
+    description: 'Text color of the default light face.',
+  },
+  {
+    name: '--yk-button-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+    description: 'Border color of the default light face.',
+  },
+  {
+    name: '--yk-button-on-tone',
+    default: '#fff',
+    description: 'Text color on the solid tone faces.',
+  },
+];
+
 export const components = [
   {
     tag: 'yk-vstack',
@@ -137,44 +176,7 @@ export const components = [
     tag: 'yk-button',
     description:
       'Action button that renders its label inside a native button with a solid Bootstrap-style tone.',
-    cssProperties: [
-      {
-        name: '--yk-button-padding-block',
-        default: 'var(--yk-space-sm, 0.5rem)',
-        description: 'Vertical padding of the button face.',
-      },
-      {
-        name: '--yk-button-padding-inline',
-        default: 'var(--yk-space-md, 1rem)',
-        description: 'Horizontal padding of the button face.',
-      },
-      {
-        name: '--yk-button-radius',
-        default: 'var(--yk-radius-md, 0.375rem)',
-        description: 'Corner radius of the button face.',
-      },
-      {
-        name: '--yk-button-bg',
-        default: '#fff',
-        description: 'Background of the default light face.',
-      },
-      {
-        name: '--yk-button-color',
-        default: 'oklch(26.2% 0.009 248.2)',
-        description: 'Text color of the default light face.',
-      },
-      {
-        name: '--yk-button-border-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
-        description: 'Border color of the default light face.',
-      },
-      {
-        name: '--yk-button-on-tone',
-        default: '#fff',
-        description: 'Text color on the solid tone faces.',
-      },
-    ],
+    cssProperties: buttonFaceProperties,
     attributes: [
       {
         name: 'variant',
@@ -200,44 +202,7 @@ export const components = [
     tag: 'yk-link',
     description:
       'Link that renders like a yk-button, backed by a native anchor.',
-    cssProperties: [
-      {
-        name: '--yk-button-padding-block',
-        default: 'var(--yk-space-sm, 0.5rem)',
-        description: 'Vertical padding of the face.',
-      },
-      {
-        name: '--yk-button-padding-inline',
-        default: 'var(--yk-space-md, 1rem)',
-        description: 'Horizontal padding of the face.',
-      },
-      {
-        name: '--yk-button-radius',
-        default: 'var(--yk-radius-md, 0.375rem)',
-        description: 'Corner radius of the face.',
-      },
-      {
-        name: '--yk-button-bg',
-        default: '#fff',
-        description: 'Background of the default light face.',
-      },
-      {
-        name: '--yk-button-color',
-        default: 'oklch(26.2% 0.009 248.2)',
-        description: 'Text color of the default light face.',
-      },
-      {
-        name: '--yk-button-border-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
-        description: 'Border color of the default light face.',
-      },
-      {
-        name: '--yk-button-on-tone',
-        default: '#fff',
-        description: 'Text color on the solid tone faces.',
-      },
-    ],
+    cssProperties: buttonFaceProperties,
     attributes: [
       {
         name: 'href',
