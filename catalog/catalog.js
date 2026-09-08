@@ -236,6 +236,67 @@ export const components = [
       },
     ],
   },
+  {
+    tag: 'yk-badge',
+    description:
+      'Small status label that renders a solid tone and scales with the surrounding font size, like the Bootstrap badge.',
+    cssProperties: [
+      {
+        name: '--yk-badge-bg',
+        default: 'var(--yk-color-secondary, oklch(55.8% 0.016 244.9))',
+        description: 'Background of the default secondary face.',
+      },
+      {
+        name: '--yk-badge-color',
+        default: '#fff',
+        description: 'Text color of the badge.',
+      },
+      {
+        name: '--yk-badge-font-size',
+        default: '0.75em',
+        description: 'Font size; em units scale with the parent element.',
+      },
+      {
+        name: '--yk-badge-font-weight',
+        default: '700',
+        description: 'Font weight of the label.',
+      },
+      {
+        name: '--yk-badge-padding-block',
+        default: '0.35em',
+        description: 'Vertical padding of the badge.',
+      },
+      {
+        name: '--yk-badge-padding-inline',
+        default: '0.65em',
+        description: 'Horizontal padding of the badge.',
+      },
+      {
+        name: '--yk-badge-radius',
+        default: 'var(--yk-radius-md, 0.375rem)',
+        description: 'Corner radius of the badge.',
+      },
+      {
+        name: '--yk-badge-pill-radius',
+        default: '50rem',
+        description: 'Corner radius when the pill attribute is set.',
+      },
+    ],
+    attributes: [
+      {
+        name: 'variant',
+        default: 'unset',
+        description:
+          'Tone of the badge: primary or danger. Without the attribute, or with an unknown value, the face is the solid secondary style.',
+      },
+      {
+        name: 'pill',
+        default: 'unset',
+        description:
+          'Boolean attribute that rounds the corners fully, like the Bootstrap rounded-pill utility.',
+      },
+    ],
+  },
 ];
 
 export const tokens = [
