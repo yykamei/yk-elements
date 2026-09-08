@@ -186,7 +186,7 @@ export const components = [
         name: 'type',
         default: 'button',
         description:
-          'Click behavior: button does nothing natively, submit submits the owning form.',
+          'Click behavior: button does nothing natively, submit submits the owning form. Enter-key implicit submission in multi-field forms does not trigger it.',
       },
       {
         name: 'disabled',

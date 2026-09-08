@@ -2,11 +2,16 @@
  * Action button that renders its label inside a native `<button>` kept in
  * Shadow DOM.
  *
- * The face is a solid Bootstrap-style tone: `variant` selects primary,
- * secondary, or danger (the default face is the secondary tone), and design
- * tokens restyle it without class names. Clicks on `type="submit"` submit
- * the owning form through ElementInternals; `disabled` — or a disabled
- * form/fieldset ancestor — disables the internal control natively.
+ * Without a variant the face is a light bordered button like Bootstrap's
+ * plain .btn; `variant` selects the solid secondary, primary, or danger
+ * tone, and design tokens restyle it without class names. Clicks on
+ * `type="submit"` submit the owning form through ElementInternals;
+ * `disabled` — or a disabled form/fieldset ancestor — disables the
+ * internal control natively.
+ *
+ * Unlike a native submit button, yk-button never becomes the form's
+ * default button, so implicit Enter-key submission does not fire it in
+ * multi-field forms.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
