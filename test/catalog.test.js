@@ -8,6 +8,7 @@ const VARIATIONS = {
   'yk-cluster': 15,
   'yk-grid': 2,
   'yk-pad': 4,
+  'yk-button': 6,
 };
 
 afterEach(() => {

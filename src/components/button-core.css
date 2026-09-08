@@ -1,0 +1,73 @@
+:host {
+  display: inline-flex;
+}
+
+:host button,
+:host a {
+  --face: var(--yk-button-bg, #fff);
+  --ink: var(--yk-button-color, oklch(26.2% 0.009 248.2));
+  --edge: var(
+    --yk-button-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+      white
+    )
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+  font: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--face);
+  border: 1px solid var(--edge);
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host([variant="secondary"]) button,
+:host([variant="secondary"]) a {
+  --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+  --ink: var(--yk-button-on-tone, #fff);
+  --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+}
+
+:host([variant="primary"]) button,
+:host([variant="primary"]) a {
+  --face: var(--yk-color-primary, oklch(57.8% 0.228 260));
+  --ink: var(--yk-button-on-tone, #fff);
+  --edge: var(--yk-color-primary, oklch(57.8% 0.228 260));
+}
+
+:host([variant="danger"]) button,
+:host([variant="danger"]) a {
+  --face: var(--yk-color-danger, oklch(59.2% 0.202 21.2));
+  --ink: var(--yk-button-on-tone, #fff);
+  --edge: var(--yk-color-danger, oklch(59.2% 0.202 21.2));
+}
+
+:host button:hover,
+:host a:hover {
+  background-color: color-mix(in oklch, var(--face) 95%, black);
+  border-color: color-mix(in oklch, var(--edge) 95%, black);
+}
+
+:host button:active,
+:host a:active {
+  background-color: color-mix(in oklch, var(--face) 90%, black);
+  border-color: color-mix(in oklch, var(--edge) 90%, black);
+}
+
+:host button:focus-visible,
+:host a:focus-visible {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    color-mix(in oklch, var(--edge) 50%, transparent);
+}

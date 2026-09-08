@@ -8,6 +8,7 @@ test('minified dist entry point self-registers components', async () => {
   expect(customElements.get('yk-cluster')).toBeDefined();
   expect(customElements.get('yk-grid')).toBeDefined();
   expect(customElements.get('yk-pad')).toBeDefined();
+  expect(customElements.get('yk-button')).toBeDefined();
 });
 
 test('dist mirrors the source tree with minified CSS', async () => {

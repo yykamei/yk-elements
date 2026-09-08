@@ -133,6 +133,69 @@ export const components = [
     ],
     attributes: [],
   },
+  {
+    tag: 'yk-button',
+    description:
+      'Action button that renders its label inside a native button with a solid Bootstrap-style tone.',
+    cssProperties: [
+      {
+        name: '--yk-button-padding-block',
+        default: 'var(--yk-space-sm, 0.5rem)',
+        description: 'Vertical padding of the button face.',
+      },
+      {
+        name: '--yk-button-padding-inline',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Horizontal padding of the button face.',
+      },
+      {
+        name: '--yk-button-radius',
+        default: 'var(--yk-radius-md, 0.375rem)',
+        description: 'Corner radius of the button face.',
+      },
+      {
+        name: '--yk-button-bg',
+        default: '#fff',
+        description: 'Background of the default light face.',
+      },
+      {
+        name: '--yk-button-color',
+        default: 'oklch(26.2% 0.009 248.2)',
+        description: 'Text color of the default light face.',
+      },
+      {
+        name: '--yk-button-border-color',
+        default:
+          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+        description: 'Border color of the default light face.',
+      },
+      {
+        name: '--yk-button-on-tone',
+        default: '#fff',
+        description: 'Text color on the solid tone faces.',
+      },
+    ],
+    attributes: [
+      {
+        name: 'variant',
+        default: 'unset',
+        description:
+          'Tone of the button face: primary, secondary, or danger. Without the attribute the face is the default light style.',
+      },
+      {
+        name: 'type',
+        default: 'button',
+        description:
+          'Click behavior: button does nothing natively, submit submits the owning form.',
+      },
+      {
+        name: 'disabled',
+        default: 'unset',
+        description:
+          'Boolean attribute that disables the button, like the native button disabled attribute.',
+      },
+    ],
+  },
 ];
 
 export const tokens = [
