@@ -30,14 +30,41 @@ class YKLink extends HTMLElement {
     shadowRoot.adoptedStyleSheets = [coreSheet, sheet];
     shadowRoot.innerHTML = `<a part="link"><slot></slot></a>`;
     this.#anchor = shadowRoot.querySelector('a');
+    this.#capturePreUpgradeWrite('href');
+    this.#capturePreUpgradeWrite('target');
+    this.#capturePreUpgradeWrite('rel');
+    this.#capturePreUpgradeWrite('download');
+    // Attribute reactions do not fire for attributes set while the
+    // constructor runs, so mirror the transferred writes directly.
+    this.#mirror('href');
+    this.#mirror('target');
+    this.#mirror('rel');
+    this.#mirror('download');
   }
 
   attributeChangedCallback(name) {
+    this.#mirror(name);
+  }
+
+  #mirror(name) {
     const value = this.getAttribute(name);
     if (value === null) {
       this.#anchor.removeAttribute(name);
     } else {
       this.#anchor.setAttribute(name, value);
+    }
+  }
+
+  // Routes property writes made before the module loaded through the
+  // prototype setters: without this, such a write creates an own property
+  // that permanently shadows the accessor and never reaches the attribute.
+  // Standard custom element upgrade idiom; the string-keyed access is the
+  // platform-recommended form.
+  #capturePreUpgradeWrite(name) {
+    if (Object.hasOwn(this, name)) {
+      const value = this[name];
+      delete this[name];
+      this[name] = value;
     }
   }
 

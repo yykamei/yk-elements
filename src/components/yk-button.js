@@ -39,13 +39,18 @@ class YKButton extends HTMLElement {
     shadowRoot.innerHTML = `<button part="button" type="button"><slot></slot></button>`;
     this.#button = shadowRoot.querySelector('button');
     this.#button.addEventListener('click', () => this.#submitOwningForm());
+    this.#capturePreUpgradeWrite('type');
+    this.#capturePreUpgradeWrite('disabled');
+    // Attribute reactions do not fire for attributes set while the
+    // constructor runs, so apply the transferred writes directly.
+    this.#syncType();
+    this.#syncDisabled();
   }
 
   attributeChangedCallback(name) {
     if (name === 'type') {
-      this.#button.type =
-        this.getAttribute('type') === 'submit' ? 'submit' : 'button';
-    } else {
+      this.#syncType();
+    } else if (name === 'disabled') {
       this.#syncDisabled();
     }
   }
@@ -73,6 +78,24 @@ class YKButton extends HTMLElement {
 
   #syncDisabled() {
     this.#button.disabled = this.hasAttribute('disabled') || this.#formDisabled;
+  }
+
+  #syncType() {
+    this.#button.type =
+      this.getAttribute('type') === 'submit' ? 'submit' : 'button';
+  }
+
+  // Routes property writes made before the module loaded through the
+  // prototype setters: without this, such a write creates an own property
+  // that permanently shadows the accessor and never reaches the attribute.
+  // Standard custom element upgrade idiom; the string-keyed access is the
+  // platform-recommended form.
+  #capturePreUpgradeWrite(name) {
+    if (Object.hasOwn(this, name)) {
+      const value = this[name];
+      delete this[name];
+      this[name] = value;
+    }
   }
 
   #submitOwningForm() {
