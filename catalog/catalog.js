@@ -300,16 +300,23 @@ function renderInterface() {
       </div>`);
   }
   if (component.attributes.length) {
-    groups.push(`
+    for (const attribute of component.attributes) {
+      groups.push(`
       <div class="table-scroll">
         <table data-table="attributes">
-          <caption>HTML attributes</caption>
+          <caption>${attribute.name}</caption>
           <thead>
-            <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+            <tr><th>Default</th><th>Description</th></tr>
           </thead>
-          <tbody>${rowsFor(component.attributes)}</tbody>
+          <tbody>
+            <tr>
+              <td class="property-default">${linkTokens(attribute.default)}</td>
+              <td>${attribute.description}</td>
+            </tr>
+          </tbody>
         </table>
       </div>`);
+    }
   }
 
   section.innerHTML = groups.length
