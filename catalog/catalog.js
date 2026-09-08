@@ -152,6 +152,27 @@ export const tokens = [
     value: '1.5rem',
     description: 'Large spacing unit; used for roomier paddings and gaps.',
   },
+  {
+    name: '--yk-color-primary',
+    value: 'oklch(57.8% 0.228 260)',
+    description:
+      'Primary accent color; solid primary tones and their focus rings.',
+  },
+  {
+    name: '--yk-color-secondary',
+    value: 'oklch(55.8% 0.016 244.9)',
+    description: 'Neutral secondary color; the default button tone.',
+  },
+  {
+    name: '--yk-color-danger',
+    value: 'oklch(59.2% 0.202 21.2)',
+    description: 'Destructive accent color; danger tones.',
+  },
+  {
+    name: '--yk-radius-md',
+    value: '0.375rem',
+    description: 'Default corner radius; the fallback for component radii.',
+  },
 ];
 
 const pageFor = (tag) => `./${tag}.html`;
