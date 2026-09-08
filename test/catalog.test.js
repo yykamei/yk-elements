@@ -10,6 +10,7 @@ const VARIATIONS = {
   'yk-pad': 4,
   'yk-button': 6,
   'yk-link': 5,
+  'yk-badge': 5,
 };
 
 afterEach(() => {
@@ -70,12 +71,18 @@ test('landing page declares the overview layout with a landing container', async
 
 test('bare /catalog URL is normalized to the trailing-slash form', async () => {
   const iframe = await loadIframe('/catalog');
+  // The load event can fire before the redirect replaces the document and
+  // the module scripts render the shared chrome, so wait for the chrome
+  // itself instead of asserting right after the navigation settles.
   await vi.waitFor(() => {
-    expect(iframe.contentWindow.location.pathname.endsWith('/')).toBe(true);
+    expect(
+      iframe.contentDocument.querySelector('.brand')?.textContent.trim(),
+    ).toBe('yk-elements');
   });
-  const doc = iframe.contentDocument;
-  expect(doc.querySelector('.brand').textContent.trim()).toBe('yk-elements');
-  expect(doc.querySelectorAll('nav a').length).toBeGreaterThan(0);
+  expect(iframe.contentWindow.location.pathname.endsWith('/')).toBe(true);
+  expect(
+    iframe.contentDocument.querySelectorAll('nav a').length,
+  ).toBeGreaterThan(0);
 });
 
 test('each component page declares its component and lists its variations', async () => {
@@ -220,5 +227,8 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-cluster')).toBeDefined();
   expect(customElements.get('yk-grid')).toBeDefined();
   expect(customElements.get('yk-pad')).toBeDefined();
+  expect(customElements.get('yk-button')).toBeDefined();
+  expect(customElements.get('yk-link')).toBeDefined();
+  expect(customElements.get('yk-badge')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });
