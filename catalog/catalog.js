@@ -196,6 +196,81 @@ export const components = [
       },
     ],
   },
+  {
+    tag: 'yk-link',
+    description:
+      'Link that renders like a yk-button, backed by a native anchor.',
+    cssProperties: [
+      {
+        name: '--yk-button-padding-block',
+        default: 'var(--yk-space-sm, 0.5rem)',
+        description: 'Vertical padding of the face.',
+      },
+      {
+        name: '--yk-button-padding-inline',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Horizontal padding of the face.',
+      },
+      {
+        name: '--yk-button-radius',
+        default: 'var(--yk-radius-md, 0.375rem)',
+        description: 'Corner radius of the face.',
+      },
+      {
+        name: '--yk-button-bg',
+        default: '#fff',
+        description: 'Background of the default light face.',
+      },
+      {
+        name: '--yk-button-color',
+        default: 'oklch(26.2% 0.009 248.2)',
+        description: 'Text color of the default light face.',
+      },
+      {
+        name: '--yk-button-border-color',
+        default:
+          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+        description: 'Border color of the default light face.',
+      },
+      {
+        name: '--yk-button-on-tone',
+        default: '#fff',
+        description: 'Text color on the solid tone faces.',
+      },
+    ],
+    attributes: [
+      {
+        name: 'href',
+        default: 'unset',
+        description:
+          'URL of the link target, mirrored onto the internal anchor.',
+      },
+      {
+        name: 'target',
+        default: 'unset',
+        description:
+          'Browsing context for the navigation, mirrored onto the internal anchor.',
+      },
+      {
+        name: 'rel',
+        default: 'unset',
+        description:
+          'Relationship of the link target, mirrored onto the internal anchor.',
+      },
+      {
+        name: 'download',
+        default: 'unset',
+        description:
+          'Downloads the target instead of navigating, mirrored onto the internal anchor.',
+      },
+      {
+        name: 'variant',
+        default: 'unset',
+        description:
+          'Tone of the face: primary, secondary, or danger. Without the attribute the face is the default light style.',
+      },
+    ],
+  },
 ];
 
 export const tokens = [

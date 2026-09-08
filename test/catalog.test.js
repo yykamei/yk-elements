@@ -9,6 +9,7 @@ const VARIATIONS = {
   'yk-grid': 2,
   'yk-pad': 4,
   'yk-button': 6,
+  'yk-link': 5,
 };
 
 afterEach(() => {
