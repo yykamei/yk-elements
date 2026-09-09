@@ -12,11 +12,16 @@ test('applies property writes made before the module upgrades the elements', asy
   const link = document.createElement('yk-link');
   link.href = '/pre-upgrade';
   link.rel = 'noopener';
-  document.body.append(button, link);
+  const input = document.createElement('yk-input-text');
+  input.value = 'pre-upgrade';
+  input.placeholder = 'Type here';
+  input.required = true;
+  document.body.append(button, link, input);
 
   await Promise.all([
     import('../src/components/yk-button.js'),
     import('../src/components/yk-link.js'),
+    import('../src/components/yk-input-text.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -28,4 +33,10 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(link.shadowRoot.querySelector('a').getAttribute('href')).toBe(
     '/pre-upgrade',
   );
+  expect(input.shadowRoot.querySelector('input').value).toBe('pre-upgrade');
+  expect(input.getAttribute('placeholder')).toBe('Type here');
+  expect(
+    input.shadowRoot.querySelector('input').getAttribute('placeholder'),
+  ).toBe('Type here');
+  expect(input.shadowRoot.querySelector('input').required).toBe(true);
 });
