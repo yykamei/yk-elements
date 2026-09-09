@@ -11,6 +11,7 @@ const VARIATIONS = {
   'yk-button': 6,
   'yk-link': 5,
   'yk-badge': 5,
+  'yk-input-text': 9,
 };
 
 afterEach(() => {
@@ -230,5 +231,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-button')).toBeDefined();
   expect(customElements.get('yk-link')).toBeDefined();
   expect(customElements.get('yk-badge')).toBeDefined();
+  expect(customElements.get('yk-input-text')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });

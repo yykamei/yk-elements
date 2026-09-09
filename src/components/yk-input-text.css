@@ -1,0 +1,94 @@
+:host {
+  display: block;
+}
+
+:host input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
+  appearance: none;
+  background-color: var(--yk-input-bg, #fff);
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host input::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      white
+    )
+  );
+  opacity: 1;
+}
+
+:host input:focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
+      white
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host input:disabled,
+:host input:read-only {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      white
+    )
+  );
+}
+
+:host input:user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(59.2% 0.202 21.2))
+  );
+}
+
+:host input:user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%,
+        transparent
+      )
+    );
+}

@@ -70,13 +70,13 @@
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <form onsubmit="event.preventDefault()">
               <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-                <input name="email" type="email" placeholder="you@example.com" />
+                <yk-input-text name="email" placeholder="you@example.com"></yk-input-text>
                 <yk-button type="submit" variant="primary">Subscribe</yk-button>
               </yk-vstack>
             </form>
           </yk-pad>
           <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
-  &lt;input name="email" type="email" placeholder="you@example.com" /&gt;
+  &lt;yk-input-text name="email" placeholder="you@example.com"&gt;&lt;/yk-input-text&gt;
   &lt;yk-button type="submit" variant="primary"&gt;Subscribe&lt;/yk-button&gt;
 &lt;/form&gt;</code></pre>
         </figure>
