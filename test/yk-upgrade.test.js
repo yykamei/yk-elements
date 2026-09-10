@@ -16,12 +16,18 @@ test('applies property writes made before the module upgrades the elements', asy
   input.value = 'pre-upgrade';
   input.placeholder = 'Type here';
   input.required = true;
-  document.body.append(button, link, input);
+  const email = document.createElement('yk-input-email');
+  email.value = 'pre-upgrade@example.com';
+  email.placeholder = 'you@example.com';
+  email.required = true;
+  email.multiple = true;
+  document.body.append(button, link, input, email);
 
   await Promise.all([
     import('../src/components/yk-button.js'),
     import('../src/components/yk-link.js'),
     import('../src/components/yk-input-text.js'),
+    import('../src/components/yk-input-email.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -39,4 +45,11 @@ test('applies property writes made before the module upgrades the elements', asy
     input.shadowRoot.querySelector('input').getAttribute('placeholder'),
   ).toBe('Type here');
   expect(input.shadowRoot.querySelector('input').required).toBe(true);
+  expect(email.shadowRoot.querySelector('input').value).toBe(
+    'pre-upgrade@example.com',
+  );
+  expect(email.shadowRoot.querySelector('input').type).toBe('email');
+  expect(email.shadowRoot.querySelector('input').multiple).toBe(true);
+  expect(email.getAttribute('placeholder')).toBe('you@example.com');
+  expect(email.shadowRoot.querySelector('input').required).toBe(true);
 });

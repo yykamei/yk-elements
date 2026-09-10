@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-email&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-input-email">
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>placeholder</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email placeholder="you@example.com"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email placeholder="you@example.com"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email value="ykamei@example.com"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email value="ykamei@example.com"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>minlength + maxlength</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email minlength="8" maxlength="40" placeholder="8–40 characters"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email minlength="8" maxlength="40" placeholder="8–40 characters"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>pattern</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email pattern=".+@example\.com" placeholder="@example.com address"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email pattern=".+@example\.com" placeholder="@example.com address"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email required name="email" placeholder="required field"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email required name="email" placeholder="required field"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>readonly</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email readonly value="read-only@example.com"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email readonly value="read-only@example.com"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email disabled value="disabled@example.com"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email disabled value="disabled@example.com"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>multiple</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-email multiple value="a@example.com, b@example.com, c@example.com"></yk-input-email>
+          </yk-pad>
+          <pre><code>&lt;yk-input-email multiple value="a@example.com, b@example.com, c@example.com"&gt;&lt;/yk-input-email&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-email">Email</label>
+                <yk-input-email id="catalog-email" name="email" required placeholder="you@example.com"></yk-input-email>
+                <yk-button type="submit" variant="primary">Subscribe</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-email"&gt;Email&lt;/label&gt;
+    &lt;yk-input-email id="catalog-email" name="email" required placeholder="you@example.com"&gt;&lt;/yk-input-email&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Subscribe&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

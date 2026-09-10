@@ -71,6 +71,138 @@ const buttonFaceProperties = [
   },
 ];
 
+const inputFaceProperties = [
+  {
+    name: '--yk-input-padding-block',
+    default: '0.375rem',
+    description: 'Vertical padding of the face.',
+  },
+  {
+    name: '--yk-input-padding-inline',
+    default: '0.75rem',
+    description: 'Horizontal padding of the face.',
+  },
+  {
+    name: '--yk-input-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the face.',
+  },
+  {
+    name: '--yk-input-bg',
+    default: '#fff',
+    description: 'Background of the face.',
+  },
+  {
+    name: '--yk-input-color',
+    default: 'oklch(26.2% 0.009 248.2)',
+    description: 'Text color of the face.',
+  },
+  {
+    name: '--yk-input-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+    description: 'Border color of the face.',
+  },
+  {
+    name: '--yk-input-placeholder-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, white)',
+    description: 'Text color of the placeholder.',
+  },
+  {
+    name: '--yk-input-focus-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+    description: 'Border color while the field is focused.',
+  },
+  {
+    name: '--yk-input-focus-ring-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%, transparent)',
+    description: 'Focus ring color.',
+  },
+  {
+    name: '--yk-input-disabled-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%, white)',
+    description: 'Background of the disabled and readonly face.',
+  },
+  {
+    name: '--yk-input-invalid-border-color',
+    default: 'var(--yk-color-danger, oklch(59.2% 0.202 21.2))',
+    description: 'Border color of the user-invalid face.',
+  },
+  {
+    name: '--yk-input-invalid-ring-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%, transparent)',
+    description: 'Focus ring color of the user-invalid face.',
+  },
+];
+
+/**
+ * Builds the attribute metadata for an input component, optionally inserting
+ * type-specific boolean attributes (e.g. `multiple` on yk-input-email) before
+ * the shared `disabled` and `name` entries.
+ */
+const inputFieldAttributes = (extra = []) => [
+  {
+    name: 'value',
+    default: 'unset',
+    description:
+      'Default value shown initially and restored by form reset, mirrored onto the internal input.',
+  },
+  {
+    name: 'placeholder',
+    default: 'unset',
+    description:
+      'Hint text shown while the field is empty, mirrored onto the internal input.',
+  },
+  {
+    name: 'maxlength',
+    default: 'unset',
+    description:
+      'Maximum string length the user may enter, mirrored onto the internal input.',
+  },
+  {
+    name: 'minlength',
+    default: 'unset',
+    description:
+      'Minimum string length checked by constraint validation, mirrored onto the internal input.',
+  },
+  {
+    name: 'pattern',
+    default: 'unset',
+    description:
+      'Regular expression the value must match, mirrored onto the internal input.',
+  },
+  {
+    name: 'required',
+    default: 'unset',
+    description:
+      'Boolean attribute that makes the field mandatory and blocks submission while it is empty, mirrored onto the internal input.',
+  },
+  {
+    name: 'readonly',
+    default: 'unset',
+    description:
+      'Boolean attribute that makes the field read-only, mirrored onto the internal input.',
+  },
+  ...extra,
+  {
+    name: 'disabled',
+    default: 'unset',
+    description:
+      'Boolean attribute that disables the field and excludes its value from the form, like the native input disabled attribute.',
+  },
+  {
+    name: 'name',
+    default: 'unset',
+    description:
+      'Entry name used when the owner form submits the value, like the native input name attribute.',
+  },
+];
+
 export const components = [
   {
     tag: 'yk-vstack',
@@ -301,130 +433,22 @@ export const components = [
     tag: 'yk-input-text',
     description:
       'Single-line text field that renders a native text input with a Bootstrap-style face and full form participation.',
-    cssProperties: [
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(),
+  },
+  {
+    tag: 'yk-input-email',
+    description:
+      'Single-line email field that renders a native email input with a Bootstrap-style face, native email syntax validation, and full form participation.',
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes([
       {
-        name: '--yk-input-padding-block',
-        default: '0.375rem',
-        description: 'Vertical padding of the face.',
-      },
-      {
-        name: '--yk-input-padding-inline',
-        default: '0.75rem',
-        description: 'Horizontal padding of the face.',
-      },
-      {
-        name: '--yk-input-radius',
-        default: 'var(--yk-radius-md, 0.375rem)',
-        description: 'Corner radius of the face.',
-      },
-      {
-        name: '--yk-input-bg',
-        default: '#fff',
-        description: 'Background of the face.',
-      },
-      {
-        name: '--yk-input-color',
-        default: 'oklch(26.2% 0.009 248.2)',
-        description: 'Text color of the face.',
-      },
-      {
-        name: '--yk-input-border-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
-        description: 'Border color of the face.',
-      },
-      {
-        name: '--yk-input-placeholder-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, white)',
-        description: 'Text color of the placeholder.',
-      },
-      {
-        name: '--yk-input-focus-border-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
-        description: 'Border color while the field is focused.',
-      },
-      {
-        name: '--yk-input-focus-ring-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%, transparent)',
-        description: 'Focus ring color.',
-      },
-      {
-        name: '--yk-input-disabled-bg',
-        default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%, white)',
-        description: 'Background of the disabled and readonly face.',
-      },
-      {
-        name: '--yk-input-invalid-border-color',
-        default: 'var(--yk-color-danger, oklch(59.2% 0.202 21.2))',
-        description: 'Border color of the user-invalid face.',
-      },
-      {
-        name: '--yk-input-invalid-ring-color',
-        default:
-          'color-mix(in oklch, var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%, transparent)',
-        description: 'Focus ring color of the user-invalid face.',
-      },
-    ],
-    attributes: [
-      {
-        name: 'value',
+        name: 'multiple',
         default: 'unset',
         description:
-          'Default value shown initially and restored by form reset, mirrored onto the internal input.',
+          'Boolean attribute that allows a comma-separated list of email addresses and validates each address, mirrored onto the internal input.',
       },
-      {
-        name: 'placeholder',
-        default: 'unset',
-        description:
-          'Hint text shown while the field is empty, mirrored onto the internal input.',
-      },
-      {
-        name: 'maxlength',
-        default: 'unset',
-        description:
-          'Maximum string length the user may enter, mirrored onto the internal input.',
-      },
-      {
-        name: 'minlength',
-        default: 'unset',
-        description:
-          'Minimum string length checked by constraint validation, mirrored onto the internal input.',
-      },
-      {
-        name: 'pattern',
-        default: 'unset',
-        description:
-          'Regular expression the value must match, mirrored onto the internal input.',
-      },
-      {
-        name: 'required',
-        default: 'unset',
-        description:
-          'Boolean attribute that makes the field mandatory and blocks submission while it is empty, mirrored onto the internal input.',
-      },
-      {
-        name: 'readonly',
-        default: 'unset',
-        description:
-          'Boolean attribute that makes the field read-only, mirrored onto the internal input.',
-      },
-      {
-        name: 'disabled',
-        default: 'unset',
-        description:
-          'Boolean attribute that disables the field and excludes its value from the form, like the native input disabled attribute.',
-      },
-      {
-        name: 'name',
-        default: 'unset',
-        description:
-          'Entry name used when the owner form submits the value, like the native input name attribute.',
-      },
-    ],
+    ]),
   },
 ];
 
