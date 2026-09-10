@@ -16,7 +16,7 @@
  * <yk-input-text id="handle" name="handle" minlength="3" placeholder="3+ characters"></yk-input-text>
  * ```
  */
-import sheet from './yk-input-text.css' with { type: 'css' };
+import sheet from './input-core.css' with { type: 'css' };
 
 const ATTRIBUTES = [
   'value',
