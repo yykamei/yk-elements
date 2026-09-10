@@ -3,7 +3,7 @@
 ## 1. Core Philosophy
 
 - **Zero Config, Just Put** — no class names or complex scripting required; structured, self-organizing layout and UI emerge just by placing HTML tags.
-- **Lean & Native-First** — reject excessive abstraction (early introduction of base classes, unnecessary framework dependencies) and use Web standard APIs (Custom Elements v1, Shadow DOM v1, CSS Module Scripts, ElementInternals) directly.
+- **Lean & Native-First** — use Web standard APIs (Custom Elements v1, Shadow DOM v1, CSS Module Scripts, ElementInternals) directly and reject unnecessary framework dependencies. Abstraction is earned, not anticipated: while identical behavior lives in a single component it is left alone, and once it repeats across components it is extracted into a shared core (e.g. `input-core.css` and the `YKInputElement` base class behind the `<yk-input-*>` fields) instead of being copied further.
 - **Clear File Separation** — keep JavaScript and CSS clearly separated into distinct files to maximize the benefits of editor syntax highlighting, code completion, linters, and formatters.
 - **Self-Registering** — self-contained modules that automatically call `customElements.define` as soon as the module is loaded.
 
