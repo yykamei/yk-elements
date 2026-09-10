@@ -14,6 +14,7 @@ test('minified dist entry point self-registers components', async () => {
   expect(customElements.get('yk-input-text')).toBeDefined();
   expect(customElements.get('yk-input-email')).toBeDefined();
   expect(customElements.get('yk-input-tel')).toBeDefined();
+  expect(customElements.get('yk-input-url')).toBeDefined();
 });
 
 test('dist mirrors the source tree with minified CSS', async () => {

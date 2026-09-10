@@ -457,6 +457,13 @@ export const components = [
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
+  {
+    tag: 'yk-input-url',
+    description:
+      'Single-line URL field that renders a native url input with a Bootstrap-style face, native URL syntax validation, and full form participation.',
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(),
+  },
 ];
 
 export const tokens = [

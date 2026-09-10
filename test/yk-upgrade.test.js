@@ -24,7 +24,10 @@ test('applies property writes made before the module upgrades the elements', asy
   const tel = document.createElement('yk-input-tel');
   tel.value = '090-1234-5678';
   tel.required = true;
-  document.body.append(button, link, input, email, tel);
+  const url = document.createElement('yk-input-url');
+  url.value = 'https://example.com/pre-upgrade';
+  url.required = true;
+  document.body.append(button, link, input, email, tel, url);
 
   await Promise.all([
     import('../src/components/yk-button.js'),
@@ -32,6 +35,7 @@ test('applies property writes made before the module upgrades the elements', asy
     import('../src/components/yk-input-text.js'),
     import('../src/components/yk-input-email.js'),
     import('../src/components/yk-input-tel.js'),
+    import('../src/components/yk-input-url.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -59,4 +63,9 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(tel.shadowRoot.querySelector('input').type).toBe('tel');
   expect(tel.shadowRoot.querySelector('input').value).toBe('090-1234-5678');
   expect(tel.shadowRoot.querySelector('input').required).toBe(true);
+  expect(url.shadowRoot.querySelector('input').type).toBe('url');
+  expect(url.shadowRoot.querySelector('input').value).toBe(
+    'https://example.com/pre-upgrade',
+  );
+  expect(url.shadowRoot.querySelector('input').required).toBe(true);
 });
