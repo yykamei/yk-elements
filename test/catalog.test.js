@@ -13,6 +13,7 @@ const VARIATIONS = {
   'yk-badge': 5,
   'yk-input-text': 9,
   'yk-input-email': 10,
+  'yk-input-tel': 9,
 };
 
 afterEach(() => {
@@ -234,5 +235,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-badge')).toBeDefined();
   expect(customElements.get('yk-input-text')).toBeDefined();
   expect(customElements.get('yk-input-email')).toBeDefined();
+  expect(customElements.get('yk-input-tel')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });

@@ -14,7 +14,7 @@ const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
  *   shortPrefill: 'ab',
  *   shortMinlength: '3',
  *   fillValue: '090-1234-5678',
- *   pattern: '[0-9()+-]+',
+ *   pattern: '[0-9\\-]+',
  *   invalidPatternValue: 'abc!',
  *   sharedFaceWith: [
  *     'yk-input-text',

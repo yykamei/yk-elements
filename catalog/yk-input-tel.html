@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-tel&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-input-tel">
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>placeholder</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel placeholder="090-1234-5678"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel placeholder="090-1234-5678"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel value="090-1234-5678"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel value="090-1234-5678"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>minlength + maxlength</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel minlength="10" maxlength="15" placeholder="10–15 characters"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel minlength="10" maxlength="15" placeholder="10–15 characters"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>pattern</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel pattern="[0-9\-]+" placeholder="digits and hyphens"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel pattern="[0-9\-]+" placeholder="digits and hyphens"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel required name="phone" placeholder="required field"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel required name="phone" placeholder="required field"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>readonly</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel readonly value="090-1234-5678"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel readonly value="090-1234-5678"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-tel disabled value="090-1234-5678"></yk-input-tel>
+          </yk-pad>
+          <pre><code>&lt;yk-input-tel disabled value="090-1234-5678"&gt;&lt;/yk-input-tel&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-phone">Phone</label>
+                <yk-input-tel id="catalog-phone" name="phone" pattern="[0-9\-]+" placeholder="digits and hyphens"></yk-input-tel>
+                <yk-button type="submit" variant="primary">Subscribe</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-phone"&gt;Phone&lt;/label&gt;
+    &lt;yk-input-tel id="catalog-phone" name="phone" pattern="[0-9\-]+" placeholder="digits and hyphens"&gt;&lt;/yk-input-tel&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Subscribe&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

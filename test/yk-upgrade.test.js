@@ -21,13 +21,17 @@ test('applies property writes made before the module upgrades the elements', asy
   email.placeholder = 'you@example.com';
   email.required = true;
   email.multiple = true;
-  document.body.append(button, link, input, email);
+  const tel = document.createElement('yk-input-tel');
+  tel.value = '090-1234-5678';
+  tel.required = true;
+  document.body.append(button, link, input, email, tel);
 
   await Promise.all([
     import('../src/components/yk-button.js'),
     import('../src/components/yk-link.js'),
     import('../src/components/yk-input-text.js'),
     import('../src/components/yk-input-email.js'),
+    import('../src/components/yk-input-tel.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -52,4 +56,7 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(email.shadowRoot.querySelector('input').multiple).toBe(true);
   expect(email.getAttribute('placeholder')).toBe('you@example.com');
   expect(email.shadowRoot.querySelector('input').required).toBe(true);
+  expect(tel.shadowRoot.querySelector('input').type).toBe('tel');
+  expect(tel.shadowRoot.querySelector('input').value).toBe('090-1234-5678');
+  expect(tel.shadowRoot.querySelector('input').required).toBe(true);
 });
