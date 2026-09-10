@@ -450,6 +450,13 @@ export const components = [
       },
     ]),
   },
+  {
+    tag: 'yk-input-tel',
+    description:
+      'Single-line telephone field that renders a native tel input with a Bootstrap-style face and full form participation; constraining the format is up to the pattern attribute since tel has no native syntax check.',
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(),
+  },
 ];
 
 export const tokens = [
