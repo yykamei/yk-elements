@@ -18,6 +18,13 @@
  * - the design-token table on the landing page, which hosts a [data-tokens]
  *   container linking back from each component's property defaults
  *
+ * The component list is also the schema for the interactive playground: each
+ * attribute declares a `control` kind (`boolean`, `select`, or `text`) and,
+ * for selects, the `options` it offers, while each component declares the
+ * initial `playground.content` it renders. `content` is trusted internal
+ * markup used as the playground element's children (empty for childless
+ * inputs such as the yk-input-* fields).
+ *
  * Adding a component means adding one entry here plus one HTML page that
  * lists its variations. The variations are hand-written; everything else
  * comes from this module.
@@ -149,42 +156,49 @@ const inputFaceProperties = [
 const inputFieldAttributes = (extra = []) => [
   {
     name: 'value',
+    control: 'text',
     default: 'unset',
     description:
       'Default value shown initially and restored by form reset, mirrored onto the internal input.',
   },
   {
     name: 'placeholder',
+    control: 'text',
     default: 'unset',
     description:
       'Hint text shown while the field is empty, mirrored onto the internal input.',
   },
   {
     name: 'maxlength',
+    control: 'text',
     default: 'unset',
     description:
       'Maximum string length the user may enter, mirrored onto the internal input.',
   },
   {
     name: 'minlength',
+    control: 'text',
     default: 'unset',
     description:
       'Minimum string length checked by constraint validation, mirrored onto the internal input.',
   },
   {
     name: 'pattern',
+    control: 'text',
     default: 'unset',
     description:
       'Regular expression the value must match, mirrored onto the internal input.',
   },
   {
     name: 'required',
+    control: 'boolean',
     default: 'unset',
     description:
       'Boolean attribute that makes the field mandatory and blocks submission while it is empty, mirrored onto the internal input.',
   },
   {
     name: 'readonly',
+    control: 'boolean',
     default: 'unset',
     description:
       'Boolean attribute that makes the field read-only, mirrored onto the internal input.',
@@ -192,17 +206,32 @@ const inputFieldAttributes = (extra = []) => [
   ...extra,
   {
     name: 'disabled',
+    control: 'boolean',
     default: 'unset',
     description:
       'Boolean attribute that disables the field and excludes its value from the form, like the native input disabled attribute.',
   },
   {
     name: 'name',
+    control: 'text',
     default: 'unset',
     description:
       'Entry name used when the owner form submits the value, like the native input name attribute.',
   },
 ];
+
+/**
+ * Builds the indented `demo-item` paragraphs used as a layout primitive's
+ * initial playground content, so the generated markup stays readable. Labels
+ * are trusted internal strings; escape them if they ever become external.
+ *
+ * ```js
+ * demoItems(['First item', 'Second item']);
+ * // '  <p class="demo-item">First item</p>\n  <p class="demo-item">Second item</p>'
+ * ```
+ */
+const demoItems = (labels) =>
+  labels.map((label) => `  <p class="demo-item">${label}</p>`).join('\n');
 
 export const components = [
   {
@@ -210,6 +239,9 @@ export const components = [
     category: 'Layout',
     description:
       'Layout primitive that stacks its children vertically with a consistent gap.',
+    playground: {
+      content: demoItems(['First item', 'Second item', 'Third item']),
+    },
     cssProperties: [
       {
         name: '--yk-vstack-gap',
@@ -224,6 +256,9 @@ export const components = [
     category: 'Layout',
     description:
       'Layout primitive that stacks its children horizontally with a consistent gap.',
+    playground: {
+      content: demoItems(['First item', 'Second item', 'Third item']),
+    },
     cssProperties: [
       {
         name: '--yk-hstack-align',
@@ -244,6 +279,9 @@ export const components = [
     category: 'Layout',
     description:
       'Layout primitive that places children in a centered, wrapping horizontal flow.',
+    playground: {
+      content: demoItems(['First item', 'Second item', 'Third item']),
+    },
     cssProperties: [
       {
         name: '--yk-cluster-justify',
@@ -270,6 +308,9 @@ export const components = [
     category: 'Layout',
     description:
       'Layout primitive that places children in an auto-equal-width grid.',
+    playground: {
+      content: demoItems(['First item', 'Second item', 'Third item']),
+    },
     cssProperties: [
       {
         name: '--yk-grid-min',
@@ -289,6 +330,9 @@ export const components = [
     category: 'Layout',
     description:
       'Layout primitive that pads its children with a consistent inset from the host edges.',
+    playground: {
+      content: demoItems(['Padded content']),
+    },
     cssProperties: [
       {
         name: '--yk-pad-padding',
@@ -315,22 +359,30 @@ export const components = [
     category: 'Components',
     description:
       'Action button that renders its label inside a native button with a solid Bootstrap-style tone.',
+    playground: {
+      content: 'Button',
+    },
     cssProperties: buttonFaceProperties,
     attributes: [
       {
         name: 'variant',
+        control: 'select',
+        options: ['primary', 'secondary', 'danger'],
         default: 'unset',
         description:
           'Tone of the button face: primary, secondary, or danger. Without the attribute the face is the default light style.',
       },
       {
         name: 'type',
+        control: 'select',
+        options: ['button', 'submit'],
         default: 'button',
         description:
           'Click behavior: button does nothing natively, submit submits the owning form. Enter-key implicit submission in multi-field forms does not trigger it.',
       },
       {
         name: 'disabled',
+        control: 'boolean',
         default: 'unset',
         description:
           'Boolean attribute that disables the button, like the native button disabled attribute.',
@@ -342,34 +394,43 @@ export const components = [
     category: 'Components',
     description:
       'Link that renders like a yk-button, backed by a native anchor.',
+    playground: {
+      content: 'Link',
+    },
     cssProperties: buttonFaceProperties,
     attributes: [
       {
         name: 'href',
+        control: 'text',
         default: 'unset',
         description:
           'URL of the link target, mirrored onto the internal anchor.',
       },
       {
         name: 'target',
+        control: 'text',
         default: 'unset',
         description:
           'Browsing context for the navigation, mirrored onto the internal anchor.',
       },
       {
         name: 'rel',
+        control: 'text',
         default: 'unset',
         description:
           'Relationship of the link target, mirrored onto the internal anchor.',
       },
       {
         name: 'download',
+        control: 'text',
         default: 'unset',
         description:
-          'Downloads the target instead of navigating, mirrored onto the internal anchor.',
+          'Downloads the target instead of navigating, optionally suggesting a filename, mirrored onto the internal anchor.',
       },
       {
         name: 'variant',
+        control: 'select',
+        options: ['primary', 'secondary', 'danger'],
         default: 'unset',
         description:
           'Tone of the face: primary, secondary, or danger. Without the attribute the face is the default light style.',
@@ -381,6 +442,9 @@ export const components = [
     category: 'Components',
     description:
       'Small status label that renders a solid tone and scales with the surrounding font size, like the Bootstrap badge.',
+    playground: {
+      content: 'Badge',
+    },
     cssProperties: [
       {
         name: '--yk-badge-bg',
@@ -426,12 +490,15 @@ export const components = [
     attributes: [
       {
         name: 'variant',
+        control: 'select',
+        options: ['primary', 'danger'],
         default: 'unset',
         description:
           'Tone of the badge: primary or danger. Without the attribute, or with an unknown value, the face is the solid secondary style.',
       },
       {
         name: 'pill',
+        control: 'boolean',
         default: 'unset',
         description:
           'Boolean attribute that rounds the corners fully, like the Bootstrap rounded-pill utility.',
@@ -443,6 +510,9 @@ export const components = [
     category: 'Components',
     description:
       'Single-line text field that renders a native text input with a Bootstrap-style face and full form participation.',
+    playground: {
+      content: '',
+    },
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
@@ -451,10 +521,14 @@ export const components = [
     category: 'Components',
     description:
       'Single-line email field that renders a native email input with a Bootstrap-style face, native email syntax validation, and full form participation.',
+    playground: {
+      content: '',
+    },
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes([
       {
         name: 'multiple',
+        control: 'boolean',
         default: 'unset',
         description:
           'Boolean attribute that allows a comma-separated list of email addresses and validates each address, mirrored onto the internal input.',
@@ -466,6 +540,9 @@ export const components = [
     category: 'Components',
     description:
       'Single-line telephone field that renders a native tel input with a Bootstrap-style face and full form participation; constraining the format is up to the pattern attribute since tel has no native syntax check.',
+    playground: {
+      content: '',
+    },
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
@@ -474,6 +551,9 @@ export const components = [
     category: 'Components',
     description:
       'Single-line URL field that renders a native url input with a Bootstrap-style face, native URL syntax validation, and full form participation.',
+    playground: {
+      content: '',
+    },
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
