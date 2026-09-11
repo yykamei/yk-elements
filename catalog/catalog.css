@@ -328,6 +328,13 @@
     color: var(--yk-catalog-fg-muted);
   }
 
+  /* CSS custom property names are long, so those labels stack the name above
+   * the field rather than leaving the input a sliver. */
+  [data-playground-panel] label:has(input[data-playground-property]) {
+    display: grid;
+    gap: var(--yk-catalog-space-xs);
+  }
+
   [data-playground-panel] input[type="text"],
   [data-playground-panel] select {
     flex: 1;

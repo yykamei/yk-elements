@@ -131,22 +131,46 @@ test('every component declares playground content', () => {
   }
 });
 
+test('attribute and CSS custom property names are safe identifiers', () => {
+  const attributeName = /^[a-z][a-z0-9-]*$/;
+  const propertyName = /^--[a-z][a-z0-9-]*$/;
+  for (const { tag, attributes, cssProperties } of components) {
+    for (const { name } of attributes) {
+      expect(attributeName.test(name), `${tag} ${name}`).toBe(true);
+    }
+    for (const { name } of cssProperties) {
+      expect(propertyName.test(name), `${tag} ${name}`).toBe(true);
+    }
+  }
+});
+
 async function loadPlayground(tag) {
   const iframe = await loadIframe(`/catalog/${tag}.html`);
   const doc = iframe.contentDocument;
   return { iframe, doc, section: doc.querySelector('[data-playground]') };
 }
 
-function setControl(section, name, value) {
-  const control = section.querySelector(
-    `[data-playground-attribute="${name}"]`,
-  );
+function setInput(control, value) {
   if (control.type === 'checkbox') {
     control.checked = value;
   } else {
     control.value = value;
   }
   control.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function setControl(section, name, value) {
+  setInput(
+    section.querySelector(`[data-playground-attribute="${name}"]`),
+    value,
+  );
+}
+
+function setProperty(section, name, value) {
+  setInput(
+    section.querySelector(`[data-playground-property="${name}"]`),
+    value,
+  );
 }
 
 const codeOf = (section) =>
@@ -245,28 +269,29 @@ test('generated code lists attributes in metadata order', async () => {
 
 test('reset restores the initial playground state', async () => {
   for (const tag of ['yk-button', 'yk-input-text']) {
+    const component = components.find((known) => known.tag === tag);
     const { section } = await loadPlayground(tag);
     const host = section.querySelector('[data-playground-preview] > *');
     const initial = codeOf(section);
 
-    for (const control of section.querySelectorAll(
-      '[data-playground-attribute]',
-    )) {
-      setControl(
-        section,
-        control.dataset.playgroundAttribute,
-        control.type === 'checkbox' ? true : 'x',
-      );
+    const inputs = section.querySelectorAll(
+      '[data-playground-attribute], [data-playground-property]',
+    );
+    for (const control of inputs) {
+      setInput(control, control.type === 'checkbox' ? true : 'x');
     }
-    expect(host.attributes.length, tag).toBeGreaterThan(0);
+    expect(codeOf(section), tag).not.toBe(initial);
 
     section.querySelector('[data-playground-reset]').click();
 
-    expect(host.attributes.length, tag).toBe(0);
+    for (const { name } of component.attributes) {
+      expect(host.hasAttribute(name), `${tag} ${name}`).toBe(false);
+    }
+    // Clearing the last custom property leaves an empty style attribute in
+    // Chromium; assert the declaration itself is empty, not the attribute.
+    expect(host.style.cssText, tag).toBe('');
     expect(codeOf(section), tag).toBe(initial);
-    for (const control of section.querySelectorAll(
-      '[data-playground-attribute]',
-    )) {
+    for (const control of inputs) {
       if (control.type === 'checkbox') {
         expect(control.checked, tag).toBe(false);
       } else {
@@ -289,6 +314,51 @@ test('copy writes the generated code to the clipboard', async () => {
   await vi.waitFor(() => {
     expect(writeText).toHaveBeenCalledWith('<yk-button>Button</yk-button>');
   });
+});
+
+test('each component page renders one control per CSS custom property', async () => {
+  for (const { tag, cssProperties } of components) {
+    const { section } = await loadPlayground(tag);
+    const controls = section.querySelectorAll('[data-playground-property]');
+    expect(controls.length, tag).toBe(cssProperties.length);
+    for (const { name } of cssProperties) {
+      const control = section.querySelector(
+        `[data-playground-property="${name}"]`,
+      );
+      expect(control, `${tag} ${name}`).not.toBeNull();
+      expect(control.type, `${tag} ${name}`).toBe('text');
+    }
+  }
+});
+
+test('a CSS custom property control updates the preview style and code', async () => {
+  const { section } = await loadPlayground('yk-vstack');
+  const host = section.querySelector('[data-playground-preview] > *');
+
+  setProperty(section, '--yk-vstack-gap', '2rem');
+  expect(host.style.getPropertyValue('--yk-vstack-gap')).toBe('2rem');
+  expect(codeOf(section)).toContain('style="--yk-vstack-gap: 2rem"');
+
+  setProperty(section, '--yk-vstack-gap', '');
+  expect(host.style.getPropertyValue('--yk-vstack-gap')).toBe('');
+  expect(codeOf(section)).not.toContain('style=');
+});
+
+test('generated code joins the CSS custom properties in metadata order', async () => {
+  const { section } = await loadPlayground('yk-hstack');
+  setProperty(section, '--yk-hstack-gap', '2rem');
+  setProperty(section, '--yk-hstack-align', 'center');
+  expect(codeOf(section)).toContain(
+    'style="--yk-hstack-align: center; --yk-hstack-gap: 2rem"',
+  );
+});
+
+test('generated code escapes CSS custom property values', async () => {
+  const { section } = await loadPlayground('yk-vstack');
+  setProperty(section, '--yk-vstack-gap', 'a&b<c>d"e');
+  expect(codeOf(section)).toContain(
+    'style="--yk-vstack-gap: a&amp;b&lt;c&gt;d&quot;e"',
+  );
 });
 
 test('landing page groups cards into one section per category', async () => {

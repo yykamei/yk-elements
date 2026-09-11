@@ -101,8 +101,9 @@ npm run preview
 ```
 
 Each component page opens with an interactive Playground: change the
-component's attributes and the preview and generated markup update live.
-Copy the markup to start from the configuration you built in the browser.
+component's attributes or CSS custom properties and the preview and
+generated markup update live. Copy the markup to start from the
+configuration you built in the browser.
 
 ## Development
 
