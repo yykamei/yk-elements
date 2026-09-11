@@ -111,6 +111,26 @@ test('every component declares a known category', () => {
   );
 });
 
+const CONTROL_KINDS = ['boolean', 'select', 'text'];
+
+test('every attribute declares a valid playground control', () => {
+  for (const { tag, attributes } of components) {
+    for (const { name, control, options } of attributes) {
+      const label = `${tag} ${name}`;
+      expect(CONTROL_KINDS, label).toContain(control);
+      if (control === 'select') {
+        expect(Array.isArray(options) && options.length > 0, label).toBe(true);
+      }
+    }
+  }
+});
+
+test('every component declares playground content', () => {
+  for (const { tag, playground } of components) {
+    expect(typeof playground?.content, tag).toBe('string');
+  }
+});
+
 test('landing page groups cards into one section per category', async () => {
   const iframe = await loadIframe('/catalog/index.html');
   const doc = iframe.contentDocument;
