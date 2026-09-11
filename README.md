@@ -100,6 +100,10 @@ npm run preview
 # open http://localhost:3000/catalog/
 ```
 
+Each component page opens with an interactive Playground: change the
+component's attributes and the preview and generated markup update live.
+Copy the markup to start from the configuration you built in the browser.
+
 ## Development
 
 ```bash

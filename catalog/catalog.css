@@ -8,24 +8,24 @@
  * Adding a component means adding a page with its variations and one entry
  * in that list. No build step is involved.
  *
- * All rules live in a single `@scope (.catalog)` block: the page shell is
- * the only named class, and parts are reached through element selectors,
- * data attributes, and the few part classes the scope cannot say (.brand,
- * .title, .description, .property-name, .property-default, .demo-item).
- * The nav's current page uses the platform's own [aria-current="page"]
- * state instead of an invented class. `@scope` is Baseline Newly
- * Available (Chrome 118+, Safari 17.4+, Firefox 146+); the catalog
- * deliberately ships no fallback — only these dogfooding pages use it,
- * the library itself never does.
+ * All rules live in a single `@scope (.catalog)` block. Parts are reached
+ * through element selectors, data attributes, and the few classes the scope
+ * cannot otherwise say: the layout shells .catalog and .playground, the part
+ * classes .brand, .title, .description, .property-name, .property-default,
+ * .demo-item, and the .table-scroll wrapper. The nav's current page uses the
+ * platform's own [aria-current="page"] state instead of an invented class.
+ * `@scope` is Baseline Newly Available (Chrome 118+, Safari 17.4+, Firefox
+ * 146+); the catalog deliberately ships no fallback — only these dogfooding
+ * pages use it, the library itself never does.
  *
  * The catalog dogfoods the library: spacing between siblings is owned by
  * yk-vstack / yk-grid parents and demo insets by yk-pad, so this file keeps
  * only the catalog's own visual identity (colors, borders, typography).
- * Two layout exceptions remain here: the outer .catalog two-column shell,
- * which no existing primitive reproduces, and the sidebar nav, whose
- * per-category stacks must switch to wrapping rows in the mobile media
- * query (a switch neither yk-vstack nor yk-cluster can express from
- * outside Shadow DOM).
+ * Three layout exceptions remain here: the outer .catalog two-column shell,
+ * the .playground controls/stage shell (whose stage must shrink below its
+ * code block), and the sidebar nav, whose per-category stacks must switch to
+ * wrapping rows in the mobile media query (a switch neither yk-vstack nor
+ * yk-cluster can express from outside Shadow DOM).
  *
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on the scope root and
@@ -172,6 +172,7 @@
   }
 
   [data-landing] h2,
+  [data-playground] h2,
   [data-interface] h2,
   [data-tokens] h2 {
     font-size: 1.125rem;
@@ -283,6 +284,76 @@
     background-color: var(--yk-catalog-demo-item-bg);
   }
 
+  /**
+   * The playground pairs a controls panel with a live preview and the
+   * generated markup. It needs a two-column shell of its own (like the outer
+   * .catalog grid) so the stage can shrink below the intrinsic width of its
+   * code block. The panel and stage are otherwise reached through their data
+   * attributes; the native form fields are styled directly because the
+   * library ships no comparable control.
+   */
+  .playground {
+    display: grid;
+    grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
+    gap: var(--yk-space-md);
+    align-items: start;
+  }
+
+  [data-playground-panel] fieldset {
+    margin: 0;
+    padding: var(--yk-space-md);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
+    background-color: var(--yk-catalog-demo-bg);
+  }
+
+  [data-playground-panel] legend {
+    padding-inline: var(--yk-catalog-space-xs);
+    color: var(--yk-catalog-fg-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  [data-playground-panel] label {
+    display: flex;
+    align-items: center;
+    gap: var(--yk-space-sm);
+    font-size: var(--yk-catalog-text-sm);
+  }
+
+  [data-playground-panel] label span {
+    font-family: var(--yk-catalog-font-mono);
+    color: var(--yk-catalog-fg-muted);
+  }
+
+  [data-playground-panel] input[type="text"],
+  [data-playground-panel] select {
+    flex: 1;
+    min-inline-size: 0;
+    padding: var(--yk-catalog-space-xs) var(--yk-space-sm);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-sm);
+    background-color: var(--yk-catalog-demo-item-bg);
+    color: var(--yk-catalog-fg);
+    font-family: var(--yk-catalog-font-mono);
+    font-size: var(--yk-catalog-text-sm);
+  }
+
+  [data-playground-stage] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--yk-space-sm);
+    min-inline-size: 0;
+  }
+
+  [data-playground-preview] {
+    display: block;
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-md);
+  }
+
   @media (width < 56rem) {
     :scope {
       grid-template-columns: 1fr;
@@ -297,6 +368,10 @@
     nav section {
       flex-direction: row;
       flex-wrap: wrap;
+    }
+
+    .playground {
+      grid-template-columns: 1fr;
     }
   }
 }

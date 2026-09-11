@@ -131,6 +131,166 @@ test('every component declares playground content', () => {
   }
 });
 
+async function loadPlayground(tag) {
+  const iframe = await loadIframe(`/catalog/${tag}.html`);
+  const doc = iframe.contentDocument;
+  return { iframe, doc, section: doc.querySelector('[data-playground]') };
+}
+
+function setControl(section, name, value) {
+  const control = section.querySelector(
+    `[data-playground-attribute="${name}"]`,
+  );
+  if (control.type === 'checkbox') {
+    control.checked = value;
+  } else {
+    control.value = value;
+  }
+  control.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+const codeOf = (section) =>
+  section.querySelector('[data-playground-code]').textContent;
+
+test('each component page renders a playground with one control per attribute', async () => {
+  for (const { tag, attributes } of components) {
+    const { section } = await loadPlayground(tag);
+    expect(section, tag).not.toBeNull();
+
+    const preview = section.querySelector('[data-playground-preview] > *');
+    expect(preview, tag).not.toBeNull();
+    expect(preview.tagName, tag).toBe(tag.toUpperCase());
+
+    const controls = section.querySelectorAll('[data-playground-attribute]');
+    expect(controls.length, tag).toBe(attributes.length);
+    for (const { name, control } of attributes) {
+      const label = `${tag} ${name}`;
+      const element = section.querySelector(
+        `[data-playground-attribute="${name}"]`,
+      );
+      expect(element, label).not.toBeNull();
+      if (control === 'boolean') {
+        expect(element.type, label).toBe('checkbox');
+      } else if (control === 'select') {
+        expect(element.tagName, label).toBe('SELECT');
+      } else {
+        expect(element.tagName, label).toBe('INPUT');
+        expect(element.type, label).toBe('text');
+      }
+    }
+  }
+});
+
+test('the playground previews the initial generated code', async () => {
+  const { section } = await loadPlayground('yk-button');
+  expect(codeOf(section)).toBe('<yk-button>Button</yk-button>');
+});
+
+test('layout playground content renders as indented demo items', async () => {
+  const { section } = await loadPlayground('yk-vstack');
+  expect(codeOf(section)).toBe(
+    '<yk-vstack>\n  <p class="demo-item">First item</p>\n  <p class="demo-item">Second item</p>\n  <p class="demo-item">Third item</p>\n</yk-vstack>',
+  );
+  expect(
+    section.querySelectorAll('[data-playground-preview] .demo-item').length,
+  ).toBe(3);
+});
+
+test('a select control sets its attribute and updates the generated code', async () => {
+  const { section } = await loadPlayground('yk-button');
+  const host = section.querySelector('[data-playground-preview] > *');
+  setControl(section, 'variant', 'primary');
+  expect(host.getAttribute('variant')).toBe('primary');
+  expect(codeOf(section)).toBe(
+    '<yk-button variant="primary">Button</yk-button>',
+  );
+
+  setControl(section, 'variant', '');
+  expect(host.hasAttribute('variant')).toBe(false);
+});
+
+test('a boolean control toggles a bare attribute in the generated code', async () => {
+  const { section } = await loadPlayground('yk-button');
+  const host = section.querySelector('[data-playground-preview] > *');
+  setControl(section, 'disabled', true);
+  expect(host.hasAttribute('disabled')).toBe(true);
+  expect(codeOf(section)).toBe('<yk-button disabled>Button</yk-button>');
+
+  setControl(section, 'disabled', false);
+  expect(host.hasAttribute('disabled')).toBe(false);
+  expect(codeOf(section)).toBe('<yk-button>Button</yk-button>');
+});
+
+test('a text control sets its attribute and escapes the generated code', async () => {
+  const { section } = await loadPlayground('yk-input-text');
+  const host = section.querySelector('[data-playground-preview] > *');
+  setControl(section, 'placeholder', 'a&b<c>d"e');
+  expect(host.getAttribute('placeholder')).toBe('a&b<c>d"e');
+
+  const code = codeOf(section);
+  expect(code).toBe(
+    '<yk-input-text placeholder="a&amp;b&lt;c&gt;d&quot;e"></yk-input-text>',
+  );
+  expect(code).not.toContain('a&b<c>d"e');
+});
+
+test('generated code lists attributes in metadata order', async () => {
+  const { section } = await loadPlayground('yk-input-text');
+  setControl(section, 'name', 'email');
+  setControl(section, 'placeholder', 'you@example.com');
+  expect(codeOf(section)).toBe(
+    '<yk-input-text placeholder="you@example.com" name="email"></yk-input-text>',
+  );
+});
+
+test('reset restores the initial playground state', async () => {
+  for (const tag of ['yk-button', 'yk-input-text']) {
+    const { section } = await loadPlayground(tag);
+    const host = section.querySelector('[data-playground-preview] > *');
+    const initial = codeOf(section);
+
+    for (const control of section.querySelectorAll(
+      '[data-playground-attribute]',
+    )) {
+      setControl(
+        section,
+        control.dataset.playgroundAttribute,
+        control.type === 'checkbox' ? true : 'x',
+      );
+    }
+    expect(host.attributes.length, tag).toBeGreaterThan(0);
+
+    section.querySelector('[data-playground-reset]').click();
+
+    expect(host.attributes.length, tag).toBe(0);
+    expect(codeOf(section), tag).toBe(initial);
+    for (const control of section.querySelectorAll(
+      '[data-playground-attribute]',
+    )) {
+      if (control.type === 'checkbox') {
+        expect(control.checked, tag).toBe(false);
+      } else {
+        expect(control.value, tag).toBe('');
+      }
+    }
+  }
+});
+
+test('copy writes the generated code to the clipboard', async () => {
+  const { iframe, section } = await loadPlayground('yk-button');
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  Object.defineProperty(iframe.contentWindow.navigator, 'clipboard', {
+    value: { writeText },
+    configurable: true,
+  });
+
+  section.querySelector('[data-playground-copy]').click();
+
+  await vi.waitFor(() => {
+    expect(writeText).toHaveBeenCalledWith('<yk-button>Button</yk-button>');
+  });
+});
+
 test('landing page groups cards into one section per category', async () => {
   const iframe = await loadIframe('/catalog/index.html');
   const doc = iframe.contentDocument;
