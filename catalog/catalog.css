@@ -23,9 +23,9 @@
  * only the catalog's own visual identity (colors, borders, typography).
  * Two layout exceptions remain here: the outer .catalog two-column shell,
  * which no existing primitive reproduces, and the sidebar nav, whose
- * vertical stack must switch to a wrapping row in the mobile media query
- * (a switch neither yk-vstack nor yk-cluster can express from outside
- * Shadow DOM).
+ * per-category stacks must switch to wrapping rows in the mobile media
+ * query (a switch neither yk-vstack nor yk-cluster can express from
+ * outside Shadow DOM).
  *
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on the scope root and
@@ -87,14 +87,30 @@
   }
 
   /**
-   * The sidebar nav keeps its own flex CSS (see the file header): the stack
-   * must switch to a wrapping row in the mobile media query below, which no
+   * The sidebar nav keeps its own flex CSS (see the file header). It stacks
+   * the category sections, each of which stacks its own links; the sections
+   * switch to wrapping rows in the mobile media query below, a switch no
    * existing yk-* primitive can express from outside Shadow DOM.
    */
   nav {
     display: flex;
     flex-direction: column;
+    gap: var(--yk-space-md);
+  }
+
+  nav section {
+    display: flex;
+    flex-direction: column;
     gap: var(--yk-catalog-space-xs);
+  }
+
+  nav h2 {
+    padding-inline: var(--yk-space-sm);
+    color: var(--yk-catalog-fg-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   nav a {
@@ -134,9 +150,8 @@
     font-weight: 700;
   }
 
-  /* The landing cards are the only direct-child links of the landing grid;
-   * their titles are the only <h2> elements inside it. */
-  [data-landing] > a {
+  /* The landing cards are the only links inside each category section. */
+  [data-landing] > section a {
     padding: var(--yk-space-md);
     border: 1px solid var(--yk-catalog-border);
     border-radius: var(--yk-catalog-radius-md);
@@ -144,16 +159,19 @@
     text-decoration: none;
   }
 
-  [data-landing] > a:hover {
+  [data-landing] > section a:hover {
     border-color: var(--yk-catalog-fg-muted);
   }
 
-  [data-landing] h2 {
+  /* The card titles are the only <h3> elements inside the landing
+   * container; the category headings are the <h2> ones. */
+  [data-landing] h3 {
     font-family: var(--yk-catalog-font-mono);
     font-size: 1rem;
     font-weight: 700;
   }
 
+  [data-landing] h2,
   [data-interface] h2,
   [data-tokens] h2 {
     font-size: 1.125rem;
@@ -276,7 +294,7 @@
       overflow-x: auto;
     }
 
-    nav {
+    nav section {
       flex-direction: row;
       flex-wrap: wrap;
     }

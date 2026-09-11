@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test, vi } from 'vitest';
-import { components, tokens } from '../catalog/catalog.js';
+import { categories, components, tokens } from '../catalog/catalog.js';
 
 const VARIATIONS = {
   'yk-vstack': 3,
@@ -100,15 +100,61 @@ test('each component page declares its component and lists its variations', asyn
   }
 });
 
-test('landing page renders the sidebar and one card per component', async () => {
+test('every component declares a known category', () => {
+  const names = categories.map(({ name }) => name);
+  expect(names).toEqual(['Layout', 'Components']);
+  for (const { tag, category } of components) {
+    expect(names, tag).toContain(category);
+  }
+  expect(categories.flatMap(({ components: group }) => group)).toEqual(
+    components,
+  );
+});
+
+test('landing page groups cards into one section per category', async () => {
+  const iframe = await loadIframe('/catalog/index.html');
+  const doc = iframe.contentDocument;
+  const sections = [...doc.querySelectorAll('[data-landing] > section')];
+  expect(
+    sections.map((section) => section.querySelector('h2').textContent.trim()),
+  ).toEqual(categories.map(({ name }) => name));
+
+  for (const [index, { name, components: group }] of categories.entries()) {
+    const cards = [...sections[index].querySelectorAll('a')];
+    expect(cards.length, name).toBe(group.length);
+    expect(
+      cards.map((card) => card.getAttribute('href')),
+      name,
+    ).toEqual(group.map(({ tag }) => `./${tag}.html`));
+  }
+  expect(doc.querySelectorAll('[data-landing] h3').length).toBe(
+    components.length,
+  );
+});
+
+test('landing page renders the sidebar grouped by category and one card per component', async () => {
   const iframe = await loadIframe('/catalog/index.html');
   const doc = iframe.contentDocument;
   expect(doc.querySelector('.brand').textContent.trim()).toBe('yk-elements');
+
+  const groups = [...doc.querySelectorAll('nav section')].map((section) => ({
+    name: section.querySelector('h2').textContent.trim(),
+    labels: [...section.querySelectorAll('a')].map((link) =>
+      link.textContent.trim(),
+    ),
+  }));
+  expect(groups).toEqual(
+    categories.map(({ name, components: group }) => ({
+      name,
+      labels: group.map(({ tag }) => `<${tag}>`),
+    })),
+  );
+
   const labels = [...doc.querySelectorAll('nav a')].map((link) =>
     link.textContent.trim(),
   );
   expect(labels).toEqual(['Overview', ...tags.map((tag) => `<${tag}>`)]);
-  expect(doc.querySelectorAll('[data-landing] > a').length).toBe(
+  expect(doc.querySelectorAll('[data-landing] a').length).toBe(
     components.length,
   );
   expect(
@@ -119,11 +165,12 @@ test('landing page renders the sidebar and one card per component', async () => 
 test('catalog chrome dogfoods the library components', async () => {
   const landing = await loadIframe('/catalog/index.html');
   const landingDoc = landing.contentDocument;
-  expect(landingDoc.querySelector('[data-landing]').tagName).toBe('YK-GRID');
+  expect(landingDoc.querySelector('[data-landing]').tagName).toBe('YK-VSTACK');
+  expect(landingDoc.querySelectorAll('[data-landing] yk-grid').length).toBe(
+    categories.length,
+  );
   expect(landingDoc.querySelector('[data-sidebar] yk-vstack')).not.toBeNull();
-  expect(
-    landingDoc.querySelector('[data-landing] > a yk-vstack'),
-  ).not.toBeNull();
+  expect(landingDoc.querySelector('[data-landing] a yk-vstack')).not.toBeNull();
   expect(landingDoc.querySelector('[data-tokens] yk-vstack')).not.toBeNull();
 
   for (const tag of tags) {

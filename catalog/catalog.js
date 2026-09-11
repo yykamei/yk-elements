@@ -5,11 +5,12 @@
  * component list and the design tokens, and renders the catalog's shared
  * chrome from them:
  *
- * - the sidebar navigation (brand + Overview + one link per component),
- *   marking the current page as active based on the URL via the platform's
- *   own aria-current state
+ * - the sidebar navigation (brand + Overview + one section per category,
+ *   each holding one link per component), marking the current page as
+ *   active based on the URL via the platform's own aria-current state
  * - the component cards on the landing page (catalog/index.html), which
- *   hosts a [data-landing] container
+ *   hosts a [data-landing] container and groups the cards into one section
+ *   per category
  * - the header (title + description) on each component page, whose <body>
  *   carries data-component="yk-xxx"
  * - the Interface section on each component page, listing the component's
@@ -206,6 +207,7 @@ const inputFieldAttributes = (extra = []) => [
 export const components = [
   {
     tag: 'yk-vstack',
+    category: 'Layout',
     description:
       'Layout primitive that stacks its children vertically with a consistent gap.',
     cssProperties: [
@@ -219,6 +221,7 @@ export const components = [
   },
   {
     tag: 'yk-hstack',
+    category: 'Layout',
     description:
       'Layout primitive that stacks its children horizontally with a consistent gap.',
     cssProperties: [
@@ -238,6 +241,7 @@ export const components = [
   },
   {
     tag: 'yk-cluster',
+    category: 'Layout',
     description:
       'Layout primitive that places children in a centered, wrapping horizontal flow.',
     cssProperties: [
@@ -263,6 +267,7 @@ export const components = [
   },
   {
     tag: 'yk-grid',
+    category: 'Layout',
     description:
       'Layout primitive that places children in an auto-equal-width grid.',
     cssProperties: [
@@ -281,6 +286,7 @@ export const components = [
   },
   {
     tag: 'yk-pad',
+    category: 'Layout',
     description:
       'Layout primitive that pads its children with a consistent inset from the host edges.',
     cssProperties: [
@@ -306,6 +312,7 @@ export const components = [
   },
   {
     tag: 'yk-button',
+    category: 'Components',
     description:
       'Action button that renders its label inside a native button with a solid Bootstrap-style tone.',
     cssProperties: buttonFaceProperties,
@@ -332,6 +339,7 @@ export const components = [
   },
   {
     tag: 'yk-link',
+    category: 'Components',
     description:
       'Link that renders like a yk-button, backed by a native anchor.',
     cssProperties: buttonFaceProperties,
@@ -370,6 +378,7 @@ export const components = [
   },
   {
     tag: 'yk-badge',
+    category: 'Components',
     description:
       'Small status label that renders a solid tone and scales with the surrounding font size, like the Bootstrap badge.',
     cssProperties: [
@@ -431,6 +440,7 @@ export const components = [
   },
   {
     tag: 'yk-input-text',
+    category: 'Components',
     description:
       'Single-line text field that renders a native text input with a Bootstrap-style face and full form participation.',
     cssProperties: inputFaceProperties,
@@ -438,6 +448,7 @@ export const components = [
   },
   {
     tag: 'yk-input-email',
+    category: 'Components',
     description:
       'Single-line email field that renders a native email input with a Bootstrap-style face, native email syntax validation, and full form participation.',
     cssProperties: inputFaceProperties,
@@ -452,6 +463,7 @@ export const components = [
   },
   {
     tag: 'yk-input-tel',
+    category: 'Components',
     description:
       'Single-line telephone field that renders a native tel input with a Bootstrap-style face and full form participation; constraining the format is up to the pattern attribute since tel has no native syntax check.',
     cssProperties: inputFaceProperties,
@@ -459,12 +471,27 @@ export const components = [
   },
   {
     tag: 'yk-input-url',
+    category: 'Components',
     description:
       'Single-line URL field that renders a native url input with a Bootstrap-style face, native URL syntax validation, and full form participation.',
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
 ];
+
+/**
+ * Component groups derived from the flat list, in first-appearance order.
+ *
+ * Each entry references the same component objects as `components` so the
+ * sidebar and landing renders can map over one structure; adding a component
+ * still means adding one entry above.
+ */
+export const categories = [
+  ...new Set(components.map(({ category }) => category)),
+].map((name) => ({
+  name,
+  components: components.filter(({ category }) => category === name),
+}));
 
 export const tokens = [
   {
@@ -522,17 +549,22 @@ function renderSidebar() {
   // The platform's aria-current state carries "active" for styling (see
   // catalog.css) — no invented class needed.
   const isActive = (active) => (active ? ' aria-current="page"' : '');
+  const sectionFor = ({ name, components: group }) => `
+        <section>
+          <h2>${name}</h2>
+          ${group
+            .map(
+              ({ tag }) => `
+          <a href="${pageFor(tag)}"${isActive(current === tag)}>&lt;${tag}&gt;</a>`,
+            )
+            .join('')}
+        </section>`;
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
       <a class="brand" href="./index.html">yk-elements</a>
-      <nav aria-label="Components">
+      <nav aria-label="Catalog">
         <a href="./index.html"${isActive(current === null)}>Overview</a>
-        ${components
-          .map(
-            ({ tag }) => `
-        <a href="${pageFor(tag)}"${isActive(current === tag)}>&lt;${tag}&gt;</a>`,
-          )
-          .join('')}
+        ${categories.map(sectionFor).join('')}
       </nav>
     </yk-vstack>
   `;
@@ -543,15 +575,27 @@ function renderLanding() {
   // become external or author-supplied input.
   const landing = document.querySelector('[data-landing]');
   if (!landing) return;
-  landing.innerHTML = components
+  landing.innerHTML = categories
     .map(
-      ({ tag, description }) => `
-    <a href="${pageFor(tag)}">
+      ({ name, components: group }) => `
+    <section>
       <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
-        <h2>&lt;${tag}&gt;</h2>
-        <p class="description">${description}</p>
+        <h2>${name}</h2>
+        <yk-grid style="--yk-grid-min: 15rem">
+          ${group
+            .map(
+              ({ tag, description }) => `
+          <a href="${pageFor(tag)}">
+            <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+              <h3>&lt;${tag}&gt;</h3>
+              <p class="description">${description}</p>
+            </yk-vstack>
+          </a>`,
+            )
+            .join('')}
+        </yk-grid>
       </yk-vstack>
-    </a>`,
+    </section>`,
     )
     .join('');
 }
