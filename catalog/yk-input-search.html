@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-search&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-input-search">
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>placeholder</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search placeholder="Search articles..."></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search placeholder="Search articles..."&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search value="prefilled query"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search value="prefilled query"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>minlength + maxlength</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search minlength="2" maxlength="30" placeholder="2–30 characters"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search minlength="2" maxlength="30" placeholder="2–30 characters"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>pattern</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search pattern="[a-z -]{2,30}" placeholder="2–30 lowercase letters, spaces, or hyphens"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search pattern="[a-z -]{2,30}" placeholder="2–30 lowercase letters, spaces, or hyphens"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search required name="q" placeholder="required field"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search required name="q" placeholder="required field"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>readonly</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search readonly value="read-only query"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search readonly value="read-only query"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-search disabled value="disabled query"></yk-input-search>
+          </yk-pad>
+          <pre><code>&lt;yk-input-search disabled value="disabled query"&gt;&lt;/yk-input-search&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-query">Search</label>
+                <yk-input-search id="catalog-query" name="q" pattern="[a-z -]{2,30}" placeholder="2–30 lowercase letters"></yk-input-search>
+                <yk-button type="submit" variant="primary">Search</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-query"&gt;Search&lt;/label&gt;
+    &lt;yk-input-search id="catalog-query" name="q" pattern="[a-z -]{2,30}" placeholder="2–30 lowercase letters"&gt;&lt;/yk-input-search&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Search&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

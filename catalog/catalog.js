@@ -610,6 +610,17 @@ export const components = [
       { sensitiveValue: true },
     ),
   },
+  {
+    tag: 'yk-input-search',
+    category: 'Components',
+    description:
+      'Single-line search field that renders a native search input with a Bootstrap-style face, the browser search affordances such as the clear button, and full form participation; constraining the format is up to the pattern attribute since search has no native syntax check.',
+    playground: {
+      content: '',
+    },
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(),
+  },
 ];
 
 /**
