@@ -16,8 +16,8 @@
  * - the Interface section on each component page, listing the component's
  *   configurable CSS custom properties
  * - the Playground section on each component page, whose [data-playground]
- *   container is filled with attribute controls, a live preview, and the
- *   generated markup
+ *   container is filled with attribute and CSS custom property controls, a
+ *   live preview, and the generated markup
  * - the design-token table on the landing page, which hosts a [data-tokens]
  *   container linking back from each component's property defaults
  *
@@ -836,6 +836,20 @@ function playgroundControl(attribute) {
       </label>`;
 }
 
+function playgroundProperty(property) {
+  const id = `playground-${property.name.slice(2)}`;
+  return `
+      <label for="${id}">
+        <span>${property.name}</span>
+        <input
+          type="text"
+          id="${id}"
+          data-playground-property="${property.name}"
+          placeholder="${escapeHtml(property.default)}"
+        >
+      </label>`;
+}
+
 /**
  * Rebuilds the component's markup from the metadata, in metadata order, with
  * every value escaped. Reading the preview host keeps the code in step with
@@ -850,9 +864,16 @@ function codeFor(component, host) {
         : ` ${name}="${escapeHtml(host.getAttribute(name))}"`,
     )
     .join('');
+  const style = component.cssProperties
+    .flatMap(({ name }) => {
+      const value = host.style.getPropertyValue(name);
+      return value === '' ? [] : [`${name}: ${value}`];
+    })
+    .join('; ');
+  const styleAttribute = style ? ` style="${escapeHtml(style)}"` : '';
   const content = component.playground.content;
   const body = content.includes('\n') ? `\n${content}\n` : content;
-  return `<${component.tag}${attributes}>${body}</${component.tag}>`;
+  return `<${component.tag}${attributes}${styleAttribute}>${body}</${component.tag}>`;
 }
 
 function renderPlayground() {
@@ -862,14 +883,28 @@ function renderPlayground() {
   const component = components.find(({ tag: known }) => known === tag);
   if (!component) return;
 
-  const controls = component.attributes.length
-    ? `<fieldset>
+  const groups = [];
+  if (component.attributes.length) {
+    groups.push(`
+      <fieldset>
         <legend>Attributes</legend>
         <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
           ${component.attributes.map(playgroundControl).join('')}
         </yk-vstack>
-      </fieldset>`
-    : '<p class="description">This component has no attributes to configure.</p>';
+      </fieldset>`);
+  }
+  if (component.cssProperties.length) {
+    groups.push(`
+      <fieldset>
+        <legend>CSS custom properties</legend>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+          ${component.cssProperties.map(playgroundProperty).join('')}
+        </yk-vstack>
+      </fieldset>`);
+  }
+  const controls = groups.length
+    ? groups.join('')
+    : '<p class="description">This component has no configurable options.</p>';
 
   section.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
@@ -914,6 +949,18 @@ function renderPlayground() {
         host.setAttribute(attribute.name, control.value);
       }
     }
+    for (const property of component.cssProperties) {
+      const control = panel.querySelector(
+        `[data-playground-property="${property.name}"]`,
+      );
+      if (control.value.trim() === '') {
+        host.style.removeProperty(property.name);
+      } else {
+        host.style.setProperty(property.name, control.value);
+      }
+    }
+    // Clearing the last property leaves an empty style attribute behind;
+    // generated code ignores it, so the leftover is harmless and left alone.
     code.textContent = codeFor(component, host);
   };
 
@@ -923,7 +970,7 @@ function renderPlayground() {
     .querySelector('[data-playground-reset]')
     .addEventListener('click', () => {
       for (const control of panel.querySelectorAll(
-        '[data-playground-attribute]',
+        '[data-playground-attribute], [data-playground-property]',
       )) {
         if (control.type === 'checkbox') {
           control.checked = false;
