@@ -15,6 +15,9 @@
  *   carries data-component="yk-xxx"
  * - the Interface section on each component page, listing the component's
  *   configurable CSS custom properties
+ * - the Playground section on each component page, whose [data-playground]
+ *   container is filled with attribute controls, a live preview, and the
+ *   generated markup
  * - the design-token table on the landing page, which hosts a [data-tokens]
  *   container linking back from each component's property defaults
  *
@@ -780,6 +783,175 @@ function renderInterface() {
     : '';
 }
 
+/**
+ * Escapes a value for inclusion in generated markup. The playground copies
+ * this string verbatim, so quotes and angle brackets must survive as text.
+ */
+const escapeHtml = (text) =>
+  text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+
+function playgroundControl(attribute) {
+  const id = `playground-${attribute.name}`;
+  const label = `<span>${attribute.name}</span>`;
+  const field = `id="${id}" data-playground-attribute="${attribute.name}"`;
+
+  if (attribute.control === 'boolean') {
+    return `
+      <label for="${id}">
+        ${label}
+        <input type="checkbox" ${field}>
+      </label>`;
+  }
+
+  if (attribute.control === 'select') {
+    const unset =
+      attribute.default === 'unset'
+        ? '(unset)'
+        : `(unset · default: ${attribute.default})`;
+    const options = [
+      `<option value="">${unset}</option>`,
+      ...attribute.options.map(
+        (option) => `<option value="${option}">${option}</option>`,
+      ),
+    ].join('');
+    return `
+      <label for="${id}">
+        ${label}
+        <select ${field}>${options}</select>
+      </label>`;
+  }
+
+  const placeholder =
+    attribute.default === 'unset'
+      ? ''
+      : ` placeholder="${escapeHtml(attribute.default)}"`;
+  return `
+      <label for="${id}">
+        ${label}
+        <input type="text" ${field}${placeholder}>
+      </label>`;
+}
+
+/**
+ * Rebuilds the component's markup from the metadata, in metadata order, with
+ * every value escaped. Reading the preview host keeps the code in step with
+ * the live element without a separate state object.
+ */
+function codeFor(component, host) {
+  const attributes = component.attributes
+    .filter(({ name }) => host.hasAttribute(name))
+    .map(({ name, control }) =>
+      control === 'boolean'
+        ? ` ${name}`
+        : ` ${name}="${escapeHtml(host.getAttribute(name))}"`,
+    )
+    .join('');
+  const content = component.playground.content;
+  const body = content.includes('\n') ? `\n${content}\n` : content;
+  return `<${component.tag}${attributes}>${body}</${component.tag}>`;
+}
+
+function renderPlayground() {
+  const section = document.querySelector('[data-playground]');
+  const tag = document.body.dataset.component;
+  if (!section || !tag) return;
+  const component = components.find(({ tag: known }) => known === tag);
+  if (!component) return;
+
+  const controls = component.attributes.length
+    ? `<fieldset>
+        <legend>Attributes</legend>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+          ${component.attributes.map(playgroundControl).join('')}
+        </yk-vstack>
+      </fieldset>`
+    : '<p class="description">This component has no attributes to configure.</p>';
+
+  section.innerHTML = `
+    <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+      <h2>Playground</h2>
+      <div class="playground">
+        <div data-playground-panel>${controls}</div>
+        <div data-playground-stage>
+          <yk-pad
+            data-playground-preview
+            style="--yk-pad-padding: var(--yk-space-lg)"
+          ></yk-pad>
+          <pre><code data-playground-code aria-live="polite"></code></pre>
+          <yk-cluster
+            style="--yk-cluster-justify: flex-start; --yk-cluster-gap: var(--yk-space-sm)"
+          >
+            <yk-button type="button" data-playground-copy>Copy</yk-button>
+            <yk-button type="button" data-playground-reset>Reset</yk-button>
+          </yk-cluster>
+        </div>
+      </div>
+    </yk-vstack>
+  `;
+
+  const panel = section.querySelector('[data-playground-panel]');
+  const preview = section.querySelector('[data-playground-preview]');
+  const code = section.querySelector('[data-playground-code]');
+
+  const host = document.createElement(tag);
+  host.innerHTML = component.playground.content;
+  preview.append(host);
+
+  const sync = () => {
+    for (const attribute of component.attributes) {
+      const control = panel.querySelector(
+        `[data-playground-attribute="${attribute.name}"]`,
+      );
+      if (attribute.control === 'boolean') {
+        host.toggleAttribute(attribute.name, control.checked);
+      } else if (control.value === '') {
+        host.removeAttribute(attribute.name);
+      } else {
+        host.setAttribute(attribute.name, control.value);
+      }
+    }
+    code.textContent = codeFor(component, host);
+  };
+
+  panel.addEventListener('input', sync);
+
+  section
+    .querySelector('[data-playground-reset]')
+    .addEventListener('click', () => {
+      for (const control of panel.querySelectorAll(
+        '[data-playground-attribute]',
+      )) {
+        if (control.type === 'checkbox') {
+          control.checked = false;
+        } else {
+          control.value = '';
+        }
+      }
+      sync();
+    });
+
+  const copy = section.querySelector('[data-playground-copy]');
+  let copyTimer;
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(code.textContent);
+      copy.textContent = 'Copied';
+    } catch {
+      copy.textContent = 'Copy failed';
+    }
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => {
+      copy.textContent = 'Copy';
+    }, 1500);
+  });
+
+  sync();
+}
+
 function renderTokens() {
   const section = document.querySelector('[data-tokens]');
   if (!section) return;
@@ -811,5 +983,6 @@ function renderTokens() {
 renderSidebar();
 renderLanding();
 renderComponentHeader();
+renderPlayground();
 renderInterface();
 renderTokens();
