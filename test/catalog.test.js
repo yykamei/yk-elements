@@ -21,6 +21,7 @@ const VARIATIONS = {
   'yk-input-email': 10,
   'yk-input-tel': 9,
   'yk-input-url': 9,
+  'yk-input-password': 12,
 };
 
 afterEach(() => {
@@ -134,11 +135,14 @@ const CONTROL_KINDS = ['boolean', 'select', 'text'];
 
 test('every attribute declares a valid playground control', () => {
   for (const { tag, attributes } of components) {
-    for (const { name, control, options } of attributes) {
+    for (const { name, control, options, sensitive } of attributes) {
       const label = `${tag} ${name}`;
       expect(CONTROL_KINDS, label).toContain(control);
       if (control === 'select') {
         expect(Array.isArray(options) && options.length > 0, label).toBe(true);
+      }
+      if (sensitive) {
+        expect(control, label).toBe('text');
       }
     }
   }
@@ -284,7 +288,7 @@ test('each component page renders a playground with one control per attribute', 
 
     const controls = section.querySelectorAll('[data-playground-attribute]');
     expect(controls.length, tag).toBe(attributes.length);
-    for (const { name, control } of attributes) {
+    for (const { name, control, sensitive } of attributes) {
       const label = `${tag} ${name}`;
       const element = section.querySelector(
         `[data-playground-attribute="${name}"]`,
@@ -296,7 +300,7 @@ test('each component page renders a playground with one control per attribute', 
         expect(element.tagName, label).toBe('SELECT');
       } else {
         expect(element.tagName, label).toBe('INPUT');
-        expect(element.type, label).toBe('text');
+        expect(element.type, label).toBe(sensitive ? 'password' : 'text');
       }
     }
   }
@@ -484,6 +488,20 @@ test('generated code round-trips entity references without double-escaping', asy
   expect(parseCode(code).getAttribute('placeholder')).toBe('&quot;');
 });
 
+test('the password playground masks its value control and omits it from the generated code', async () => {
+  const { section } = await loadPlayground('yk-input-password');
+  const host = section.querySelector('[data-playground-preview] > *');
+  const control = section.querySelector('[data-playground-attribute="value"]');
+  expect(control.type).toBe('password');
+
+  setInput(control, 'mistyped-secret');
+  expect(host.hasAttribute('value')).toBe(true);
+  expect(codeOf(section)).toBe('<yk-input-password></yk-input-password>');
+
+  setInput(control, '');
+  expect(host.hasAttribute('value')).toBe(false);
+});
+
 const INJECTION = '"><img src=x onerror=alert(1)>';
 
 test('user values never inject markup into the preview or generated code', async () => {
@@ -509,9 +527,19 @@ test('user values never inject markup into the preview or generated code', async
 
       const attribute = control.dataset.playgroundAttribute;
       if (attribute !== undefined) {
-        expect(reparsed.getAttribute(attribute), `${tag} ${attribute}`).toBe(
-          INJECTION,
-        );
+        const sensitive = components
+          .find((known) => known.tag === tag)
+          ?.attributes.find((meta) => meta.name === attribute)?.sensitive;
+        if (sensitive) {
+          expect(
+            reparsed.getAttribute(attribute),
+            `${tag} ${attribute}`,
+          ).toBeNull();
+        } else {
+          expect(reparsed.getAttribute(attribute), `${tag} ${attribute}`).toBe(
+            INJECTION,
+          );
+        }
       } else {
         const property = control.dataset.playgroundProperty;
         expect(
@@ -699,5 +727,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-input-email')).toBeDefined();
   expect(customElements.get('yk-input-tel')).toBeDefined();
   expect(customElements.get('yk-input-url')).toBeDefined();
+  expect(customElements.get('yk-input-password')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });

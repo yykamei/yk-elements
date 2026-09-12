@@ -27,7 +27,12 @@ test('applies property writes made before the module upgrades the elements', asy
   const url = document.createElement('yk-input-url');
   url.value = 'https://example.com/pre-upgrade';
   url.required = true;
-  document.body.append(button, link, input, email, tel, url);
+  const password = document.createElement('yk-input-password');
+  password.value = 'pre-upgrade-pass';
+  password.required = true;
+  password.autocomplete = 'current-password';
+  password.inputMode = 'numeric';
+  document.body.append(button, link, input, email, tel, url, password);
 
   await Promise.all([
     import('../src/components/yk-button.js'),
@@ -36,6 +41,7 @@ test('applies property writes made before the module upgrades the elements', asy
     import('../src/components/yk-input-email.js'),
     import('../src/components/yk-input-tel.js'),
     import('../src/components/yk-input-url.js'),
+    import('../src/components/yk-input-password.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -68,4 +74,17 @@ test('applies property writes made before the module upgrades the elements', asy
     'https://example.com/pre-upgrade',
   );
   expect(url.shadowRoot.querySelector('input').required).toBe(true);
+  expect(password.shadowRoot.querySelector('input').type).toBe('password');
+  expect(password.shadowRoot.querySelector('input').value).toBe(
+    'pre-upgrade-pass',
+  );
+  expect(password.shadowRoot.querySelector('input').required).toBe(true);
+  expect(password.getAttribute('autocomplete')).toBe('current-password');
+  expect(
+    password.shadowRoot.querySelector('input').getAttribute('autocomplete'),
+  ).toBe('current-password');
+  expect(password.getAttribute('inputmode')).toBe('numeric');
+  expect(
+    password.shadowRoot.querySelector('input').getAttribute('inputmode'),
+  ).toBe('numeric');
 });

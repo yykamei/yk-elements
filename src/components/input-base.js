@@ -35,6 +35,7 @@ const ATTRIBUTE_PROPERTIES = {
   maxlength: 'maxLength',
   minlength: 'minLength',
   readonly: 'readOnly',
+  inputmode: 'inputMode',
 };
 
 export class YKInputElement extends HTMLElement {
