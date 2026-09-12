@@ -154,13 +154,17 @@ const inputFaceProperties = [
 /**
  * Builds the attribute metadata for an input component, optionally inserting
  * type-specific boolean attributes (e.g. `multiple` on yk-input-email) before
- * the shared `disabled` and `name` entries.
+ * the shared `disabled` and `name` entries. `sensitiveValue` marks the `value`
+ * attribute as sensitive so the playground masks its control and the
+ * generated code never echoes the value back (see `playgroundControl` and
+ * `codeFor`).
  */
-const inputFieldAttributes = (extra = []) => [
+const inputFieldAttributes = (extra = [], { sensitiveValue = false } = {}) => [
   {
     name: 'value',
     control: 'text',
     default: 'unset',
+    ...(sensitiveValue && { sensitive: true }),
     description:
       'Default value shown initially and restored by form reset, mirrored onto the internal input.',
   },
@@ -560,6 +564,52 @@ export const components = [
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
   },
+  {
+    tag: 'yk-input-password',
+    category: 'Components',
+    description:
+      'Single-line password field that renders a native password input with a Bootstrap-style face, obscured values, password-manager interaction through autocomplete, and full form participation since password has no native syntax check.',
+    playground: {
+      content: '',
+    },
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(
+      [
+        {
+          name: 'autocomplete',
+          control: 'select',
+          options: [
+            'current-password',
+            'new-password',
+            'one-time-code',
+            'on',
+            'off',
+          ],
+          default: 'unset',
+          description:
+            'What the browser may fill in, such as the current or a newly generated password, or one-time-code for a PIN, mirrored onto the internal input.',
+        },
+        {
+          name: 'inputmode',
+          control: 'select',
+          options: [
+            'none',
+            'text',
+            'decimal',
+            'numeric',
+            'tel',
+            'search',
+            'email',
+            'url',
+          ],
+          default: 'unset',
+          description:
+            'Virtual keyboard layout to request on devices with one, such as numeric for a PIN, mirrored onto the internal input.',
+        },
+      ],
+      { sensitiveValue: true },
+    ),
+  },
 ];
 
 /**
@@ -843,10 +893,11 @@ export function playgroundControl(attribute) {
     attribute.default === 'unset'
       ? ''
       : ` placeholder="${escapeHtml(attribute.default)}"`;
+  const type = attribute.sensitive ? 'password' : 'text';
   return `
       <label for="${id}">
         ${label}
-        <input type="text" ${field}${placeholder}>
+        <input type="${type}" ${field}${placeholder}>
       </label>`;
 }
 
@@ -880,8 +931,11 @@ export function playgroundProperty(property) {
  * the live element without a separate state object.
  */
 function codeFor(component, host) {
+  // Sensitive values (e.g. a mistyped password) are never echoed into the
+  // generated markup, so they cannot leak through the code block, its
+  // aria-live announcement, or the Copy clipboard write.
   const attributes = component.attributes
-    .filter(({ name }) => host.hasAttribute(name))
+    .filter(({ name, sensitive }) => !sensitive && host.hasAttribute(name))
     .map(({ name, control }) =>
       control === 'boolean'
         ? ` ${name}`

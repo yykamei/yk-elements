@@ -21,3 +21,4 @@ import './src/components/yk-input-email.js';
 import './src/components/yk-input-text.js';
 import './src/components/yk-input-tel.js';
 import './src/components/yk-input-url.js';
+import './src/components/yk-input-password.js';
