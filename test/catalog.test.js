@@ -1,6 +1,12 @@
 // @ts-check
 import { afterEach, expect, test, vi } from 'vitest';
-import { categories, components, tokens } from '../catalog/catalog.js';
+import {
+  categories,
+  components,
+  playgroundControl,
+  playgroundProperty,
+  tokens,
+} from '../catalog/catalog.js';
 
 const VARIATIONS = {
   'yk-vstack': 3,
@@ -136,12 +142,84 @@ test('attribute and CSS custom property names are safe identifiers', () => {
   const propertyName = /^--[a-z][a-z0-9-]*$/;
   for (const { tag, attributes, cssProperties } of components) {
     for (const { name } of attributes) {
-      expect(attributeName.test(name), `${tag} ${name}`).toBe(true);
+      const label = `${tag} ${name}`;
+      expect(attributeName.test(name), label).toBe(true);
+      expect(/^on/i.test(name), label).toBe(false);
+      expect(name, label).not.toBe('style');
     }
     for (const { name } of cssProperties) {
       expect(propertyName.test(name), `${tag} ${name}`).toBe(true);
     }
   }
+});
+
+test('metadata interpolated into HTML is plain text', () => {
+  const plain = (value) => !/[<>"]/.test(value);
+  for (const { tag, description, attributes, cssProperties } of components) {
+    expect(plain(description), `${tag} description`).toBe(true);
+    for (const {
+      name,
+      description: attributeDescription,
+      default: fallback,
+      options = [],
+    } of attributes) {
+      const label = `${tag} ${name}`;
+      expect(typeof fallback, label).toBe('string');
+      expect(plain(attributeDescription), label).toBe(true);
+      if (fallback !== 'unset') {
+        expect(plain(fallback), label).toBe(true);
+      }
+      for (const option of options) {
+        expect(typeof option, label).toBe('string');
+        expect(plain(option), `${label} ${option}`).toBe(true);
+      }
+    }
+    for (const {
+      name,
+      description: propertyDescription,
+      default: fallback,
+    } of cssProperties) {
+      expect(typeof fallback, `${tag} ${name}`).toBe('string');
+      expect(plain(fallback), `${tag} ${name}`).toBe(true);
+      expect(plain(propertyDescription), `${tag} ${name}`).toBe(true);
+    }
+  }
+});
+
+test('playground control templates escape metadata values', () => {
+  const html = playgroundControl({
+    name: 'x"y',
+    control: 'text',
+    default: '"><img src=x onerror=alert(1)>',
+    description: '',
+  });
+  expect(html).not.toContain('<img');
+  expect(html).toContain('data-playground-attribute="x&quot;y"');
+  expect(html).toContain(
+    'placeholder="&quot;&gt;&lt;img src=x onerror=alert(1)&gt;"',
+  );
+});
+
+test('playground select templates escape metadata options', () => {
+  const html = playgroundControl({
+    name: 'variant',
+    control: 'select',
+    default: '</option><img src=x onerror=alert(1)>',
+    options: ['"><img src=x>'],
+    description: '',
+  });
+  expect(html).not.toContain('<img');
+  expect(html).toContain('value="&quot;&gt;&lt;img src=x&gt;"');
+});
+
+test('playground property templates escape metadata values', () => {
+  const html = playgroundProperty({
+    name: '--x"y',
+    default: '"><img src=x>',
+    description: '',
+  });
+  expect(html).not.toContain('<img');
+  expect(html).toContain('data-playground-property="--x&quot;y"');
 });
 
 async function loadPlayground(tag) {
@@ -175,6 +253,12 @@ function setProperty(section, name, value) {
 
 const codeOf = (section) =>
   section.querySelector('[data-playground-code]').textContent;
+
+function parseCode(code) {
+  const template = document.createElement('template');
+  template.innerHTML = code;
+  return template.content.firstElementChild;
+}
 
 test('each component page renders a playground with one control per attribute', async () => {
   for (const { tag, attributes } of components) {
@@ -359,6 +443,55 @@ test('generated code escapes CSS custom property values', async () => {
   expect(codeOf(section)).toContain(
     'style="--yk-vstack-gap: a&amp;b&lt;c&gt;d&quot;e"',
   );
+});
+
+test('generated code round-trips entity references without double-escaping', async () => {
+  const { section } = await loadPlayground('yk-input-text');
+  setControl(section, 'placeholder', '&quot;');
+  const code = codeOf(section);
+  expect(code).toContain('placeholder="&amp;quot;"');
+  expect(parseCode(code).getAttribute('placeholder')).toBe('&quot;');
+});
+
+const INJECTION = '"><img src=x onerror=alert(1)>';
+
+test('user values never inject markup into the preview or generated code', async () => {
+  for (const { tag } of components) {
+    const { section } = await loadPlayground(tag);
+    const preview = section.querySelector('[data-playground-preview]');
+    const controls = section.querySelectorAll(
+      '[data-playground-attribute], [data-playground-property]',
+    );
+    for (const control of controls) {
+      if (control.type === 'checkbox' || control.tagName === 'SELECT') {
+        continue;
+      }
+      setInput(control, INJECTION);
+      expect(preview.querySelectorAll('img').length, tag).toBe(0);
+
+      const reparsed = parseCode(codeOf(section));
+      expect(reparsed.querySelectorAll('img').length, tag).toBe(0);
+      expect(
+        reparsed.getAttributeNames().some((name) => /^on/i.test(name)),
+        tag,
+      ).toBe(false);
+
+      const attribute = control.dataset.playgroundAttribute;
+      if (attribute !== undefined) {
+        expect(reparsed.getAttribute(attribute), `${tag} ${attribute}`).toBe(
+          INJECTION,
+        );
+      } else {
+        const property = control.dataset.playgroundProperty;
+        expect(
+          reparsed.style.getPropertyValue(property),
+          `${tag} ${property}`,
+        ).toBe(INJECTION);
+      }
+
+      setInput(control, '');
+    }
+  }
 });
 
 test('landing page groups cards into one section per category', async () => {

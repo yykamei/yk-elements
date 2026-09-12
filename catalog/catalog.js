@@ -784,8 +784,10 @@ function renderInterface() {
 }
 
 /**
- * Escapes a value for inclusion in generated markup. The playground copies
- * this string verbatim, so quotes and angle brackets must survive as text.
+ * Escapes a value for a double-quoted HTML attribute or text node in rendered
+ * or generated markup. `&` is replaced first so an entity reference such as
+ * `&quot;` becomes `&amp;quot;` instead of being decoded twice. Single quotes
+ * are left alone because no generated context uses them.
  */
 const escapeHtml = (text) =>
   text
@@ -794,10 +796,21 @@ const escapeHtml = (text) =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
 
-function playgroundControl(attribute) {
-  const id = `playground-${attribute.name}`;
-  const label = `<span>${attribute.name}</span>`;
-  const field = `id="${id}" data-playground-attribute="${attribute.name}"`;
+/**
+ * Builds the markup for one component attribute control. The result is
+ * interpolated into the playground panel's `innerHTML`, so every metadata
+ * value is escaped. It is exported so the escaping contract can be unit-tested
+ * with synthetic metadata.
+ *
+ * ```js
+ * playgroundControl({ name: 'variant', control: 'select', options: ['primary'] });
+ * ```
+ */
+export function playgroundControl(attribute) {
+  const name = escapeHtml(attribute.name);
+  const id = escapeHtml(`playground-${attribute.name}`);
+  const label = `<span>${name}</span>`;
+  const field = `id="${id}" data-playground-attribute="${name}"`;
 
   if (attribute.control === 'boolean') {
     return `
@@ -811,12 +824,13 @@ function playgroundControl(attribute) {
     const unset =
       attribute.default === 'unset'
         ? '(unset)'
-        : `(unset · default: ${attribute.default})`;
+        : `(unset · default: ${escapeHtml(attribute.default)})`;
     const options = [
       `<option value="">${unset}</option>`,
-      ...attribute.options.map(
-        (option) => `<option value="${option}">${option}</option>`,
-      ),
+      ...attribute.options.map((option) => {
+        const value = escapeHtml(option);
+        return `<option value="${value}">${value}</option>`;
+      }),
     ].join('');
     return `
       <label for="${id}">
@@ -836,15 +850,25 @@ function playgroundControl(attribute) {
       </label>`;
 }
 
-function playgroundProperty(property) {
-  const id = `playground-${property.name.slice(2)}`;
+/**
+ * Builds the markup for one CSS custom property control. Like
+ * `playgroundControl`, the result is assigned to `innerHTML` and every
+ * metadata value is escaped; it is exported for the same unit tests.
+ *
+ * ```js
+ * playgroundProperty({ name: '--yk-vstack-gap', default: 'var(--yk-space-md)' });
+ * ```
+ */
+export function playgroundProperty(property) {
+  const name = escapeHtml(property.name);
+  const id = escapeHtml(`playground-${property.name.slice(2)}`);
   return `
       <label for="${id}">
-        <span>${property.name}</span>
+        <span>${name}</span>
         <input
           type="text"
           id="${id}"
-          data-playground-property="${property.name}"
+          data-playground-property="${name}"
           placeholder="${escapeHtml(property.default)}"
         >
       </label>`;
@@ -937,6 +961,8 @@ function renderPlayground() {
   preview.append(host);
 
   const sync = () => {
+    // The metadata guard test constrains attribute and property names to safe
+    // identifiers, so they are interpolated into these selectors unescaped.
     for (const attribute of component.attributes) {
       const control = panel.querySelector(
         `[data-playground-attribute="${attribute.name}"]`,
