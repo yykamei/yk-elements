@@ -35,17 +35,30 @@ async function fetchHtml(path) {
   return new DOMParser().parseFromString(await res.text(), 'text/html');
 }
 
-function loadIframe(path) {
+// A `style` argument keeps the iframe laid out (e.g. for assertion on
+// geometry); the default hides it, which is enough for DOM-only assertions.
+function loadIframe(path, style = 'display: none') {
   return new Promise((resolve, reject) => {
     const iframe = document.createElement('iframe');
     iframe.src = path;
-    iframe.style.display = 'none';
+    iframe.style.cssText = style;
     iframe.addEventListener('load', () => resolve(iframe));
     iframe.addEventListener('error', () =>
       reject(new Error(`failed to load ${path}`)),
     );
     document.body.appendChild(iframe);
   });
+}
+
+// Wide enough to stay above the 56rem breakpoint where .playground
+// collapses to one column, and laid out but invisible, so every page
+// renders the two-column playground grid and geometry can be measured
+// inside the iframe.
+function loadLaidOutIframe(path) {
+  return loadIframe(
+    path,
+    'position: absolute; visibility: hidden; width: 1000px; height: 800px;',
+  );
 }
 
 const tags = components.map(({ tag }) => tag);
@@ -349,6 +362,24 @@ test('generated code lists attributes in metadata order', async () => {
   expect(codeOf(section)).toBe(
     '<yk-input-text placeholder="you@example.com" name="email"></yk-input-text>',
   );
+});
+
+test('playground fieldsets never overflow the panel column into the stage', async () => {
+  // The UA stylesheet gives fieldset min-width: min-content, which would
+  // keep the Attributes fieldset wider than its grid column and let it
+  // render under the stage column on every page with text controls.
+  for (const { tag } of components) {
+    const iframe = await loadLaidOutIframe(`/catalog/${tag}.html`);
+    const doc = iframe.contentDocument;
+    const panel = doc.querySelector('[data-playground-panel]');
+    const panelRight = panel.getBoundingClientRect().right;
+    for (const fieldset of panel.querySelectorAll('fieldset')) {
+      expect(
+        fieldset.getBoundingClientRect().right,
+        `${tag} fieldset`,
+      ).toBeLessThanOrEqual(panelRight + 0.5);
+    }
+  }
 });
 
 test('reset restores the initial playground state', async () => {
