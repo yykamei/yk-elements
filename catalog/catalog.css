@@ -300,6 +300,11 @@
   }
 
   [data-playground-panel] fieldset {
+    /* The UA stylesheet's fieldset { min-width: min-content } keeps the wide
+     * Attributes fieldset from shrinking to its grid column, letting it
+     * overflow under the stage column; the flex labels shrink their text
+     * inputs instead, so release that minimum. */
+    min-inline-size: 0;
     margin: 0;
     padding: var(--yk-space-md);
     border: 1px solid var(--yk-catalog-border);
