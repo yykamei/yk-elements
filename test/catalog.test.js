@@ -23,7 +23,7 @@ const VARIATIONS = {
   'yk-input-url': 9,
   'yk-input-password': 12,
   'yk-input-search': 9,
-  'yk-input-file': 6,
+  'yk-input-file': 7,
 };
 
 afterEach(() => {

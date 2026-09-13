@@ -24,9 +24,9 @@
         <figure>
           <figcaption>Default</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
-            <yk-input-file></yk-input-file>
+            <yk-input-file name="attachment"></yk-input-file>
           </yk-pad>
-          <pre><code>&lt;yk-input-file&gt;&lt;/yk-input-file&gt;</code></pre>
+          <pre><code>&lt;yk-input-file name="attachment"&gt;&lt;/yk-input-file&gt;</code></pre>
         </figure>
 
         <figure>
@@ -59,6 +59,22 @@
             <yk-input-file disabled></yk-input-file>
           </yk-pad>
           <pre><code>&lt;yk-input-file disabled&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>localized labels</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file multiple name="photos" accept="image/*">
+              <span slot="browse">ファイルを選択</span>
+              <span slot="hint">またはここにドロップ</span>
+              <span slot="remove-label">削除</span>
+            </yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file multiple name="photos" accept="image/*"&gt;
+  &lt;span slot="browse"&gt;ファイルを選択&lt;/span&gt;
+  &lt;span slot="hint"&gt;またはここにドロップ&lt;/span&gt;
+  &lt;span slot="remove-label"&gt;削除&lt;/span&gt;
+&lt;/yk-input-file&gt;</code></pre>
         </figure>
 
         <figure>
