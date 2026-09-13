@@ -228,6 +228,49 @@ const inputFieldAttributes = (extra = [], { sensitiveValue = false } = {}) => [
 ];
 
 /**
+ * Attribute metadata for the file picker, which mirrors only the picker and
+ * validation attributes — file inputs have no string value, placeholder, or
+ * length/pattern constraints.
+ */
+const fileFieldAttributes = [
+  {
+    name: 'accept',
+    control: 'text',
+    default: 'unset',
+    description:
+      'Comma-separated list of accepted file types, such as image/png or .pdf, mirrored onto the internal input.',
+  },
+  {
+    name: 'multiple',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that allows selecting several files at once and contributes one form entry per file, mirrored onto the internal input.',
+  },
+  {
+    name: 'required',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that blocks submission while no file is selected, mirrored onto the internal input.',
+  },
+  {
+    name: 'disabled',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that disables the field and excludes its value from the form, like the native input disabled attribute.',
+  },
+  {
+    name: 'name',
+    control: 'text',
+    default: 'unset',
+    description:
+      'Entry name used when the owner form submits the value, like the native input name attribute.',
+  },
+];
+
+/**
  * Builds the indented `demo-item` paragraphs used as a layout primitive's
  * initial playground content, so the generated markup stays readable. Labels
  * are trusted internal strings; escape them if they ever become external.
@@ -620,6 +663,35 @@ export const components = [
     },
     cssProperties: inputFaceProperties,
     attributes: inputFieldAttributes(),
+  },
+  {
+    tag: 'yk-input-file',
+    category: 'Components',
+    description:
+      'File picker that renders a native file input with a Bootstrap-style face and a selector button in the default button tone, submits the selected files as File entries, and supports full form participation including required validation and multiple selection.',
+    playground: {
+      content: '',
+    },
+    cssProperties: [
+      ...inputFaceProperties,
+      {
+        name: '--yk-button-bg',
+        default: '#fff',
+        description: 'Background of the selector button.',
+      },
+      {
+        name: '--yk-button-color',
+        default: 'oklch(26.2% 0.009 248.2)',
+        description: 'Text color of the selector button.',
+      },
+      {
+        name: '--yk-button-border-color',
+        default:
+          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+        description: 'Border color of the selector button.',
+      },
+    ],
+    attributes: fileFieldAttributes,
   },
 ];
 

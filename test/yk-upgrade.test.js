@@ -35,7 +35,21 @@ test('applies property writes made before the module upgrades the elements', asy
   const search = document.createElement('yk-input-search');
   search.value = 'pre-upgrade query';
   search.required = true;
-  document.body.append(button, link, input, email, tel, url, password, search);
+  const file = document.createElement('yk-input-file');
+  file.accept = 'image/png';
+  file.multiple = true;
+  file.required = true;
+  document.body.append(
+    button,
+    link,
+    input,
+    email,
+    tel,
+    url,
+    password,
+    search,
+    file,
+  );
 
   await Promise.all([
     import('../src/components/yk-button.js'),
@@ -46,6 +60,7 @@ test('applies property writes made before the module upgrades the elements', asy
     import('../src/components/yk-input-url.js'),
     import('../src/components/yk-input-password.js'),
     import('../src/components/yk-input-search.js'),
+    import('../src/components/yk-input-file.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -96,4 +111,11 @@ test('applies property writes made before the module upgrades the elements', asy
     'pre-upgrade query',
   );
   expect(search.shadowRoot.querySelector('input').required).toBe(true);
+  expect(file.shadowRoot.querySelector('input').type).toBe('file');
+  expect(file.getAttribute('accept')).toBe('image/png');
+  expect(file.shadowRoot.querySelector('input').getAttribute('accept')).toBe(
+    'image/png',
+  );
+  expect(file.shadowRoot.querySelector('input').multiple).toBe(true);
+  expect(file.shadowRoot.querySelector('input').required).toBe(true);
 });

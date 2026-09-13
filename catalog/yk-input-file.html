@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-file&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="./catalog.js"></script>
+  </head>
+  <body data-component="yk-input-file">
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file></yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>accept</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file accept="image/png,image/jpeg"></yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file accept="image/png,image/jpeg"&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>multiple</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file multiple></yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file multiple&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file required name="attachment"></yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file required name="attachment"&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-file disabled></yk-input-file>
+          </yk-pad>
+          <pre><code>&lt;yk-input-file disabled&gt;&lt;/yk-input-file&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-attachment">Attachment</label>
+                <yk-input-file id="catalog-attachment" name="attachment" accept=".pdf,image/*" required></yk-input-file>
+                <yk-button type="submit" variant="primary">Upload</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-attachment"&gt;Attachment&lt;/label&gt;
+    &lt;yk-input-file id="catalog-attachment" name="attachment" accept=".pdf,image/*" required&gt;&lt;/yk-input-file&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Upload&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

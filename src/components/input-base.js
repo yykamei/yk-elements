@@ -241,9 +241,17 @@ export class YKInputElement extends HTMLElement {
     return input;
   }
 
+  // Extension point for subclasses whose form value is not the internal
+  // input's string value (e.g. file inputs submit File objects). Called on
+  // every form-state sync; return values other than a string must be null or
+  // FormData, the shapes setFormValue accepts.
+  formValue() {
+    return this.#input.value;
+  }
+
   #syncFormState() {
     const disabled = this.hasAttribute('disabled') || this.#formDisabled;
-    this.#internals.setFormValue(disabled ? null : this.#input.value);
+    this.#internals.setFormValue(disabled ? null : this.formValue());
     if (this.#input.willValidate) {
       this.#internals.setValidity(
         this.#input.validity,
