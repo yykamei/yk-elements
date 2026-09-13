@@ -283,6 +283,48 @@ const fileFieldAttributes = [
 const demoItems = (labels) =>
   labels.map((label) => `  <p class="demo-item">${label}</p>`).join('\n');
 
+/**
+ * CSS custom properties used by the dropzone face of yk-input-file, layered
+ * on top of the shared `inputFaceProperties` and button tokens.
+ */
+const dropzoneFaceProperties = [
+  {
+    name: '--yk-input-dropzone-bg',
+    default: '#f8f9fa',
+    description: 'Background of the dropzone face.',
+  },
+  {
+    name: '--yk-input-dropzone-border-color',
+    default:
+      'var(--yk-input-border-color, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white))',
+    description: 'Border color of the dropzone face.',
+  },
+  {
+    name: '--yk-input-dropzone-radius',
+    default: 'var(--yk-input-radius, var(--yk-radius-md, 0.375rem))',
+    description: 'Corner radius of the dropzone face.',
+  },
+  {
+    name: '--yk-input-dropzone-padding',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Inset from the dropzone edges to its content.',
+  },
+  {
+    name: '--yk-input-dropzone-dragover-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 12%, white)',
+    description:
+      'Background of the dropzone face while files are dragged over.',
+  },
+  {
+    name: '--yk-input-dropzone-dragover-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+    description:
+      'Border color of the dropzone face while files are dragged over.',
+  },
+];
+
 export const components = [
   {
     tag: 'yk-vstack',
@@ -668,7 +710,7 @@ export const components = [
     tag: 'yk-input-file',
     category: 'Components',
     description:
-      'File picker that renders a native file input with a Bootstrap-style face and a selector button in the default button tone, submits the selected files as File entries, and supports full form participation including required validation and multiple selection.',
+      'File picker rendered as a bordered drop area: clicking the zone (except its remove buttons) opens the picker, files can be dropped anywhere in the zone, selected files are listed with per-file remove buttons, and labels localize through the browse, hint, and remove-label slots. Submits the selected files as File entries with full form participation including required validation and multiple selection.',
     playground: {
       content: '',
     },
@@ -677,19 +719,35 @@ export const components = [
       {
         name: '--yk-button-bg',
         default: '#fff',
-        description: 'Background of the selector button.',
+        description: 'Background of the browse and remove buttons.',
       },
       {
         name: '--yk-button-color',
         default: 'oklch(26.2% 0.009 248.2)',
-        description: 'Text color of the selector button.',
+        description: 'Text color of the browse and remove buttons.',
       },
       {
         name: '--yk-button-border-color',
         default:
           'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
-        description: 'Border color of the selector button.',
+        description: 'Border color of the browse and remove buttons.',
       },
+      {
+        name: '--yk-button-radius',
+        default: 'var(--yk-radius-md, 0.375rem)',
+        description: 'Corner radius of the browse and remove buttons.',
+      },
+      {
+        name: '--yk-button-padding-block',
+        default: 'var(--yk-space-sm, 0.5rem)',
+        description: 'Vertical padding of the browse button.',
+      },
+      {
+        name: '--yk-button-padding-inline',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Horizontal padding of the browse button.',
+      },
+      ...dropzoneFaceProperties,
     ],
     attributes: fileFieldAttributes,
   },
