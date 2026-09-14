@@ -64,6 +64,16 @@ function loadLaidOutIframe(path) {
   );
 }
 
+// Narrow enough to stay below the 56rem breakpoint where the catalog
+// collapses to one column, and laid out but invisible, so geometry can be
+// measured inside the iframe.
+function loadMobileIframe(path) {
+  return loadIframe(
+    path,
+    'position: absolute; visibility: hidden; width: 480px; height: 800px;',
+  );
+}
+
 const tags = components.map(({ tag }) => tag);
 
 test('every catalog page references the library entry point, tokens, and shared chrome', async () => {
@@ -367,6 +377,76 @@ test('generated code lists attributes in metadata order', async () => {
   setControl(section, 'placeholder', 'you@example.com');
   expect(codeOf(section)).toBe(
     '<yk-input-text placeholder="you@example.com" name="email"></yk-input-text>',
+  );
+});
+
+test('mobile playground shows the preview first and keeps it sticky', async () => {
+  // yk-input-file has the longest property list, the worst case for the
+  // preview being pushed below the fold.
+  const iframe = await loadMobileIframe('/catalog/yk-input-file.html');
+  const doc = iframe.contentDocument;
+  const preview = doc.querySelector('[data-playground-preview]');
+  const stage = doc.querySelector('[data-playground-stage]');
+  const panel = doc.querySelector('[data-playground-panel]');
+  expect(getComputedStyle(preview).position).toBe('sticky');
+  const previewTop = preview.getBoundingClientRect().top;
+  const stageTop = stage.getBoundingClientRect().top;
+  const panelTop = panel.getBoundingClientRect().top;
+  expect(previewTop, 'preview above stage').toBeLessThan(stageTop);
+  expect(stageTop, 'stage above controls panel').toBeLessThan(panelTop);
+
+  // Sticky pinning: after scrolling past the header, the preview stays at
+  // the viewport top while the controls panel keeps moving up.
+  iframe.contentWindow.scrollTo(0, 800);
+  expect(preview.getBoundingClientRect().top, 'preview pinned').toBeLessThan(1);
+  expect(
+    panel.getBoundingClientRect().top,
+    'panel scrolled under the preview',
+  ).toBeLessThan(previewTop);
+});
+
+test('mobile keeps the nav at the top behind a hamburger toggle', async () => {
+  const iframe = await loadMobileIframe('/catalog/yk-button.html');
+  const doc = iframe.contentDocument;
+  const toggle = doc.querySelector('[data-nav-toggle]');
+  const nav = doc.querySelector('nav');
+
+  // The nav stays at the top of the page, above the main content.
+  const toggleTop = toggle.getBoundingClientRect().top;
+  expect(toggleTop, 'toggle above main').toBeLessThan(
+    doc.querySelector('main').getBoundingClientRect().top,
+  );
+  expect(
+    toggle.compareDocumentPosition(doc.querySelector('main')),
+    'toggle precedes main in DOM',
+  ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+
+  // The toggle is a real button exposing expanded state to assistive tech.
+  expect(toggle.tagName).toBe('BUTTON');
+  expect(toggle.getAttribute('aria-controls')).toBe(nav.id);
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+  // The nav starts collapsed and expands on toggle, with aria-expanded
+  // mirroring the same bit the CSS keys off.
+  expect(getComputedStyle(nav).display).toBe('none');
+  toggle.click();
+  expect(getComputedStyle(nav).display).not.toBe('none');
+  expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  toggle.click();
+  expect(getComputedStyle(nav).display).toBe('none');
+  expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+  // The desktop layout keeps the nav permanently visible in its left column.
+  const desktop = await loadLaidOutIframe('/catalog/yk-button.html');
+  const desktopDoc = desktop.contentDocument;
+  expect(getComputedStyle(desktopDoc.querySelector('nav')).display).not.toBe(
+    'none',
+  );
+  expect(
+    desktopDoc.querySelector('aside').getBoundingClientRect().right,
+    'sidebar beside main',
+  ).toBeLessThanOrEqual(
+    desktopDoc.querySelector('main').getBoundingClientRect().left + 0.5,
   );
 });
 

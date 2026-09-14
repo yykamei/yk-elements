@@ -5,9 +5,11 @@
  * component list and the design tokens, and renders the catalog's shared
  * chrome from them:
  *
- * - the sidebar navigation (brand + Overview + one section per category,
- *   each holding one link per component), marking the current page as
- *   active based on the URL via the platform's own aria-current state
+ * - the sidebar navigation (brand + a hamburger toggle + Overview + one
+ *   section per category, each holding one link per component), marking the
+ *   current page as active based on the URL via the platform's own
+ *   aria-current state; the toggle collapses the nav on mobile (CSS decides
+ *   visibility, the listener only flips data-open and aria-expanded)
  * - the component cards on the landing page (catalog/index.html), which
  *   hosts a [data-landing] container and groups the cards into one section
  *   per category
@@ -835,13 +837,48 @@ function renderSidebar() {
         </section>`;
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
-      <a class="brand" href="./index.html">yk-elements</a>
-      <nav aria-label="Catalog">
+      <div class="sidebar-head">
+        <a class="brand" href="./index.html">yk-elements</a>
+        <button
+          type="button"
+          class="nav-toggle"
+          data-nav-toggle
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="catalog-nav"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 5h14M3 10h14M3 15h14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <nav id="catalog-nav" aria-label="Catalog">
         <a href="./index.html"${isActive(current === null)}>Overview</a>
         ${categories.map(sectionFor).join('')}
       </nav>
     </yk-vstack>
   `;
+  // The click only flips data-open on the aside; whether the nav is visible
+  // stays a pure CSS decision (catalog.css), so a viewport resize can never
+  // desync the visible nav from the layout. aria-expanded mirrors the same
+  // bit for assistive tech.
+  sidebar
+    .querySelector('[data-nav-toggle]')
+    .addEventListener('click', ({ currentTarget }) => {
+      const open = sidebar.toggleAttribute('data-open');
+      currentTarget.setAttribute('aria-expanded', String(open));
+    });
 }
 
 function renderLanding() {
@@ -1130,11 +1167,11 @@ function renderPlayground() {
       <h2>Playground</h2>
       <div class="playground">
         <div data-playground-panel>${controls}</div>
+        <yk-pad
+          data-playground-preview
+          style="--yk-pad-padding: var(--yk-space-lg)"
+        ></yk-pad>
         <div data-playground-stage>
-          <yk-pad
-            data-playground-preview
-            style="--yk-pad-padding: var(--yk-space-lg)"
-          ></yk-pad>
           <pre><code data-playground-code aria-live="polite"></code></pre>
           <yk-cluster
             style="--yk-cluster-justify: flex-start; --yk-cluster-gap: var(--yk-space-sm)"
