@@ -50,6 +50,10 @@
     --yk-catalog-text-sm: 0.875rem;
     display: grid;
     grid-template-columns: 16rem minmax(0, 1fr);
+    /* Column gap only: gap shorthand would also insert a row-gap between the
+     * stacked tracks — undesired between main and the spanning footer, and in
+     * the collapsed single-column mobile layout. */
+    column-gap: var(--yk-space-lg);
     max-inline-size: 72rem;
     margin-inline: auto;
     padding: var(--yk-space-lg);

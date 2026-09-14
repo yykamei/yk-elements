@@ -448,6 +448,11 @@ test('mobile keeps the nav at the top behind a hamburger toggle', async () => {
   ).toBeLessThanOrEqual(
     desktopDoc.querySelector('main').getBoundingClientRect().left + 0.5,
   );
+  expect(
+    desktopDoc.querySelector('main').getBoundingClientRect().left -
+      desktopDoc.querySelector('aside').getBoundingClientRect().right,
+    'space between sidebar and main',
+  ).toBeGreaterThan(0);
 });
 
 test('playground fieldsets never overflow the panel column into the stage', async () => {
