@@ -22,10 +22,12 @@
  * yk-vstack / yk-grid parents and demo insets by yk-pad, so this file keeps
  * only the catalog's own visual identity (colors, borders, typography).
  * Three layout exceptions remain here: the outer .catalog two-column shell,
- * the .playground controls/stage shell (whose stage must shrink below its
- * code block), and the sidebar nav, whose per-category stacks must switch to
- * wrapping rows in the mobile media query (a switch neither yk-vstack nor
- * yk-cluster can express from outside Shadow DOM).
+ * the .playground shell (whose stage must shrink below its code block, and
+ * whose preview is hoisted out of the stage so mobile can pin it while the
+ * controls scroll), and the sidebar nav, which keeps its own flex CSS — the
+ * brand row with the mobile hamburger toggle, and per-category stacks that
+ * switch to wrapping rows in the mobile media query (a switch neither
+ * yk-vstack nor yk-cluster can express from outside Shadow DOM).
  *
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on the scope root and
@@ -91,11 +93,31 @@
    * the category sections, each of which stacks its own links; the sections
    * switch to wrapping rows in the mobile media query below, a switch no
    * existing yk-* primitive can express from outside Shadow DOM.
+   *
+   * The brand row pairs the brand with the hamburger toggle. The toggle is
+   * desktop-invisible; on mobile it collapses the nav behind data-open on
+   * the aside, so the nav's visibility stays a pure CSS decision.
    */
   nav {
     display: flex;
     flex-direction: column;
     gap: var(--yk-space-md);
+  }
+
+  .sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-toggle {
+    display: none;
+    padding: var(--yk-space-sm);
+    border: 1px solid var(--yk-catalog-border);
+    border-radius: var(--yk-catalog-radius-sm);
+    color: var(--yk-catalog-fg);
+    background-color: transparent;
+    cursor: pointer;
   }
 
   nav section {
@@ -288,15 +310,26 @@
    * The playground pairs a controls panel with a live preview and the
    * generated markup. It needs a two-column shell of its own (like the outer
    * .catalog grid) so the stage can shrink below the intrinsic width of its
-   * code block. The panel and stage are otherwise reached through their data
-   * attributes; the native form fields are styled directly because the
-   * library ships no comparable control.
+   * code block. The preview is a direct child of the shell — not wrapped in
+   * the stage — so the mobile layout can pin it with position: sticky while
+   * the panel scrolls (a flex item's sticky constraint is the whole flex
+   * container, so it stays visible across the long property list). The panel
+   * and stage are otherwise reached through their data attributes; the native
+   * form fields are styled directly because the library ships no comparable
+   * control.
    */
   .playground {
     display: grid;
+    grid-template-areas:
+      "panel preview"
+      "panel stage";
     grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
     gap: var(--yk-space-md);
     align-items: start;
+  }
+
+  [data-playground-panel] {
+    grid-area: panel;
   }
 
   [data-playground-panel] fieldset {
@@ -354,6 +387,7 @@
   }
 
   [data-playground-stage] {
+    grid-area: stage;
     display: flex;
     flex-direction: column;
     gap: var(--yk-space-sm);
@@ -362,6 +396,7 @@
 
   [data-playground-preview] {
     display: block;
+    grid-area: preview;
     border: 1px solid var(--yk-catalog-border);
     border-radius: var(--yk-catalog-radius-md);
   }
@@ -377,13 +412,46 @@
       overflow-x: auto;
     }
 
+    /* The nav stays at the top of the page but collapses behind the
+     * hamburger toggle; the brand row carries the toggle at the right. */
+    .nav-toggle {
+      display: inline-flex;
+    }
+
+    nav {
+      display: none;
+    }
+
+    aside[data-open] nav {
+      display: flex;
+    }
+
     nav section {
       flex-direction: row;
       flex-wrap: wrap;
     }
 
+    /* A single column ordered preview → stage → panel: the component's look
+     * leads the page, and the sticky preview keeps reflecting every control
+     * change while the long property list scrolls beneath it. Flex (not a
+     * one-column grid) is what lets the preview's sticky constraint span the
+     * whole shell. align-items: stretch keeps items from shrinking to fit. */
     .playground {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    [data-playground-preview] {
+      order: -2;
+      position: sticky;
+      inset-block-start: 0;
+      /* Paints above the panel content scrolling beneath it. */
+      z-index: 1;
+    }
+
+    [data-playground-stage] {
+      order: -1;
     }
   }
 }
