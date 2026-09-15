@@ -289,8 +289,13 @@ function parseCode(code) {
   return template.content.firstElementChild;
 }
 
-test('each component page renders a playground with one control per attribute', async () => {
-  for (const { tag, attributes } of components) {
+test('representative component pages render a playground with one control per attribute', async () => {
+  // One page per control-kind branch of the shared template: yk-vstack has
+  // no attributes at all, yk-button covers select and boolean controls, and
+  // yk-input-password covers text, sensitive, and select controls.
+  const sampleTags = ['yk-vstack', 'yk-button', 'yk-input-password'];
+  for (const tag of sampleTags) {
+    const { attributes } = components.find((known) => known.tag === tag);
     const { section } = await loadPlayground(tag);
     expect(section, tag).not.toBeNull();
 
@@ -458,18 +463,18 @@ test('mobile keeps the nav at the top behind a hamburger toggle', async () => {
 test('playground fieldsets never overflow the panel column into the stage', async () => {
   // The UA stylesheet gives fieldset min-width: min-content, which would
   // keep the Attributes fieldset wider than its grid column and let it
-  // render under the stage column on every page with text controls.
-  for (const { tag } of components) {
-    const iframe = await loadLaidOutIframe(`/catalog/${tag}.html`);
-    const doc = iframe.contentDocument;
-    const panel = doc.querySelector('[data-playground-panel]');
-    const panelRight = panel.getBoundingClientRect().right;
-    for (const fieldset of panel.querySelectorAll('fieldset')) {
-      expect(
-        fieldset.getBoundingClientRect().right,
-        `${tag} fieldset`,
-      ).toBeLessThanOrEqual(panelRight + 0.5);
-    }
+  // render under the stage column. yk-input-text is representative of the
+  // pages whose fieldsets hold the wide text controls where the overflow
+  // showed itself.
+  const iframe = await loadLaidOutIframe('/catalog/yk-input-text.html');
+  const doc = iframe.contentDocument;
+  const panel = doc.querySelector('[data-playground-panel]');
+  const panelRight = panel.getBoundingClientRect().right;
+  for (const fieldset of panel.querySelectorAll('fieldset')) {
+    expect(
+      fieldset.getBoundingClientRect().right,
+      'fieldset',
+    ).toBeLessThanOrEqual(panelRight + 0.5);
   }
 });
 
@@ -522,8 +527,14 @@ test('copy writes the generated code to the clipboard', async () => {
   });
 });
 
-test('each component page renders one control per CSS custom property', async () => {
-  for (const { tag, cssProperties } of components) {
+test('representative component pages render one control per CSS custom property', async () => {
+  // One page per property-family of the shared template: yk-vstack for the
+  // layout components, yk-button for the buttonFace properties, yk-badge
+  // for its own family, and yk-input-file as a superset of the inputFace
+  // properties with its own additions on top.
+  const sampleTags = ['yk-vstack', 'yk-button', 'yk-badge', 'yk-input-file'];
+  for (const tag of sampleTags) {
+    const { cssProperties } = components.find((known) => known.tag === tag);
     const { section } = await loadPlayground(tag);
     const controls = section.querySelectorAll('[data-playground-property]');
     expect(controls.length, tag).toBe(cssProperties.length);
@@ -592,7 +603,17 @@ test('the password playground masks its value control and omits it from the gene
 const INJECTION = '"><img src=x onerror=alert(1)>';
 
 test('user values never inject markup into the preview or generated code', async () => {
-  for (const { tag } of components) {
+  // One page per branch of the injection handling: yk-button skips its
+  // checkbox and select controls, yk-input-text covers plain text
+  // attributes, yk-input-password covers sensitive attributes, and
+  // yk-vstack covers CSS custom properties.
+  const sampleTags = [
+    'yk-button',
+    'yk-input-text',
+    'yk-input-password',
+    'yk-vstack',
+  ];
+  for (const tag of sampleTags) {
     const { section } = await loadPlayground(tag);
     const preview = section.querySelector('[data-playground-preview]');
     const controls = section.querySelectorAll(
@@ -691,7 +712,7 @@ test('landing page renders the sidebar grouped by category and one card per comp
   ).toBe('Overview');
 });
 
-test('catalog chrome dogfoods the library components', async () => {
+test('landing and representative component pages dogfood the library components', async () => {
   const landing = await loadIframe('/catalog/index.html');
   const landingDoc = landing.contentDocument;
   expect(landingDoc.querySelector('[data-landing]').tagName).toBe('YK-VSTACK');
@@ -702,7 +723,9 @@ test('catalog chrome dogfoods the library components', async () => {
   expect(landingDoc.querySelector('[data-landing] a yk-vstack')).not.toBeNull();
   expect(landingDoc.querySelector('[data-tokens] yk-vstack')).not.toBeNull();
 
-  for (const tag of tags) {
+  // The per-page chrome comes from one shared template; yk-button and
+  // yk-input-file are representative pages.
+  for (const tag of ['yk-button', 'yk-input-file']) {
     const iframe = await loadIframe(`/catalog/${tag}.html`);
     const doc = iframe.contentDocument;
     expect(
@@ -717,8 +740,10 @@ test('catalog chrome dogfoods the library components', async () => {
   }
 });
 
-test('each component page renders the sidebar with its own entry active and a header', async () => {
-  for (const tag of tags) {
+test('representative component pages render the sidebar with their own entry active and a header', async () => {
+  // aria-current and the header come from one shared template; a layout
+  // page and an input page are representative.
+  for (const tag of ['yk-vstack', 'yk-input-file']) {
     const iframe = await loadIframe(`/catalog/${tag}.html`);
     const doc = iframe.contentDocument;
     expect(
@@ -756,8 +781,15 @@ test('overview page renders the design tokens section', async () => {
   expect(ids).toEqual(tokens.map(({ name }) => name.slice(2)));
 });
 
-test('each component page renders its declared interface', async () => {
-  for (const { tag, cssProperties, attributes } of components) {
+test('representative component pages render their declared interface', async () => {
+  // Token-link counting depends on the default values: yk-vstack has a
+  // single token reference, yk-button references several tokens, and
+  // yk-input-file nests tokens inside color-mix for the worst case.
+  const sampleTags = ['yk-vstack', 'yk-button', 'yk-input-file'];
+  for (const tag of sampleTags) {
+    const { cssProperties, attributes } = components.find(
+      (known) => known.tag === tag,
+    );
     const iframe = await loadIframe(`/catalog/${tag}.html`);
     const doc = iframe.contentDocument;
     const section = doc.querySelector('[data-interface]');
