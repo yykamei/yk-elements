@@ -17,6 +17,7 @@ import './src/layout/yk-pad.js';
 import './src/components/yk-button.js';
 import './src/components/yk-link.js';
 import './src/components/yk-badge.js';
+import './src/components/yk-soft-nav.js';
 import './src/components/yk-input-email.js';
 import './src/components/yk-input-text.js';
 import './src/components/yk-input-tel.js';

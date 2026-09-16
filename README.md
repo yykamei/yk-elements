@@ -119,3 +119,9 @@ npm run format # format all files (Biome)
 Components load their styles via CSS Module Scripts
 (`import ... with { type: 'css' }`), which requires current versions of Chrome,
 Edge, Safari, and Firefox.
+
+`<yk-soft-nav>` enables cross-document view transitions between pages that
+place it. The fade transition requires Chrome 126+, Edge 126+, or Safari
+18.2+ — Firefox ignores the opt-in and navigates as before. The placement
+page's `blocking="render"` scripts (honored by Chromium) keep the opt-in in
+place before the first paint.

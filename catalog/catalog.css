@@ -83,6 +83,10 @@
     border: 1px solid var(--yk-catalog-border);
     border-radius: var(--yk-catalog-radius-md);
     background-color: var(--yk-catalog-demo-bg);
+    /* Every page renders the same sidebar, so with its own view transition
+     * name the cross-document transition morphs it in place and only the main
+     * content cross-fades through the root snapshot. */
+    view-transition-name: catalog-sidebar;
   }
 
   .brand {
