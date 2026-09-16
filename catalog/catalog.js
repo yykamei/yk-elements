@@ -838,7 +838,7 @@ function renderSidebar() {
   sidebar.innerHTML = `
     <yk-vstack style="--yk-vstack-gap: var(--yk-space-md)">
       <div class="sidebar-head">
-        <a class="brand" href="./index.html">yk-elements</a>
+        <a class="brand" href="./">yk-elements</a>
         <button
           type="button"
           class="nav-toggle"
@@ -864,7 +864,7 @@ function renderSidebar() {
         </button>
       </div>
       <nav id="catalog-nav" aria-label="Catalog">
-        <a href="./index.html"${isActive(current === null)}>Overview</a>
+        <a href="./"${isActive(current === null)}>Overview</a>
         ${categories.map(sectionFor).join('')}
       </nav>
     </yk-vstack>
@@ -933,11 +933,16 @@ function renderComponentHeader() {
  * (e.g. `--yk-space` and `--yk-space-md`) from matching inside the `<a>` tag
  * inserted for a longer name. The alternation is ordered by descending length
  * so the longest name is always matched first.
+ *
+ * Overview links use the directory URL (`./#anchor`), never `./index.html`:
+ * some static servers rewrite `index.html` URLs with a redirect, which turns
+ * one click into two document loads and skips the cross-document view
+ * transition on the second hop.
  */
 const linkTokens = (() => {
   const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const anchors = new Map(
-    tokens.map(({ name }) => [name, `./index.html#${name.slice(2)}`]),
+    tokens.map(({ name }) => [name, `./#${name.slice(2)}`]),
   );
   const pattern = new RegExp(
     [...anchors.keys()]
