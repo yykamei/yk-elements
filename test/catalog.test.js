@@ -118,6 +118,41 @@ test('a catalog page adopts the view transition opt-in into its own document', a
   });
 });
 
+test('navigating to the overview lands on one document with the transition opt-in', async () => {
+  // The overview is the only page whose `.html` URL some static servers
+  // rewrite with a redirect, which the in-page normalization would then
+  // compound into a second, unpainted document load: the flicker. Clicking
+  // the sidebar link must land on the directory URL in a single document.
+  const iframe = await loadIframe('/catalog/yk-button.html');
+  const doc = iframe.contentDocument;
+  const overview = [...doc.querySelectorAll('nav a')].find(
+    (link) => link.textContent.trim() === 'Overview',
+  );
+  expect(overview, 'sidebar Overview link').toBeDefined();
+  expect(overview.getAttribute('href')).toBe('./');
+  overview.click();
+
+  // The URL flip proves the new document committed; the adopted-sheet check
+  // then reads the destination document, not the originating one.
+  await vi.waitFor(() => {
+    expect(iframe.contentWindow.location.pathname).toBe('/catalog/');
+  });
+  await vi.waitFor(() => {
+    expect(
+      [...iframe.contentDocument.adoptedStyleSheets].flatMap((sheet) =>
+        [...sheet.cssRules].map((rule) => rule.cssText),
+      ),
+    ).toContain('@view-transition { navigation: auto; }');
+  });
+  // Zero redirects pins the headline claim: the destination document was
+  // fetched in the same navigation the click started.
+  expect(
+    iframe.contentWindow.performance.getEntriesByType('navigation')[0]
+      .redirectCount,
+  ).toBe(0);
+  expect(iframe.contentDocument.querySelector('.brand')).not.toBeNull();
+});
+
 test('landing page declares the overview layout with a landing container', async () => {
   const doc = await fetchHtml('/catalog/index.html');
   expect(doc.querySelector('[data-landing]')).not.toBeNull();
@@ -705,6 +740,13 @@ test('landing page renders the sidebar grouped by category and one card per comp
   const iframe = await loadIframe('/catalog/index.html');
   const doc = iframe.contentDocument;
   expect(doc.querySelector('.brand').textContent.trim()).toBe('yk-elements');
+  // Overview and brand target the directory URL: navigating to an
+  // `index.html` URL can trip a server-side rewrite and a second document
+  // load, which is what the soft navigation must avoid.
+  expect(doc.querySelector('.brand').getAttribute('href')).toBe('./');
+  expect(
+    doc.querySelector('nav a[aria-current="page"]').getAttribute('href'),
+  ).toBe('./');
 
   const groups = [...doc.querySelectorAll('nav section')].map((section) => ({
     name: section.querySelector('h2').textContent.trim(),
@@ -843,7 +885,7 @@ test('representative component pages render their declared interface', async () 
       for (const token of tokens) {
         const count = fallback.split(token.name).length - 1;
         for (let i = 0; i < count; i += 1) {
-          expected.push(`./index.html#${token.name.slice(2)}`);
+          expected.push(`./#${token.name.slice(2)}`);
         }
       }
       expect(hrefs.sort(), `${tag} ${name}`).toEqual(expected.sort());
