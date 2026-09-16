@@ -96,7 +96,26 @@ test('every catalog page references the library entry point, tokens, and shared 
       path,
     ).not.toBeNull();
     expect(doc.querySelector('[data-sidebar]'), path).not.toBeNull();
+    // Every page opts itself into cross-document view transitions by carrying
+    // the component's placement, and the module scripts hold the first paint
+    // until the JS-rendered chrome exists.
+    expect(doc.querySelector('yk-soft-nav'), path).not.toBeNull();
+    expect(
+      doc.querySelectorAll('script[type="module"][blocking="render"]').length,
+      path,
+    ).toBe(2);
   }
+});
+
+test('a catalog page adopts the view transition opt-in into its own document', async () => {
+  const iframe = await loadIframe('/catalog/yk-button.html');
+  await vi.waitFor(() => {
+    expect(
+      [...iframe.contentDocument.adoptedStyleSheets].flatMap((sheet) =>
+        [...sheet.cssRules].map((rule) => rule.cssText),
+      ),
+    ).toContain('@view-transition { navigation: auto; }');
+  });
 });
 
 test('landing page declares the overview layout with a landing container', async () => {
@@ -842,6 +861,7 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-button')).toBeDefined();
   expect(customElements.get('yk-link')).toBeDefined();
   expect(customElements.get('yk-badge')).toBeDefined();
+  expect(customElements.get('yk-soft-nav')).toBeDefined();
   expect(customElements.get('yk-input-text')).toBeDefined();
   expect(customElements.get('yk-input-email')).toBeDefined();
   expect(customElements.get('yk-input-tel')).toBeDefined();
