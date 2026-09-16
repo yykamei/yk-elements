@@ -1,0 +1,55 @@
+{
+  "name": "@yykamei/yk-elements",
+  "version": "0.1.0",
+  "description": "Zero-config Web Components library. Just put, just works.",
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Yutaka Kamei",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yykamei/yk-elements.git"
+  },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "layout",
+    "design-tokens"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "sideEffects": true,
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./tokens.css": "./tokens.css",
+    "./layout/*": "./src/layout/*",
+    "./components/*": "./src/components/*"
+  },
+  "files": [
+    "index.js",
+    "tokens.css",
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "preview": "serve ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.11",
+    "@vitest/browser-playwright": "^5.0.0",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.62.1",
+    "serve": "^14.2.6",
+    "vitest": "^5.0.0"
+  }
+}

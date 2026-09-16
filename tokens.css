@@ -1,0 +1,9 @@
+:root {
+  --yk-space-sm: 0.5rem;
+  --yk-space-md: 1rem;
+  --yk-space-lg: 1.5rem;
+  --yk-color-primary: oklch(57.8% 0.228 260);
+  --yk-color-secondary: oklch(55.8% 0.016 244.9);
+  --yk-color-danger: oklch(59.2% 0.202 21.2);
+  --yk-radius-md: 0.375rem;
+}

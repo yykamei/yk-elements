@@ -1,0 +1,180 @@
+/* Dropzone face layered on top of the shared input-core.css tokens. The
+   native input stays in the tree (keyboard focus, label activation, and form
+   semantics keep working) but is visually hidden; the picker UI lives in a
+   bordered drop area whose selector button and remove buttons borrow the
+   default yk-button face tokens. */
+:host {
+  position: relative;
+}
+
+:host input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+:host [part="dropzone"] {
+  box-sizing: border-box;
+  display: block;
+  padding: var(--yk-input-dropzone-padding, var(--yk-space-md, 1rem));
+  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-input-dropzone-bg, #f8f9fa);
+  border: 1px dashed
+    var(
+      --yk-input-dropzone-border-color,
+      var(
+        --yk-input-border-color,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          white
+        )
+      )
+    );
+  border-radius: var(
+    --yk-input-dropzone-radius,
+    var(--yk-input-radius, var(--yk-radius-md, 0.375rem))
+  );
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host [part="dropzone"]:focus-within {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
+      white
+    )
+  );
+}
+
+/* The dragover class carries the drop-in-progress state for styling. */
+:host [part="dropzone"].dragover {
+  background-color: var(
+    --yk-input-dropzone-dragover-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 12%,
+      white
+    )
+  );
+  border-color: var(
+    --yk-input-dropzone-dragover-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
+      white
+    )
+  );
+}
+
+/* The sibling selector follows the internal input so both the disabled
+   attribute and a disabled fieldset ancestor dim the zone. */
+:host input:disabled ~ [part="dropzone"] {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+:host [part="browse"] {
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-button-color, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-button-bg, #fff);
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+}
+
+:host [part="hint"] {
+  display: inline;
+  margin-inline-start: var(--yk-space-sm, 0.5rem);
+}
+
+:host [part="dropzone"]:hover [part="browse"] {
+  background-color: color-mix(in oklch, var(--yk-button-bg, #fff) 95%, black);
+}
+
+:host [part="file-list"] {
+  display: block;
+  margin: 0;
+  margin-block-start: var(--yk-space-sm, 0.5rem);
+  padding: 0;
+  list-style: none;
+}
+
+:host [part="file-item"] {
+  display: flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-input-bg, #fff);
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host [part="file-item"] + [part="file-item"] {
+  margin-block-start: calc(var(--yk-space-sm, 0.5rem) / 2);
+}
+
+:host [part="file-name"] {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:host [part="remove"] {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  font: inherit;
+  line-height: 1;
+  color: var(--yk-button-color, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-button-bg, #fff);
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding: calc(var(--yk-space-sm, 0.5rem) / 2);
+  cursor: pointer;
+}
+
+:host [part="remove"]:hover {
+  background-color: color-mix(in oklch, var(--yk-button-bg, #fff) 95%, black);
+}

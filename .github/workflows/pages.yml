@@ -1,0 +1,86 @@
+name: Deploy catalog to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Fork PRs run with a read-only token, so they cannot deploy; skip them
+    # early instead of failing at the deploy step.
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # Default checkout: the pushed commit for `push`, the merge ref for
+      # `pull_request`, so the workflow always runs the version of
+      # scripts/stage-site.sh that ships with the triggering commit.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Stage site files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: bash scripts/stage-site.sh site
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - name: Comment preview URL on pull request
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.action != 'closed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BODY: >-
+            Preview site for commit ${{ github.event.pull_request.head.sha }}:
+            ${{ steps.deployment.outputs.page_url }}pr-${{ github.event.pull_request.number }}/catalog/
+
+            This URL always reflects the latest pushed commit. The comment is
+            updated on every push and points to a removed preview after the PR
+            is closed.
+        run: gh pr comment "$PR_NUMBER" --create-if-none --edit-last --body "$PR_BODY"
+      - name: Mark preview as removed
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.action == 'closed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+        # Edited in place so each PR keeps at most one preview comment. Guarded
+        # because --edit-last fails when the bot never commented (e.g. fork PR).
+        run: |
+          bot_comment_count=$(gh api "repos/$REPOSITORY/issues/$PR_NUMBER/comments?per_page=100" \
+            --jq '[.[] | select(.user.login == "github-actions[bot]")] | length')
+          if [ -n "$bot_comment_count" ] && [ "$bot_comment_count" -gt 0 ]; then
+            gh pr comment "$PR_NUMBER" --edit-last \
+              --body "Preview site: removed (pull request closed/merged)."
+          fi
