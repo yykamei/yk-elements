@@ -1,5 +1,0 @@
-:host {
-  display: flex;
-  align-items: var(--yk-hstack-align, stretch);
-  gap: var(--yk-hstack-gap, var(--yk-space-md, 1rem));
-}
