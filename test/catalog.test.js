@@ -24,6 +24,7 @@ const VARIATIONS = {
   'yk-input-password': 12,
   'yk-input-search': 9,
   'yk-input-file': 7,
+  'yk-input-checkbox': 8,
 };
 
 afterEach(() => {
@@ -911,5 +912,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-input-password')).toBeDefined();
   expect(customElements.get('yk-input-search')).toBeDefined();
   expect(customElements.get('yk-input-file')).toBeDefined();
+  expect(customElements.get('yk-input-checkbox')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });
