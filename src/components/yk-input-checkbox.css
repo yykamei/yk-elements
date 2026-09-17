@@ -1,0 +1,107 @@
+/* Bootstrap form-check face for the checkbox. The host lays out the internal
+   input and the slotted label as siblings inside the shadow label so the
+   input's state selectors (:checked, :disabled) restyle the label through the
+   sibling combinator, mirroring Bootstrap's input-then-label markup. */
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-input-checkbox-label-gap, 0.5em);
+  min-height: 1.5em;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+:host input {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  appearance: none;
+  width: var(--yk-input-checkbox-size, 1em);
+  height: var(--yk-input-checkbox-size, 1em);
+  margin: 0;
+  font: inherit;
+  vertical-align: middle;
+  background-color: var(--yk-input-checkbox-bg, #fff);
+  border: var(--yk-input-checkbox-border-width, 1px) solid
+    var(
+      --yk-input-checkbox-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-input-checkbox-radius, 0.25em);
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  cursor: var(--yk-input-checkbox-cursor, pointer);
+}
+
+/* The checked and indeterminate faces share the solid tone; only the glyph
+   image differs. The SVG data URI cannot interpolate a CSS variable, so the
+   entire image — white stroke included — is the overridable unit
+   (--yk-input-checkbox-checked-image / -indeterminate-image). */
+:host input:checked,
+:host input:indeterminate {
+  background-color: var(
+    --yk-input-checkbox-checked-bg,
+    var(--yk-color-primary, oklch(57.8% 0.228 260))
+  );
+  border-color: var(
+    --yk-input-checkbox-checked-border-color,
+    var(
+      --yk-input-checkbox-checked-bg,
+      var(--yk-color-primary, oklch(57.8% 0.228 260))
+    )
+  );
+}
+
+:host input:checked {
+  background-image: var(
+    --yk-input-checkbox-checked-image,
+    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e")
+  );
+}
+
+:host input:indeterminate {
+  background-image: var(
+    --yk-input-checkbox-indeterminate-image,
+    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e")
+  );
+}
+
+:host input:focus {
+  border-color: var(
+    --yk-input-checkbox-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
+      white
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-focus-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host input:active {
+  filter: var(--yk-input-checkbox-active-filter, brightness(90%));
+}
+
+:host input:disabled {
+  pointer-events: none;
+  opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}
+
+/* Bootstrap dims the label with the same opacity as the disabled input. */
+:host input:disabled ~ slot {
+  opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}

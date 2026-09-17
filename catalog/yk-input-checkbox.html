@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-checkbox&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-input-checkbox">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-checkbox name="newsletter">Subscribe to the newsletter</yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;yk-input-checkbox name="newsletter"&gt;Subscribe to the newsletter&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>checked</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-checkbox name="newsletter" checked>Checked by default</yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;yk-input-checkbox name="newsletter" checked&gt;Checked by default&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-checkbox name="frequency" value="weekly">Weekly digest</yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;yk-input-checkbox name="frequency" value="weekly"&gt;Weekly digest&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <yk-input-checkbox name="agree" required>利用規約に同意する</yk-input-checkbox>
+                <yk-button type="submit" variant="primary">Continue</yk-button>
+                <p class="description">Unchecked, the field matches :invalid and blocks submission.</p>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;yk-input-checkbox name="agree" required&gt;利用規約に同意する&lt;/yk-input-checkbox&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Continue&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+              <yk-input-checkbox name="locked" disabled>Locked choice</yk-input-checkbox>
+              <yk-input-checkbox name="locked" disabled checked>Locked and checked</yk-input-checkbox>
+            </yk-vstack>
+          </yk-pad>
+          <pre><code>&lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+  &lt;yk-input-checkbox name="locked" disabled&gt;Locked choice&lt;/yk-input-checkbox&gt;
+  &lt;yk-input-checkbox name="locked" disabled checked&gt;Locked and checked&lt;/yk-input-checkbox&gt;
+&lt;/yk-vstack&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>external label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <label for="catalog-check">Toggle via &lt;label for&gt;</label>
+            <yk-input-checkbox id="catalog-check" name="external"></yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;label for="catalog-check"&gt;Toggle via &amp;lt;label for&amp;gt;&lt;/label&gt;
+&lt;yk-input-checkbox id="catalog-check" name="external"&gt;&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>inline grouping with yk-cluster</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-cluster style="--yk-cluster-justify: flex-start">
+              <yk-input-checkbox name="inline1">1</yk-input-checkbox>
+              <yk-input-checkbox name="inline2">2</yk-input-checkbox>
+              <yk-input-checkbox name="inline3">3</yk-input-checkbox>
+            </yk-cluster>
+          </yk-pad>
+          <pre><code>&lt;yk-cluster style="--yk-cluster-justify: flex-start"&gt;
+  &lt;yk-input-checkbox name="inline1"&gt;1&lt;/yk-input-checkbox&gt;
+  &lt;yk-input-checkbox name="inline2"&gt;2&lt;/yk-input-checkbox&gt;
+  &lt;yk-input-checkbox name="inline3"&gt;3&lt;/yk-input-checkbox&gt;
+&lt;/yk-cluster&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form id="catalog-check-form" onsubmit="event.preventDefault(); alert(new FormData(this).get('newsletter') ?? '(nothing)')">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <yk-input-checkbox name="newsletter" value="yes">Newsletter</yk-input-checkbox>
+                <yk-button type="submit" variant="primary">Submit</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="alert(new FormData(this).get('newsletter') ?? '(nothing)')"&gt;
+  &lt;yk-input-checkbox name="newsletter" value="yes"&gt;Newsletter&lt;/yk-input-checkbox&gt;
+  &lt;yk-button type="submit" variant="primary"&gt;Submit&lt;/yk-button&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
