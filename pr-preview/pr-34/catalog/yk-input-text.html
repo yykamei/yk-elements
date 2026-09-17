@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-input-text&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-input-text">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>placeholder</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text placeholder="you@example.com"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text placeholder="you@example.com"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text value="prefilled"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text value="prefilled"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>minlength + maxlength</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text minlength="4" maxlength="10" placeholder="4–10 characters"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text minlength="4" maxlength="10" placeholder="4–10 characters"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>pattern</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text pattern="[a-z]{3,8}" placeholder="3–8 lowercase letters"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text pattern="[a-z]{3,8}" placeholder="3–8 lowercase letters"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text required name="handle" placeholder="required field"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text required name="handle" placeholder="required field"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>readonly</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text readonly value="read-only value"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text readonly value="read-only value"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-text disabled value="disabled value"></yk-input-text>
+          </yk-pad>
+          <pre><code>&lt;yk-input-text disabled value="disabled value"&gt;&lt;/yk-input-text&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-handle">Handle</label>
+                <yk-input-text id="catalog-handle" name="handle" pattern="[a-z]{3,8}" placeholder="3–8 lowercase letters"></yk-input-text>
+                <yk-button type="submit" variant="primary">Subscribe</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-handle"&gt;Handle&lt;/label&gt;
+    &lt;yk-input-text id="catalog-handle" name="handle" pattern="[a-z]{3,8}" placeholder="3–8 lowercase letters"&gt;&lt;/yk-input-text&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Subscribe&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

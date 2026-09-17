@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-badge&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-badge">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-badge>New</yk-badge>
+          </yk-pad>
+          <pre><code>&lt;yk-badge&gt;New&lt;/yk-badge&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>variant="primary"</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-badge variant="primary">Beta</yk-badge>
+          </yk-pad>
+          <pre><code>&lt;yk-badge variant="primary"&gt;Beta&lt;/yk-badge&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>variant="danger"</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-badge variant="danger">Failed</yk-badge>
+          </yk-pad>
+          <pre><code>&lt;yk-badge variant="danger"&gt;Failed&lt;/yk-badge&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>pill</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-badge pill>Notifications</yk-badge>
+          </yk-pad>
+          <pre><code>&lt;yk-badge pill&gt;Notifications&lt;/yk-badge&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>variant="danger" pill</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-badge variant="danger" pill>99+</yk-badge>
+          </yk-pad>
+          <pre><code>&lt;yk-badge variant="danger" pill&gt;99+&lt;/yk-badge&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

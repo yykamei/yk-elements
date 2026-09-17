@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  padding-block: var(
+    --yk-pad-padding-block,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+  padding-inline: var(
+    --yk-pad-padding-inline,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+}
