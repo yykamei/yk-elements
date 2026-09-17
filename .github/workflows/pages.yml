@@ -4,36 +4,71 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
+  # Single shared group: all triggers push to the same gh-pages branch, so
+  # parallel runs would race and fail on non-fast-forward pushes.
   group: pages
   cancel-in-progress: false
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # Fork PRs get a read-only GITHUB_TOKEN and cannot push to gh-pages. Their
+    # cleanup path is skipped too, which is safe because they never deploy a
+    # preview in the first place.
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Stage site files
+        if: github.event_name == 'push' || github.event.action != 'closed'
         run: |
           mkdir -p site
           rsync -a catalog site/
           rsync -a index.html index.js tokens.css src docs README.md LICENSE site/
-      - name: Configure Pages
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+      - name: Deploy production site
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         with:
-          path: site
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+          github_token: ${{ github.token }}
+          publish_branch: gh-pages
+          publish_dir: site
+          force_orphan: false
+          # keep_files must stay true: the default (false) runs `git rm -r *`
+          # at the branch root, which would delete pr-preview/ on every
+          # production deploy. Cost: files removed from site/ linger on
+          # gh-pages and need manual cleanup.
+          keep_files: true
+      - name: Deploy or remove preview
+        if: github.event_name == 'pull_request'
+        id: preview
+        # Deploys to pr-preview/pr-<number>/ on the same gh-pages branch, or
+        # removes that directory when the pull_request action is `closed`.
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          source-dir: site
+          preview-branch: gh-pages
+          comment: false
+          # No wait-for-pages-deployment: while the repository still serves
+          # Pages from the workflow artifact (pre-migration), pushes to
+          # gh-pages trigger no build at all, so waiting only times out.
+      - name: Write preview URL to job summary
+        if: >-
+          github.event_name == 'pull_request' &&
+          steps.preview.outputs.deployment-action == 'deploy'
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.preview-url }}
+        run: |
+          echo "Preview: $PREVIEW_URL" >> "$GITHUB_STEP_SUMMARY"
