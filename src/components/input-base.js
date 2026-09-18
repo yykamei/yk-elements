@@ -12,7 +12,9 @@
  *
  * Subclasses are self-registering modules that normally only pick the input
  * type and list any type-specific stored attributes; accessors for extra
- * attributes live in the subclass.
+ * attributes live in the subclass. A subclass may also override the static
+ * `coreStylesheet` to wear a different face and call `refreshFormState()`
+ * after mutating the internal input outside an input event.
  *
  * ```js
  * // src/components/yk-input-password.js
@@ -42,6 +44,11 @@ export class YKInputElement extends HTMLElement {
   static formAssociated = true;
 
   static inputType = 'text';
+
+  // The constructable stylesheet adopted into the shadow root. Subclasses
+  // whose face is not the shared form-control look (e.g. a checkbox) override
+  // it with their own sheet.
+  static coreStylesheet = sheet;
 
   static inputAttributes = [
     'value',
@@ -74,7 +81,7 @@ export class YKInputElement extends HTMLElement {
       mode: 'open',
       delegatesFocus: true,
     });
-    shadowRoot.adoptedStyleSheets = [sheet];
+    shadowRoot.adoptedStyleSheets = [this.constructor.coreStylesheet];
     this.#input = this.#createInput();
     shadowRoot.append(this.#input);
     for (const name of this.#propertyNames()) {
@@ -247,6 +254,13 @@ export class YKInputElement extends HTMLElement {
   // FormData, the shapes setFormValue accepts.
   formValue() {
     return this.#input.value;
+  }
+
+  // Extension point for subclasses that mutate the internal input outside an
+  // input event (e.g. the yk-input-checkbox checked setter): re-runs the
+  // form-state sync so setFormValue and setValidity mirror the new state.
+  refreshFormState() {
+    this.#syncFormState();
   }
 
   #syncFormState() {

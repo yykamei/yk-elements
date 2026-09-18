@@ -273,6 +273,139 @@ const fileFieldAttributes = [
 ];
 
 /**
+ * Attribute metadata for the checkbox, which mirrors only the submitted
+ * value, the default state, and validation attributes — checkboxes have no
+ * placeholder, length, or pattern constraints.
+ */
+const checkboxFieldAttributes = [
+  {
+    name: 'value',
+    control: 'text',
+    default: 'on',
+    description:
+      'Value submitted to the form while the checkbox is checked, mirrored onto the internal input. Without the attribute the value is on, like the native checkbox.',
+  },
+  {
+    name: 'checked',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that sets the default checked state restored by form reset, like the native box checked attribute.',
+  },
+  {
+    name: 'required',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that blocks submission while the checkbox is unchecked, mirrored onto the internal input.',
+  },
+  {
+    name: 'disabled',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that disables the field, dims its face and label, and excludes its value from the form, like the native input disabled attribute.',
+  },
+  {
+    name: 'name',
+    control: 'text',
+    default: 'unset',
+    description:
+      'Entry name used when the owner form submits the value, like the native input name attribute.',
+  },
+];
+
+/**
+ * CSS custom properties of the checkbox face. The mark glyphs (check and dash)
+ * are drawn with borders, so the glyph color stays a plain color token instead
+ * of a data URI that could not interpolate one.
+ */
+const checkboxFaceProperties = [
+  {
+    name: '--yk-input-checkbox-size',
+    default: '1em',
+    description: 'Width and height of the check box.',
+  },
+  {
+    name: '--yk-input-checkbox-bg',
+    default: '#fff',
+    description: 'Background of the unchecked face.',
+  },
+  {
+    name: '--yk-input-checkbox-border-width',
+    default: '1px',
+    description: 'Border width of the check box.',
+  },
+  {
+    name: '--yk-input-checkbox-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+    description: 'Border color of the unchecked face.',
+  },
+  {
+    name: '--yk-input-checkbox-radius',
+    default: '0.25em',
+    description: 'Corner radius of the check box.',
+  },
+  {
+    name: '--yk-input-checkbox-checked-bg',
+    default: 'var(--yk-color-primary, oklch(57.8% 0.228 260))',
+    description:
+      'Background of the checked and indeterminate faces, which also tints their border.',
+  },
+  {
+    name: '--yk-input-checkbox-checked-border-color',
+    default:
+      'var(--yk-input-checkbox-checked-bg, var(--yk-color-primary, oklch(57.8% 0.228 260)))',
+    description: 'Border color of the checked and indeterminate faces.',
+  },
+  {
+    name: '--yk-input-checkbox-checked-color',
+    default: '#fff',
+    description:
+      'Color of the check and dash glyphs drawn on the checked and indeterminate faces.',
+  },
+  {
+    name: '--yk-input-checkbox-focus-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+    description: 'Border color while the field is focused.',
+  },
+  {
+    name: '--yk-input-checkbox-focus-ring-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%, transparent)',
+    description: 'Focus ring color.',
+  },
+  {
+    name: '--yk-input-checkbox-active-filter',
+    default: 'brightness(90%)',
+    description: 'Filter applied to the face while the check box is pressed.',
+  },
+  {
+    name: '--yk-input-checkbox-invalid-border-color',
+    default: 'var(--yk-color-danger, oklch(59.2% 0.202 21.2))',
+    description: 'Border color of the user-invalid face.',
+  },
+  {
+    name: '--yk-input-checkbox-invalid-ring-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%, transparent)',
+    description: 'Focus ring color of the user-invalid face.',
+  },
+  {
+    name: '--yk-input-checkbox-disabled-opacity',
+    default: '0.5',
+    description: 'Opacity of the face and label while disabled.',
+  },
+  {
+    name: '--yk-input-checkbox-label-gap',
+    default: '0.5em',
+    description: 'Gap between the check box and the label text.',
+  },
+];
+
+/**
  * Builds the indented `demo-item` paragraphs used as a layout primitive's
  * initial playground content, so the generated markup stays readable. Labels
  * are trusted internal strings; escape them if they ever become external.
@@ -752,6 +885,17 @@ export const components = [
       ...dropzoneFaceProperties,
     ],
     attributes: fileFieldAttributes,
+  },
+  {
+    tag: 'yk-input-checkbox',
+    category: 'Components',
+    description:
+      'Checkbox that renders a native checkbox in the Bootstrap form-check style with its label text inside the element, contributing name=value while checked and nothing while unchecked, with required validation, a reset-restoring checked attribute, and an indeterminate property for the dash face.',
+    playground: {
+      content: 'Subscribe to the newsletter',
+    },
+    cssProperties: checkboxFaceProperties,
+    attributes: checkboxFieldAttributes,
   },
 ];
 

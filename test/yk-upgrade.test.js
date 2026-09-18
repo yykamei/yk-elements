@@ -39,6 +39,12 @@ test('applies property writes made before the module upgrades the elements', asy
   file.accept = 'image/png';
   file.multiple = true;
   file.required = true;
+  const checkbox = document.createElement('yk-input-checkbox');
+  checkbox.value = 'yes';
+  checkbox.checked = true;
+  checkbox.required = true;
+  checkbox.disabled = true;
+  checkbox.indeterminate = true;
   document.body.append(
     button,
     link,
@@ -49,6 +55,7 @@ test('applies property writes made before the module upgrades the elements', asy
     password,
     search,
     file,
+    checkbox,
   );
 
   await Promise.all([
@@ -61,6 +68,7 @@ test('applies property writes made before the module upgrades the elements', asy
     import('../src/components/yk-input-password.js'),
     import('../src/components/yk-input-search.js'),
     import('../src/components/yk-input-file.js'),
+    import('../src/components/yk-input-checkbox.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -118,4 +126,11 @@ test('applies property writes made before the module upgrades the elements', asy
   );
   expect(file.shadowRoot.querySelector('input').multiple).toBe(true);
   expect(file.shadowRoot.querySelector('input').required).toBe(true);
+  expect(checkbox.shadowRoot.querySelector('input').type).toBe('checkbox');
+  expect(checkbox.shadowRoot.querySelector('input').value).toBe('yes');
+  expect(checkbox.shadowRoot.querySelector('input').checked).toBe(true);
+  expect(checkbox.shadowRoot.querySelector('input').required).toBe(true);
+  expect(checkbox.shadowRoot.querySelector('input').indeterminate).toBe(true);
+  expect(checkbox.getAttribute('disabled')).toBe('');
+  expect(checkbox.shadowRoot.querySelector('input').disabled).toBe(true);
 });
