@@ -1,0 +1,155 @@
+/* Bootstrap form-check face for the checkbox. The label wraps the native
+   input and the slotted text so a click on either toggles natively; the mark
+   span overlays the box and draws the check or dash glyph with borders, so
+   the glyph color stays a design token instead of a baked-in SVG stroke. */
+:host {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5em;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+}
+
+:host [part="label"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-input-checkbox-label-gap, 0.5em);
+  cursor: inherit;
+}
+
+/* Fieldset-disabled ancestors reach the input through the base class, so the
+   input's disabled state is the single source for dimming the whole control. */
+:host [part="label"]:has(input:disabled) {
+  cursor: default;
+  opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}
+
+/* Positioning context for the mark overlay. */
+:host [part="label"] > span {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+
+:host input {
+  box-sizing: border-box;
+  display: block;
+  width: var(--yk-input-checkbox-size, 1em);
+  height: var(--yk-input-checkbox-size, 1em);
+  margin: 0;
+  font: inherit;
+  appearance: none;
+  background-color: var(--yk-input-checkbox-bg, #fff);
+  background-clip: padding-box;
+  border: var(--yk-input-checkbox-border-width, 1px) solid
+    var(
+      --yk-input-checkbox-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        white
+      )
+    );
+  border-radius: var(--yk-input-checkbox-radius, 0.25em);
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  print-color-adjust: exact;
+}
+
+:host input:checked,
+:host input:indeterminate {
+  background-color: var(
+    --yk-input-checkbox-checked-bg,
+    var(--yk-color-primary, oklch(57.8% 0.228 260))
+  );
+  border-color: var(
+    --yk-input-checkbox-checked-border-color,
+    var(
+      --yk-input-checkbox-checked-bg,
+      var(--yk-color-primary, oklch(57.8% 0.228 260))
+    )
+  );
+}
+
+:host [part="mark"] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+:host [part="mark"]::before {
+  content: "";
+  box-sizing: border-box;
+}
+
+:host input:active,
+:host input:active ~ [part="mark"] {
+  filter: var(--yk-input-checkbox-active-filter, brightness(90%));
+}
+
+:host input:checked ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.25em;
+  border-block-end: 0.125em solid var(--yk-input-checkbox-checked-color, #fff);
+  border-inline-start: 0.125em solid
+    var(--yk-input-checkbox-checked-color, #fff);
+  border-start-start-radius: 0.0625em;
+  border-end-end-radius: 0.0625em;
+  transform: rotate(-45deg) translateY(-0.0625em);
+}
+
+/* The dash wins when a box is both checked and indeterminate, matching
+   Bootstrap's source order. */
+:host input:indeterminate ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.125em;
+  border: 0;
+  transform: none;
+  background-color: var(--yk-input-checkbox-checked-color, #fff);
+}
+
+:host input:focus {
+  border-color: var(
+    --yk-input-checkbox-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
+      white
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-focus-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host input:user-invalid {
+  border-color: var(
+    --yk-input-checkbox-invalid-border-color,
+    var(--yk-color-danger, oklch(59.2% 0.202 21.2))
+  );
+}
+
+:host input:user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%,
+        transparent
+      )
+    );
+}
