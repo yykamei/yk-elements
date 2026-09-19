@@ -1316,19 +1316,24 @@ function renderPlayground() {
       <h2>Playground</h2>
       <div class="playground">
         <div data-playground-panel>${controls}</div>
-        <yk-pad
-          data-playground-preview
-          style="--yk-pad-padding: var(--yk-space-lg)"
-        ></yk-pad>
-        <div data-playground-stage>
-          <pre><code data-playground-code aria-live="polite"></code></pre>
-          <yk-cluster
-            style="--yk-cluster-justify: flex-start; --yk-cluster-gap: var(--yk-space-sm)"
-          >
-            <yk-button type="button" data-playground-copy>Copy</yk-button>
-            <yk-button type="button" data-playground-reset>Reset</yk-button>
-          </yk-cluster>
-        </div>
+        <yk-vstack
+          data-playground-view
+          style="--yk-vstack-gap: var(--yk-space-sm)"
+        >
+          <yk-pad
+            data-playground-preview
+            style="--yk-pad-padding: var(--yk-space-lg)"
+          ></yk-pad>
+          <div data-playground-stage>
+            <pre><code data-playground-code aria-live="polite"></code></pre>
+            <yk-cluster
+              style="--yk-cluster-justify: flex-start; --yk-cluster-gap: var(--yk-space-sm)"
+            >
+              <yk-button type="button" data-playground-copy>Copy</yk-button>
+              <yk-button type="button" data-playground-reset>Reset</yk-button>
+            </yk-cluster>
+          </div>
+        </yk-vstack>
       </div>
     </yk-vstack>
   `;

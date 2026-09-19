@@ -465,6 +465,44 @@ test('mobile playground shows the preview first and keeps it sticky', async () =
   ).toBeLessThan(previewTop);
 });
 
+test('desktop playground keeps the generated code next to its preview', async () => {
+  // yk-input-file has the longest controls panel, the worst case for a
+  // row-spanning panel inflating the preview and stage rows apart.
+  const iframe = await loadLaidOutIframe('/catalog/yk-input-file.html');
+  const doc = iframe.contentDocument;
+  const preview = doc
+    .querySelector('[data-playground-preview]')
+    .getBoundingClientRect();
+  const stage = doc
+    .querySelector('[data-playground-stage]')
+    .getBoundingClientRect();
+  const panel = doc
+    .querySelector('[data-playground-panel]')
+    .getBoundingClientRect();
+
+  // The gap assertion only means anything while the panel is taller than the
+  // preview+code column: that is when a row-spanning panel would distribute
+  // its excess height into both rows. Guard the precondition so the test
+  // fails loudly if a shorter panel ever stops exercising the regression.
+  const viewTop = Math.min(preview.top, stage.top);
+  const viewBottom = Math.max(preview.bottom, stage.bottom);
+  expect(
+    panel.height,
+    'panel taller than the preview and code column',
+  ).toBeGreaterThan(viewBottom - viewTop);
+
+  // The code lands in the preview's column (a different failure mode than the
+  // gap check) and follows it closely, so the panel cannot open a gap.
+  expect(stage.left, 'stage shares the preview column').toBeCloseTo(
+    preview.left,
+    0,
+  );
+  expect(
+    stage.top - preview.bottom,
+    'gap between preview and generated code',
+  ).toBeLessThanOrEqual(24);
+});
+
 test('mobile keeps the nav at the top behind a hamburger toggle', async () => {
   const iframe = await loadMobileIframe('/catalog/yk-button.html');
   const doc = iframe.contentDocument;

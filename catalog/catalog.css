@@ -23,7 +23,7 @@
  * only the catalog's own visual identity (colors, borders, typography).
  * Three layout exceptions remain here: the outer .catalog two-column shell,
  * the .playground shell (whose stage must shrink below its code block, and
- * whose preview is hoisted out of the stage so mobile can pin it while the
+ * whose view column dissolves on mobile so the preview can be pinned while the
  * controls scroll), and the sidebar nav, which keeps its own flex CSS — the
  * brand row with the mobile hamburger toggle, and per-category stacks that
  * switch to wrapping rows in the mobile media query (a switch neither
@@ -318,26 +318,28 @@
    * The playground pairs a controls panel with a live preview and the
    * generated markup. It needs a two-column shell of its own (like the outer
    * .catalog grid) so the stage can shrink below the intrinsic width of its
-   * code block. The preview is a direct child of the shell — not wrapped in
-   * the stage — so the mobile layout can pin it with position: sticky while
-   * the panel scrolls (a flex item's sticky constraint is the whole flex
-   * container, so it stays visible across the long property list). The panel
-   * and stage are otherwise reached through their data attributes; the native
+   * code block. The preview and stage share one right-hand column
+   * ([data-playground-view], a yk-vstack): were the panel to span the rows
+   * instead, its excess height would be distributed across them and push the
+   * code far below its preview. On mobile the view column dissolves with
+   * display: contents, leaving the preview a direct flex item of the shell so
+   * position: sticky can pin it across the whole scrolling panel (a flex
+   * item's sticky constraint is the whole flex container). The panel and
+   * stage are otherwise reached through their data attributes; the native
    * form fields are styled directly because the library ships no comparable
    * control.
    */
   .playground {
     display: grid;
-    grid-template-areas:
-      "panel preview"
-      "panel stage";
     grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
     gap: var(--yk-space-md);
     align-items: start;
   }
 
-  [data-playground-panel] {
-    grid-area: panel;
+  /* Grid-item blowout guard: lets the view column shrink so the stage inside
+   * can shrink below the intrinsic width of its code block. */
+  [data-playground-view] {
+    min-inline-size: 0;
   }
 
   [data-playground-panel] fieldset {
@@ -395,7 +397,6 @@
   }
 
   [data-playground-stage] {
-    grid-area: stage;
     display: flex;
     flex-direction: column;
     gap: var(--yk-space-sm);
@@ -404,7 +405,6 @@
 
   [data-playground-preview] {
     display: block;
-    grid-area: preview;
     border: 1px solid var(--yk-catalog-border);
     border-radius: var(--yk-catalog-radius-md);
   }
@@ -448,6 +448,13 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
+    }
+
+    /* Dissolving the view column leaves the preview and stage as direct flex
+     * items of the shell, so the preview's sticky constraint spans the whole
+     * scrolling panel and order — not source order — puts it first. */
+    [data-playground-view] {
+      display: contents;
     }
 
     [data-playground-preview] {
