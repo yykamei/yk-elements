@@ -293,6 +293,13 @@ const checkboxFieldAttributes = [
       'Boolean attribute that sets the default checked state restored by form reset, like the native box checked attribute.',
   },
   {
+    name: 'indeterminate',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that renders the dash face and reflects the live state, so a user toggle clears it and form reset preserves it; it does not change the submitted value.',
+  },
+  {
     name: 'required',
     control: 'boolean',
     default: 'unset',
@@ -890,7 +897,7 @@ export const components = [
     tag: 'yk-input-checkbox',
     category: 'Components',
     description:
-      'Checkbox that renders a native checkbox in the Bootstrap form-check style with its label text inside the element, contributing name=value while checked and nothing while unchecked, with required validation, a reset-restoring checked attribute, and an indeterminate property for the dash face.',
+      'Checkbox that renders a native checkbox in the Bootstrap form-check style with its label text inside the element, contributing name=value while checked and nothing while unchecked, with required validation, a reset-restoring checked attribute, and an indeterminate attribute that renders the dash face.',
     playground: {
       content: 'Subscribe to the newsletter',
     },

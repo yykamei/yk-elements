@@ -41,13 +41,9 @@
         <figure>
           <figcaption>indeterminate</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
-            <yk-input-checkbox id="catalog-indeterminate" name="partial">Select all</yk-input-checkbox>
+            <yk-input-checkbox name="partial" indeterminate>Select all</yk-input-checkbox>
           </yk-pad>
-          <pre><code>&lt;yk-input-checkbox name="partial"&gt;Select all&lt;/yk-input-checkbox&gt;
-
-&lt;script type="module"&gt;
-  document.querySelector('yk-input-checkbox[name="partial"]').indeterminate = true;
-&lt;/script&gt;</code></pre>
+          <pre><code>&lt;yk-input-checkbox name="partial" indeterminate&gt;Select all&lt;/yk-input-checkbox&gt;</code></pre>
         </figure>
 
         <figure>
@@ -143,9 +139,5 @@
         <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
       </footer>
     </div>
-
-    <script type="module">
-      document.querySelector('#catalog-indeterminate').indeterminate = true;
-    </script>
   </body>
 </html>

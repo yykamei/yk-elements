@@ -14,11 +14,14 @@
  * checked it contributes `name=value` (`value` defaults to `on`) to the owner
  * form, while unchecked it contributes no entry. `checked` is the default
  * restored by form reset; the `checked` property is the live state and, like
- * the native property, neither writes the attribute nor emits events. The
- * `indeterminate` property (no HTML attribute exists for it) renders the dash
- * face. With `required`, an unchecked field surfaces valueMissing, matches
- * `:invalid`, and blocks submission. Disabled form/fieldset ancestors are
- * supported, and the host is labelable so `<label for>` toggles it.
+ * the native property, neither writes the attribute nor emits events.
+ * `indeterminate` renders the dash face: unlike native, the state is also a
+ * boolean attribute that reflects the property, a user toggle clears it, and
+ * form reset preserves it (native reset leaves the flag untouched). It is
+ * appearance only and does not change the submitted value. With `required`,
+ * an unchecked field surfaces valueMissing, matches `:invalid`, and blocks
+ * submission. Disabled form/fieldset ancestors are supported, and the host is
+ * labelable so `<label for>` toggles it.
  *
  * Clicks on links or buttons inside the label do not toggle the checkbox and
  * keep their own default behavior, like a native label.
@@ -36,6 +39,14 @@ class YKInputCheckbox extends YKInputElement {
 
   static coreStylesheet = sheet;
 
+  // `indeterminate` is host state, not a mirrored input attribute: the native
+  // input has no such attribute, so the host attribute is applied to the
+  // internal input's IDL property instead.
+  static get observedAttributes() {
+    // biome-ignore lint/complexity/noThisInStatic: super must dispatch through the base getter so this class's `inputAttributes` override is honored
+    return [...super.observedAttributes, 'indeterminate'];
+  }
+
   constructor() {
     super();
     const shadowRoot = this.shadowRoot;
@@ -48,13 +59,16 @@ class YKInputCheckbox extends YKInputElement {
     box.append(shadowRoot.querySelector('input'), mark);
     label.append(box, document.createElement('slot'));
     shadowRoot.append(label);
-    // `indeterminate` has no attribute for the base class to mirror, so a
-    // pre-upgrade property write is routed through the accessor here.
+    // `indeterminate` is not in `inputAttributes` (it maps to a property, not
+    // an internal attribute), so a pre-upgrade write is routed through the
+    // accessor here instead of the base's capture list. Applying directly
+    // avoids depending on when the attribute reaction runs.
     if (Object.hasOwn(this, 'indeterminate')) {
       const value = this.indeterminate;
       delete this.indeterminate;
       this.indeterminate = value;
     }
+    this.#applyIndeterminate();
     // Label activation (an external <label for>) and clicks that miss the
     // internal input land on the host, which has no activation behavior of
     // its own; such a click is forwarded to the input. A click already on the
@@ -66,6 +80,32 @@ class YKInputCheckbox extends YKInputElement {
       if (event.defaultPrevented || event.composedPath()[0] !== this) return;
       shadowRoot.querySelector('input').click();
     });
+    // Native activation clears the indeterminate flag, so the attribute must
+    // be cleared too or it would outlive the dash. Listening on the host (not
+    // the input) survives the input swap on form reset, and `target === this`
+    // filters out input events from slotted light-DOM controls, whose target
+    // is not retargeted across the shadow boundary.
+    this.addEventListener('input', (event) => {
+      if (event.target !== this) return;
+      this.removeAttribute('indeterminate');
+    });
+  }
+
+  attributeChangedCallback(name) {
+    if (name === 'indeterminate') {
+      // Appearance only, so the base's form-state sync is skipped: neither
+      // the submitted value nor validity depends on the flag.
+      this.#applyIndeterminate();
+      return;
+    }
+    super.attributeChangedCallback(name);
+  }
+
+  formResetCallback() {
+    // The base swaps in a fresh input, which drops the indeterminate flag;
+    // native reset leaves it untouched, so reapply it from the attribute.
+    super.formResetCallback();
+    this.#applyIndeterminate();
   }
 
   // Unlike the text fields, a native checkbox's value is its content
@@ -93,11 +133,18 @@ class YKInputCheckbox extends YKInputElement {
   }
 
   get indeterminate() {
-    return this.shadowRoot.querySelector('input').indeterminate;
+    return this.hasAttribute('indeterminate');
   }
 
   set indeterminate(value) {
-    this.shadowRoot.querySelector('input').indeterminate = Boolean(value);
+    this.toggleAttribute('indeterminate', Boolean(value));
+  }
+
+  // Mirrors the host attribute onto the internal input, which is what the
+  // platform renders and `:indeterminate` matches.
+  #applyIndeterminate() {
+    this.shadowRoot.querySelector('input').indeterminate =
+      this.hasAttribute('indeterminate');
   }
 
   formValue() {

@@ -45,6 +45,8 @@ test('applies property writes made before the module upgrades the elements', asy
   checkbox.required = true;
   checkbox.disabled = true;
   checkbox.indeterminate = true;
+  const declaredCheckbox = document.createElement('yk-input-checkbox');
+  declaredCheckbox.setAttribute('indeterminate', '');
   document.body.append(
     button,
     link,
@@ -56,6 +58,7 @@ test('applies property writes made before the module upgrades the elements', asy
     search,
     file,
     checkbox,
+    declaredCheckbox,
   );
 
   await Promise.all([
@@ -131,6 +134,11 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(checkbox.shadowRoot.querySelector('input').checked).toBe(true);
   expect(checkbox.shadowRoot.querySelector('input').required).toBe(true);
   expect(checkbox.shadowRoot.querySelector('input').indeterminate).toBe(true);
+  expect(checkbox.hasAttribute('indeterminate')).toBe(true);
   expect(checkbox.getAttribute('disabled')).toBe('');
   expect(checkbox.shadowRoot.querySelector('input').disabled).toBe(true);
+  expect(declaredCheckbox.hasAttribute('indeterminate')).toBe(true);
+  expect(declaredCheckbox.shadowRoot.querySelector('input').indeterminate).toBe(
+    true,
+  );
 });
