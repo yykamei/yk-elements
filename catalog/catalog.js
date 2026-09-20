@@ -297,7 +297,14 @@ const checkboxFieldAttributes = [
     control: 'boolean',
     default: 'unset',
     description:
-      'Boolean attribute that renders the dash face and reflects the live state, so a user toggle clears it and form reset preserves it; it does not change the submitted value.',
+      'Boolean attribute that renders the dash face and reflects the live state, so a user toggle clears it and form reset preserves it; it does not change the submitted value, and the switch face suppresses it.',
+  },
+  {
+    name: 'switch',
+    control: 'boolean',
+    default: 'unset',
+    description:
+      'Boolean attribute that renders the toggle switch face instead of the check box, mirrors itself as the native switch hint, and exposes the control as a switch to assistive technology. The form behavior is unchanged.',
   },
   {
     name: 'required',
@@ -325,13 +332,16 @@ const checkboxFieldAttributes = [
 /**
  * CSS custom properties of the checkbox face. The mark glyphs (check and dash)
  * are drawn with borders, so the glyph color stays a plain color token instead
- * of a data URI that could not interpolate one.
+ * of a data URI that could not interpolate one. The switch face reuses the size
+ * and checked tokens and derives its track and thumb geometry from them, so only
+ * the track width and the off-state thumb color are switch-specific.
  */
 const checkboxFaceProperties = [
   {
     name: '--yk-input-checkbox-size',
     default: '1em',
-    description: 'Width and height of the check box.',
+    description:
+      'Height of the check box and of the switch track; the switch thumb and its travel scale from it.',
   },
   {
     name: '--yk-input-checkbox-bg',
@@ -341,36 +351,51 @@ const checkboxFaceProperties = [
   {
     name: '--yk-input-checkbox-border-width',
     default: '1px',
-    description: 'Border width of the check box.',
+    description: 'Border width of the check box and the switch track.',
   },
   {
     name: '--yk-input-checkbox-border-color',
     default:
       'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
-    description: 'Border color of the unchecked face.',
+    description: 'Border color of the unchecked face and the off switch track.',
   },
   {
     name: '--yk-input-checkbox-radius',
     default: '0.25em',
-    description: 'Corner radius of the check box.',
+    description:
+      'Corner radius of the check box; the switch track ignores it and rounds its ends from the size instead.',
+  },
+  {
+    name: '--yk-input-checkbox-switch-width',
+    default: 'calc(var(--yk-input-checkbox-size, 1em) * 2)',
+    description:
+      'Width of the switch track; the default keeps it twice as wide as it is tall, and the corner radius follows the size.',
+  },
+  {
+    name: '--yk-input-checkbox-switch-thumb-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, white)',
+    description:
+      'Color of the switch thumb while the switch is off; it turns to the checked color while the switch is on.',
   },
   {
     name: '--yk-input-checkbox-checked-bg',
     default: 'var(--yk-color-primary, oklch(57.8% 0.228 260))',
     description:
-      'Background of the checked and indeterminate faces, which also tints their border.',
+      'Background of the checked and indeterminate faces and of the checked switch track, which also tints their border.',
   },
   {
     name: '--yk-input-checkbox-checked-border-color',
     default:
       'var(--yk-input-checkbox-checked-bg, var(--yk-color-primary, oklch(57.8% 0.228 260)))',
-    description: 'Border color of the checked and indeterminate faces.',
+    description:
+      'Border color of the checked and indeterminate faces and of the checked switch track.',
   },
   {
     name: '--yk-input-checkbox-checked-color',
     default: '#fff',
     description:
-      'Color of the check and dash glyphs drawn on the checked and indeterminate faces.',
+      'Color of the check and dash glyphs drawn on the checked and indeterminate faces and of the switch thumb while the switch is on.',
   },
   {
     name: '--yk-input-checkbox-focus-border-color',
@@ -897,7 +922,7 @@ export const components = [
     tag: 'yk-input-checkbox',
     category: 'Components',
     description:
-      'Checkbox that renders a native checkbox in the Bootstrap form-check style with its label text inside the element, contributing name=value while checked and nothing while unchecked, with required validation, a reset-restoring checked attribute, and an indeterminate attribute that renders the dash face.',
+      'Checkbox that renders a native checkbox in the Bootstrap form-check style with its label text inside the element, contributing name=value while checked and nothing while unchecked, with required validation, a reset-restoring checked attribute, an indeterminate attribute that renders the dash face, and a switch attribute for the toggle switch face.',
     playground: {
       content: 'Subscribe to the newsletter',
     },

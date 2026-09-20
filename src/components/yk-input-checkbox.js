@@ -10,6 +10,20 @@
  * </yk-input-checkbox>
  * ```
  *
+ * Add the `switch` attribute for Bootstrap's toggle-switch face instead of the
+ * box. It changes appearance only: the semantics, form participation, and
+ * validation stay those of the native checkbox, while the internal input is
+ * exposed as a switch (`role="switch"`, plus the native `switch` attribute for
+ * browsers that provide haptics and map the role themselves):
+ *
+ * ```html
+ * <yk-input-checkbox switch name="wifi" checked>Wi-Fi</yk-input-checkbox>
+ * ```
+ *
+ * `indeterminate` is a checkbox-only state. The switch face suppresses it and
+ * keeps the thumb where `checked` puts it, since the switch role has no mixed
+ * state.
+ *
  * The host is form-associated and behaves like a native checkbox: while
  * checked it contributes `name=value` (`value` defaults to `on`) to the owner
  * form, while unchecked it contributes no entry. `checked` is the default
@@ -33,9 +47,10 @@ class YKInputCheckbox extends YKInputElement {
   static inputType = 'checkbox';
 
   // Checkboxes have no placeholder or length/pattern constraints; the value
-  // attribute is the submitted-while-checked payload and `checked` is the
-  // reset-restoring default state.
-  static inputAttributes = ['value', 'checked', 'required'];
+  // attribute is the submitted-while-checked payload, `checked` is the
+  // reset-restoring default state, and `switch` is the native appearance hint
+  // mirrored so the platform can provide its own switch behavior.
+  static inputAttributes = ['value', 'checked', 'required', 'switch'];
 
   static coreStylesheet = sheet;
 
@@ -69,6 +84,7 @@ class YKInputCheckbox extends YKInputElement {
       this.indeterminate = value;
     }
     this.#applyIndeterminate();
+    this.#applySwitchRole();
     // Label activation (an external <label for>) and clicks that miss the
     // internal input land on the host, which has no activation behavior of
     // its own; such a click is forwarded to the input. A click already on the
@@ -99,6 +115,10 @@ class YKInputCheckbox extends YKInputElement {
       return;
     }
     super.attributeChangedCallback(name);
+    if (name === 'switch') {
+      this.#applyIndeterminate();
+      this.#applySwitchRole();
+    }
   }
 
   formResetCallback() {
@@ -106,6 +126,7 @@ class YKInputCheckbox extends YKInputElement {
     // native reset leaves it untouched, so reapply it from the attribute.
     super.formResetCallback();
     this.#applyIndeterminate();
+    this.#applySwitchRole();
   }
 
   // Unlike the text fields, a native checkbox's value is its content
@@ -140,11 +161,38 @@ class YKInputCheckbox extends YKInputElement {
     this.toggleAttribute('indeterminate', Boolean(value));
   }
 
+  // `switch` shadows nothing on the host (the native property lives on
+  // HTMLInputElement); it is the same boolean content attribute the platform
+  // uses for a native switch.
+  get switch() {
+    return this.hasAttribute('switch');
+  }
+
+  set switch(value) {
+    this.toggleAttribute('switch', Boolean(value));
+  }
+
   // Mirrors the host attribute onto the internal input, which is what the
-  // platform renders and `:indeterminate` matches.
+  // platform renders and `:indeterminate` matches. The switch face wins over
+  // the flag: Chromium stops matching `:checked` once a checkbox is
+  // indeterminate, so leaving the flag set would hide the switch's checked
+  // state, and the switch role has no mixed state to show anyway.
   #applyIndeterminate() {
     this.shadowRoot.querySelector('input').indeterminate =
-      this.hasAttribute('indeterminate');
+      this.hasAttribute('indeterminate') && !this.hasAttribute('switch');
+  }
+
+  // The internal input is the accessible control, so the role belongs there,
+  // not on the host. Browsers that implement the native `switch` attribute map
+  // the role themselves; setting it explicitly keeps assistive technology
+  // accurate in the browsers that do not yet.
+  #applySwitchRole() {
+    const input = this.shadowRoot.querySelector('input');
+    if (this.hasAttribute('switch')) {
+      input.setAttribute('role', 'switch');
+    } else {
+      input.removeAttribute('role');
+    }
   }
 
   formValue() {
