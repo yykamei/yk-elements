@@ -123,18 +123,97 @@ test('updates the form value from the checked property without emitting events',
   expect(events).toEqual([]);
 });
 
-test('exposes the indeterminate property backed by the internal input', async () => {
+test('reflects the indeterminate property to the attribute and the internal input', async () => {
   const host = hostOf();
   document.body.appendChild(host);
   await frame();
 
   expect(host.indeterminate).toBe(false);
+  expect(host.hasAttribute('indeterminate')).toBe(false);
 
   host.indeterminate = true;
   expect(host.indeterminate).toBe(true);
+  expect(host.hasAttribute('indeterminate')).toBe(true);
   expect(inputOf(host).indeterminate).toBe(true);
   expect(inputOf(host).matches(':indeterminate')).toBe(true);
+
+  host.indeterminate = false;
+  expect(host.indeterminate).toBe(false);
   expect(host.hasAttribute('indeterminate')).toBe(false);
+  expect(inputOf(host).indeterminate).toBe(false);
+});
+
+test('renders the dash face from the indeterminate attribute', async () => {
+  const host = hostOf();
+  host.setAttribute('indeterminate', '');
+  document.body.appendChild(host);
+  await frame();
+
+  expect(inputOf(host).indeterminate).toBe(true);
+  expect(inputOf(host).matches(':indeterminate')).toBe(true);
+
+  host.removeAttribute('indeterminate');
+  expect(inputOf(host).indeterminate).toBe(false);
+});
+
+test('clears the indeterminate attribute when the user toggles the box', async () => {
+  const host = hostOf();
+  host.setAttribute('indeterminate', '');
+  document.body.appendChild(host);
+  await frame();
+
+  host.click();
+
+  expect(host.checked).toBe(true);
+  expect(host.indeterminate).toBe(false);
+  expect(host.hasAttribute('indeterminate')).toBe(false);
+});
+
+test('keeps the indeterminate state when the checked property changes programmatically', async () => {
+  const host = hostOf();
+  document.body.appendChild(host);
+  await frame();
+
+  host.indeterminate = true;
+  host.checked = true;
+
+  expect(host.indeterminate).toBe(true);
+  expect(host.hasAttribute('indeterminate')).toBe(true);
+});
+
+test('ignores input events from slotted controls when syncing the attribute', async () => {
+  const host = hostOf();
+  host.setAttribute('indeterminate', '');
+  const slotted = document.createElement('input');
+  slotted.type = 'checkbox';
+  host.append(slotted);
+  document.body.appendChild(host);
+  await frame();
+
+  slotted.click();
+
+  expect(slotted.checked).toBe(true);
+  expect(host.indeterminate).toBe(true);
+  expect(host.hasAttribute('indeterminate')).toBe(true);
+});
+
+test('treats indeterminate as appearance only for submission and validation', () => {
+  const form = document.createElement('form');
+  const host = hostOf();
+  host.setAttribute('name', 'agree');
+  host.setAttribute('value', 'yes');
+  host.required = true;
+  host.setAttribute('indeterminate', '');
+  form.append(host);
+  document.body.appendChild(form);
+
+  expect(host.validity.valueMissing).toBe(true);
+  expect(new FormData(form).has('agree')).toBe(false);
+
+  host.checked = true;
+
+  expect(host.validity.valueMissing).toBe(false);
+  expect(new FormData(form).get('agree')).toBe('yes');
 });
 
 test('renders the label text from the default slot and names the input with it', async () => {
@@ -404,7 +483,7 @@ test('drops the checked default from the submitted value after a reset without t
   expect(new FormData(form).has('newsletter')).toBe(false);
 });
 
-test('clears the indeterminate state when the owner form resets', () => {
+test('preserves the indeterminate state when the owner form resets', () => {
   const form = document.createElement('form');
   const host = hostOf();
   host.setAttribute('name', 'newsletter');
@@ -414,7 +493,21 @@ test('clears the indeterminate state when the owner form resets', () => {
   host.indeterminate = true;
   form.reset();
 
+  expect(host.indeterminate).toBe(true);
+  expect(host.hasAttribute('indeterminate')).toBe(true);
+});
+
+test('leaves an absent indeterminate attribute absent when the owner form resets', () => {
+  const form = document.createElement('form');
+  const host = hostOf();
+  host.setAttribute('name', 'newsletter');
+  form.append(host);
+  document.body.appendChild(form);
+
+  form.reset();
+
   expect(host.indeterminate).toBe(false);
+  expect(host.hasAttribute('indeterminate')).toBe(false);
 });
 
 test('dims the face and label while the field is disabled', async () => {
