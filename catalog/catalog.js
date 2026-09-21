@@ -438,6 +438,72 @@ const checkboxFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the theme switcher. The track and its segments
+ * borrow the semantic surface, border, and tone tokens, so the control follows
+ * the active scheme like the rest of the library.
+ */
+const themeSwitcherProperties = [
+  {
+    name: '--yk-theme-switcher-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the track.',
+  },
+  {
+    name: '--yk-theme-switcher-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Border color of the track and of the segment dividers.',
+  },
+  {
+    name: '--yk-theme-switcher-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Icon color of an unselected segment.',
+  },
+  {
+    name: '--yk-theme-switcher-hover-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Icon color of an unselected segment while hovered.',
+  },
+  {
+    name: '--yk-theme-switcher-hover-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)',
+    description: 'Background of an unselected segment while hovered.',
+  },
+  {
+    name: '--yk-theme-switcher-selected-bg',
+    default: 'var(--yk-color-primary, oklch(56% 0.228 260))',
+    description: 'Background of the selected segment.',
+  },
+  {
+    name: '--yk-theme-switcher-selected-color',
+    default: 'var(--yk-color-on-tone, #fff)',
+    description: 'Icon color of the selected segment.',
+  },
+  {
+    name: '--yk-theme-switcher-focus-color',
+    default: 'currentColor',
+    description:
+      'Focus ring color of a focused segment; the default follows the icon color, which contrasts with the segment in both states.',
+  },
+  {
+    name: '--yk-theme-switcher-radius',
+    default: '50rem',
+    description: 'Corner radius of the track.',
+  },
+  {
+    name: '--yk-theme-switcher-padding',
+    default: '0.4rem',
+    description: 'Padding inside each segment; it also sets the target size.',
+  },
+  {
+    name: '--yk-theme-switcher-icon-size',
+    default: '1rem',
+    description: 'Size of the segment icons.',
+  },
+];
+
+/**
  * Builds the indented `demo-item` paragraphs used as a layout primitive's
  * initial playground content, so the generated markup stays readable. Labels
  * are trusted internal strings; escape them if they ever become external.
@@ -929,6 +995,33 @@ export const components = [
     cssProperties: checkboxFaceProperties,
     attributes: checkboxFieldAttributes,
   },
+  {
+    tag: 'yk-theme-switcher',
+    category: 'Components',
+    description:
+      'Segmented control that switches the page between the System, Light, and Dark themes. The choice is stored in localStorage by default, applied as data-theme on the root element, and shared by every instance on the page.',
+    playground: {
+      content: '',
+    },
+    cssProperties: themeSwitcherProperties,
+    attributes: [
+      {
+        name: 'theme',
+        control: 'select',
+        options: ['system', 'light', 'dark'],
+        default: 'unset',
+        description:
+          'Theme to apply, taking precedence over the stored preference. Selecting an option updates this attribute, so a framework or a server can render the value and read it back. The value is stored unless ephemeral is set.',
+      },
+      {
+        name: 'ephemeral',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that keeps the preference in memory for this page view only, without reading or writing the configured store. The page stays in memory while any connected switcher sets it; persistence returns when the last one disconnects.',
+      },
+    ],
+  },
 ];
 
 /**
@@ -1088,6 +1181,7 @@ function renderSidebar() {
         <a href="./"${isActive(current === null)}>Overview</a>
         ${categories.map(sectionFor).join('')}
       </nav>
+      <yk-theme-switcher></yk-theme-switcher>
     </yk-vstack>
   `;
   // The click only flips data-open on the aside; whether the nav is visible
