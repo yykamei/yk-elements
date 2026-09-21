@@ -24,7 +24,7 @@ const VARIATIONS = {
   'yk-input-password': 12,
   'yk-input-search': 9,
   'yk-input-file': 7,
-  'yk-input-checkbox': 9,
+  'yk-input-checkbox': 12,
 };
 
 afterEach(() => {

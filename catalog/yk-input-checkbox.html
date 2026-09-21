@@ -47,6 +47,36 @@
         </figure>
 
         <figure>
+          <figcaption>switch</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-checkbox name="wifi" switch>Wi-Fi</yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;yk-input-checkbox name="wifi" switch&gt;Wi-Fi&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>switch checked</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-input-checkbox name="wifi" switch checked>Wi-Fi</yk-input-checkbox>
+          </yk-pad>
+          <pre><code>&lt;yk-input-checkbox name="wifi" switch checked&gt;Wi-Fi&lt;/yk-input-checkbox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>switch disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+              <yk-input-checkbox name="wifi" switch disabled>Wi-Fi</yk-input-checkbox>
+              <yk-input-checkbox name="bluetooth" switch checked disabled>Bluetooth</yk-input-checkbox>
+            </yk-vstack>
+          </yk-pad>
+          <pre><code>&lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+  &lt;yk-input-checkbox name="wifi" switch disabled&gt;Wi-Fi&lt;/yk-input-checkbox&gt;
+  &lt;yk-input-checkbox name="bluetooth" switch checked disabled&gt;Bluetooth&lt;/yk-input-checkbox&gt;
+&lt;/yk-vstack&gt;</code></pre>
+        </figure>
+
+        <figure>
           <figcaption>value</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-input-checkbox name="frequency" value="weekly">Weekly digest</yk-input-checkbox>

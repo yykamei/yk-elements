@@ -45,6 +45,8 @@ test('applies property writes made before the module upgrades the elements', asy
   checkbox.required = true;
   checkbox.disabled = true;
   checkbox.indeterminate = true;
+  const switchedCheckbox = document.createElement('yk-input-checkbox');
+  switchedCheckbox.switch = true;
   const declaredCheckbox = document.createElement('yk-input-checkbox');
   declaredCheckbox.setAttribute('indeterminate', '');
   document.body.append(
@@ -58,6 +60,7 @@ test('applies property writes made before the module upgrades the elements', asy
     search,
     file,
     checkbox,
+    switchedCheckbox,
     declaredCheckbox,
   );
 
@@ -135,6 +138,13 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(checkbox.shadowRoot.querySelector('input').required).toBe(true);
   expect(checkbox.shadowRoot.querySelector('input').indeterminate).toBe(true);
   expect(checkbox.hasAttribute('indeterminate')).toBe(true);
+  expect(switchedCheckbox.hasAttribute('switch')).toBe(true);
+  expect(
+    switchedCheckbox.shadowRoot.querySelector('input').hasAttribute('switch'),
+  ).toBe(true);
+  expect(
+    switchedCheckbox.shadowRoot.querySelector('input').getAttribute('role'),
+  ).toBe('switch');
   expect(checkbox.getAttribute('disabled')).toBe('');
   expect(checkbox.shadowRoot.querySelector('input').disabled).toBe(true);
   expect(declaredCheckbox.hasAttribute('indeterminate')).toBe(true);

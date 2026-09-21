@@ -1,5 +1,5 @@
 // @ts-check
-import { afterEach, expect, test } from 'vitest';
+import { afterEach, expect, test, vi } from 'vitest';
 import '../src/components/yk-input-checkbox.js';
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
@@ -214,6 +214,81 @@ test('treats indeterminate as appearance only for submission and validation', ()
 
   expect(host.validity.valueMissing).toBe(false);
   expect(new FormData(form).get('agree')).toBe('yes');
+});
+
+test('mirrors the switch attribute onto the internal input', () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  document.body.appendChild(host);
+
+  expect(inputOf(host).hasAttribute('switch')).toBe(true);
+
+  host.removeAttribute('switch');
+  expect(inputOf(host).hasAttribute('switch')).toBe(false);
+});
+
+test('exposes the switch property as a host attribute', () => {
+  const host = hostOf();
+  document.body.appendChild(host);
+
+  expect(host.switch).toBe(false);
+
+  host.switch = true;
+  expect(host.switch).toBe(true);
+  expect(host.hasAttribute('switch')).toBe(true);
+  expect(inputOf(host).hasAttribute('switch')).toBe(true);
+
+  host.switch = false;
+  expect(host.switch).toBe(false);
+  expect(host.hasAttribute('switch')).toBe(false);
+});
+
+test('maps the internal input to the switch role while the switch attribute is present', () => {
+  const host = hostOf();
+  document.body.appendChild(host);
+
+  expect(inputOf(host).getAttribute('role')).toBeNull();
+
+  host.setAttribute('switch', '');
+  expect(inputOf(host).getAttribute('role')).toBe('switch');
+
+  host.removeAttribute('switch');
+  expect(inputOf(host).getAttribute('role')).toBeNull();
+});
+
+test('keeps the switch mirror and role after the owner form resets', () => {
+  const form = document.createElement('form');
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('checked', '');
+  form.append(host);
+  document.body.appendChild(form);
+
+  form.reset();
+
+  expect(inputOf(host).hasAttribute('switch')).toBe(true);
+  expect(inputOf(host).getAttribute('role')).toBe('switch');
+});
+
+test('keeps the checkbox behavior while the switch face is on', async () => {
+  const form = document.createElement('form');
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('name', 'wifi');
+  host.setAttribute('value', 'on');
+  form.append(host);
+  document.body.appendChild(form);
+  await frame();
+
+  expect(new FormData(form).has('wifi')).toBe(false);
+
+  host.click();
+  expect(host.checked).toBe(true);
+  expect(new FormData(form).get('wifi')).toBe('on');
+
+  host.click();
+  expect(host.checked).toBe(false);
+  expect(new FormData(form).has('wifi')).toBe(false);
 });
 
 test('renders the label text from the default slot and names the input with it', async () => {
@@ -523,6 +598,26 @@ test('dims the face and label while the field is disabled', async () => {
   expect(getComputedStyle(labelOf(disabled)).opacity).not.toBe('1');
 });
 
+test('shows the pointer cursor over the internal input while enabled', async () => {
+  const host = hostOf();
+  host.textContent = 'Toggle me';
+  document.body.appendChild(host);
+  await frame();
+
+  expect(getComputedStyle(inputOf(host)).cursor).toBe('pointer');
+});
+
+test('keeps the default cursor while the field is disabled', async () => {
+  const host = hostOf();
+  host.textContent = 'Toggle me';
+  host.disabled = true;
+  document.body.appendChild(host);
+  await frame();
+
+  expect(getComputedStyle(inputOf(host)).cursor).toBe('default');
+  expect(getComputedStyle(labelOf(host)).cursor).toBe('default');
+});
+
 test('restyles the face through the component tokens', async () => {
   const host = hostOf();
   host.style.setProperty('--yk-input-checkbox-size', '2em');
@@ -567,4 +662,153 @@ test('draws the dash glyph with the checked color while indeterminate', async ()
   expect(getComputedStyle(markOf(host), '::before').backgroundColor).toBe(
     'rgb(4, 5, 6)',
   );
+});
+
+test('renders a pill track and round thumb for the switch face', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  document.body.appendChild(host);
+  await frame();
+
+  const track = getComputedStyle(inputOf(host));
+  expect(track.width).toBe('32px');
+  expect(track.height).toBe('16px');
+  expect(track.borderTopLeftRadius).toBe('8px');
+
+  const thumb = getComputedStyle(markOf(host), '::before');
+  expect(thumb.width).toBe('12px');
+  expect(thumb.height).toBe('12px');
+  expect(thumb.borderTopLeftRadius).toBe('50%');
+  expect(thumb.transform).toBe('matrix(1, 0, 0, 1, 0, 0)');
+});
+
+test('scales the switch track and thumb with the checkbox size token', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.style.setProperty('--yk-input-checkbox-size', '2em');
+  document.body.appendChild(host);
+  await frame();
+
+  expect(getComputedStyle(inputOf(host)).width).toBe('64px');
+  expect(getComputedStyle(markOf(host), '::before').width).toBe('24px');
+});
+
+test('slides the switch thumb to the on position while checked', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  document.body.appendChild(host);
+  await frame();
+
+  host.checked = true;
+
+  await vi.waitFor(() => {
+    expect(getComputedStyle(markOf(host), '::before').transform).toBe(
+      'matrix(1, 0, 0, 1, 16, 0)',
+    );
+  });
+
+  // The thumb replaces the check glyph rather than being drawn alongside it.
+  const thumb = getComputedStyle(markOf(host), '::before');
+  expect(thumb.width).toBe('12px');
+  expect(thumb.height).toBe('12px');
+  expect(thumb.borderTopLeftRadius).toBe('50%');
+});
+
+test('draws the switch thumb and keeps the unchecked track while indeterminate', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('indeterminate', '');
+  host.style.setProperty(
+    '--yk-input-checkbox-switch-thumb-color',
+    'rgb(1, 2, 3)',
+  );
+  host.style.setProperty('--yk-input-checkbox-checked-color', 'rgb(4, 5, 6)');
+  host.style.setProperty('--yk-input-checkbox-checked-bg', 'rgb(7, 8, 9)');
+  document.body.appendChild(host);
+  await frame();
+
+  const thumb = getComputedStyle(markOf(host), '::before');
+  expect(thumb.width).toBe('12px');
+  expect(thumb.height).toBe('12px');
+  expect(thumb.borderTopLeftRadius).toBe('50%');
+  expect(thumb.transform).toBe('matrix(1, 0, 0, 1, 0, 0)');
+  expect(thumb.backgroundColor).toBe('rgb(1, 2, 3)');
+  expect(getComputedStyle(inputOf(host)).backgroundColor).toBe(
+    'rgb(255, 255, 255)',
+  );
+});
+
+test('lets the checked state decide the switch face while indeterminate is also set', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('indeterminate', '');
+  host.setAttribute('checked', '');
+  host.style.setProperty('--yk-input-checkbox-checked-bg', 'rgb(7, 8, 9)');
+  document.body.appendChild(host);
+  await frame();
+
+  await vi.waitFor(() => {
+    expect(getComputedStyle(inputOf(host)).backgroundColor).toBe(
+      'rgb(7, 8, 9)',
+    );
+  });
+});
+
+test('restores the indeterminate dash when the switch face turns off', () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('indeterminate', '');
+  document.body.appendChild(host);
+
+  expect(inputOf(host).indeterminate).toBe(false);
+
+  host.removeAttribute('switch');
+
+  expect(inputOf(host).indeterminate).toBe(true);
+  expect(inputOf(host).matches(':indeterminate')).toBe(true);
+});
+
+test('restyles the switch face through the component tokens', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.style.setProperty('--yk-input-checkbox-switch-width', '3em');
+  host.style.setProperty(
+    '--yk-input-checkbox-switch-thumb-color',
+    'rgb(1, 2, 3)',
+  );
+  document.body.appendChild(host);
+  await frame();
+
+  expect(getComputedStyle(inputOf(host)).width).toBe('48px');
+  expect(getComputedStyle(markOf(host), '::before').backgroundColor).toBe(
+    'rgb(1, 2, 3)',
+  );
+
+  // The travel stays track width minus size at any width, not just the
+  // default: 48px - 16px.
+  host.checked = true;
+  await vi.waitFor(() => {
+    expect(getComputedStyle(markOf(host), '::before').transform).toBe(
+      'matrix(1, 0, 0, 1, 32, 0)',
+    );
+  });
+});
+
+test('turns the switch thumb white through the checked color token', async () => {
+  const host = hostOf();
+  host.setAttribute('switch', '');
+  host.setAttribute('checked', '');
+  host.style.setProperty(
+    '--yk-input-checkbox-switch-thumb-color',
+    'rgb(1, 2, 3)',
+  );
+  host.style.setProperty('--yk-input-checkbox-checked-color', 'rgb(4, 5, 6)');
+  document.body.appendChild(host);
+  await frame();
+
+  await vi.waitFor(() => {
+    expect(getComputedStyle(markOf(host), '::before').backgroundColor).toBe(
+      'rgb(4, 5, 6)',
+    );
+  });
 });

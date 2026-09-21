@@ -1,7 +1,9 @@
 /* Bootstrap form-check face for the checkbox. The label wraps the native
    input and the slotted text so a click on either toggles natively; the mark
    span overlays the box and draws the check or dash glyph with borders, so
-   the glyph color stays a design token instead of a baked-in SVG stroke. */
+   the glyph color stays a design token instead of a baked-in SVG stroke.
+   With the `switch` attribute the same elements become a toggle: the input is
+   the pill track and the mark draws a thumb that slides between its ends. */
 :host {
   display: inline-flex;
   align-items: center;
@@ -23,6 +25,14 @@
 :host [part="label"]:has(input:disabled) {
   cursor: default;
   opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}
+
+/* The UA stylesheet sets the cursor on form controls directly, so the input
+   does not inherit the host's pointer and the box or switch track would show
+   the arrow while the rest of the label is clickable. A disabled input keeps
+   the UA default, which agrees with the label above it. */
+:host input:enabled {
+  cursor: pointer;
 }
 
 /* Positioning context for the mark overlay. */
@@ -111,6 +121,59 @@
   height: 0.125em;
   border: 0;
   transform: none;
+  background-color: var(--yk-input-checkbox-checked-color, #fff);
+}
+
+/* Switch face. The track is the input and the thumb is the mark's pseudo
+   element. The thumb is inset by a fraction of the size token and held at the
+   off end by padding; the checked transform advances it by the track width
+   minus the size token, which is exactly the distance the inset thumb may
+   travel for any track width. These rules come after the glyph rules and share
+   their specificity, so a checked switch replaces the check glyph with the
+   thumb by source order; the component suppresses the indeterminate flag on
+   the switch face, so the dash glyph never applies here. */
+:host([switch]) input {
+  width: var(
+    --yk-input-checkbox-switch-width,
+    calc(var(--yk-input-checkbox-size, 1em) * 2)
+  );
+  border-radius: calc(var(--yk-input-checkbox-size, 1em) / 2);
+}
+
+:host([switch]) input ~ [part="mark"] {
+  justify-content: flex-start;
+  padding: calc(var(--yk-input-checkbox-size, 1em) / 8);
+}
+
+:host([switch]) input ~ [part="mark"]::before {
+  width: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  height: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  border: 0;
+  border-radius: 50%;
+  background-color: var(
+    --yk-input-checkbox-switch-thumb-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      white
+    )
+  );
+  transform: translateX(0);
+  transition:
+    transform 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host([switch]) input:checked ~ [part="mark"]::before {
+  transform: translateX(
+    calc(
+      var(
+        --yk-input-checkbox-switch-width,
+        calc(var(--yk-input-checkbox-size, 1em) * 2)
+      ) -
+      var(--yk-input-checkbox-size, 1em)
+    )
+  );
   background-color: var(--yk-input-checkbox-checked-color, #fff);
 }
 
