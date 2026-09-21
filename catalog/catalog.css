@@ -8,7 +8,10 @@
  * Adding a component means adding a page with its variations and one entry
  * in that list. No build step is involved.
  *
- * All rules live in a single `@scope (.catalog)` block. Parts are reached
+ * All component rules live in a single `@scope (.catalog)` block, plus one
+ * `html` rule that paints the page canvas with the token background (the
+ * catalog's chrome is scoped to .catalog, so nothing else would reach it in
+ * dark mode). Parts are reached
  * through element selectors, data attributes, and the few classes the scope
  * cannot otherwise say: the layout shells .catalog and .playground, the part
  * classes .brand, .title, .description, .property-name, .property-default,
@@ -32,17 +35,44 @@
  * The page follows the library's token philosophy: a small set of
  * --yk-catalog-* custom properties is declared once on the scope root and
  * the color palette references them, so the look can be themed in one place.
+ * Each catalog color is a light-dark() pair, so the catalog follows the same
+ * scheme as the library components it documents.
  */
+html {
+  background-color: var(--yk-color-bg, #f8f9fa);
+}
+
 @scope (.catalog) {
   :scope {
-    --yk-catalog-fg: oklch(0.276 0.023 248.68);
-    --yk-catalog-fg-muted: oklch(0.482 0.027 246.41);
-    --yk-catalog-border: oklch(0.909 0.017 250.85);
-    --yk-catalog-title-bg: oklch(0.927 0.006 255.48);
-    --yk-catalog-demo-bg: oklch(0.976 0.005 258.32);
-    --yk-catalog-demo-item-bg: oklch(1 0 0);
-    --yk-catalog-code-bg: oklch(0.276 0.023 248.68);
-    --yk-catalog-code-fg: oklch(0.976 0.005 258.32);
+    --yk-catalog-fg: light-dark(
+      oklch(0.276 0.023 248.68),
+      oklch(0.925 0.008 250)
+    );
+    --yk-catalog-fg-muted: light-dark(
+      oklch(0.482 0.027 246.41),
+      oklch(0.75 0.02 250)
+    );
+    --yk-catalog-border: light-dark(
+      oklch(0.909 0.017 250.85),
+      oklch(0.33 0.02 250)
+    );
+    --yk-catalog-title-bg: light-dark(
+      oklch(0.927 0.006 255.48),
+      oklch(0.28 0.01 250)
+    );
+    --yk-catalog-demo-bg: light-dark(
+      oklch(0.976 0.005 258.32),
+      oklch(0.21 0.012 250)
+    );
+    --yk-catalog-demo-item-bg: light-dark(oklch(1 0 0), oklch(0.25 0.012 250));
+    --yk-catalog-code-bg: light-dark(
+      oklch(0.276 0.023 248.68),
+      oklch(0.15 0.012 250)
+    );
+    --yk-catalog-code-fg: light-dark(
+      oklch(0.976 0.005 258.32),
+      oklch(0.93 0.008 250)
+    );
     --yk-catalog-space-xs: 0.25rem;
     --yk-catalog-radius-md: 0.5rem;
     --yk-catalog-radius-sm: 0.375rem;

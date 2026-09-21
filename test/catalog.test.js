@@ -881,6 +881,24 @@ test('overview page renders the design tokens section', async () => {
   expect(ids).toEqual(tokens.map(({ name }) => name.slice(2)));
 });
 
+/**
+ * The token anchors a default value should produce, matched the way the
+ * catalog's linker matches: one left-to-right pass over the longest names
+ * first, so a token whose name prefixes another (e.g. --yk-color-text inside
+ * --yk-color-text-muted) is not counted twice. Deliberately independent of
+ * linkTokens so the rendered interface is checked against the metadata.
+ */
+function linkedTokenAnchors(text) {
+  const names = tokens
+    .map(({ name }) => name)
+    .sort((a, b) => b.length - a.length);
+  const pattern = new RegExp(
+    names.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'),
+    'g',
+  );
+  return [...text.matchAll(pattern)].map((match) => `./#${match[0].slice(2)}`);
+}
+
 test('representative component pages render their declared interface', async () => {
   // Token-link counting depends on the default values: yk-vstack has a
   // single token reference, yk-button references several tokens, and
@@ -920,13 +938,7 @@ test('representative component pages render their declared interface', async () 
       const hrefs = [...row.querySelectorAll('.property-default a')].map(
         (link) => link.getAttribute('href'),
       );
-      const expected = [];
-      for (const token of tokens) {
-        const count = fallback.split(token.name).length - 1;
-        for (let i = 0; i < count; i += 1) {
-          expected.push(`./#${token.name.slice(2)}`);
-        }
-      }
+      const expected = linkedTokenAnchors(fallback);
       expect(hrefs.sort(), `${tag} ${name}`).toEqual(expected.sort());
     }
   }

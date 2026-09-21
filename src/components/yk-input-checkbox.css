@@ -50,7 +50,7 @@
   margin: 0;
   font: inherit;
   appearance: none;
-  background-color: var(--yk-input-checkbox-bg, #fff);
+  background-color: var(--yk-input-checkbox-bg, var(--yk-color-surface, #fff));
   background-clip: padding-box;
   border: var(--yk-input-checkbox-border-width, 1px) solid
     var(
@@ -58,7 +58,7 @@
       color-mix(
         in oklch,
         var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-        white
+        var(--yk-color-surface, white)
       )
     );
   border-radius: var(--yk-input-checkbox-radius, 0.25em);
@@ -73,13 +73,13 @@
 :host input:indeterminate {
   background-color: var(
     --yk-input-checkbox-checked-bg,
-    var(--yk-color-primary, oklch(57.8% 0.228 260))
+    var(--yk-color-primary, oklch(56% 0.228 260))
   );
   border-color: var(
     --yk-input-checkbox-checked-border-color,
     var(
       --yk-input-checkbox-checked-bg,
-      var(--yk-color-primary, oklch(57.8% 0.228 260))
+      var(--yk-color-primary, oklch(56% 0.228 260))
     )
   );
 }
@@ -106,9 +106,10 @@
 :host input:checked ~ [part="mark"]::before {
   width: 0.5em;
   height: 0.25em;
-  border-block-end: 0.125em solid var(--yk-input-checkbox-checked-color, #fff);
+  border-block-end: 0.125em solid
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
   border-inline-start: 0.125em solid
-    var(--yk-input-checkbox-checked-color, #fff);
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
   border-start-start-radius: 0.0625em;
   border-end-end-radius: 0.0625em;
   transform: rotate(-45deg) translateY(-0.0625em);
@@ -121,7 +122,10 @@
   height: 0.125em;
   border: 0;
   transform: none;
-  background-color: var(--yk-input-checkbox-checked-color, #fff);
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
 }
 
 /* Switch face. The track is the input and the thumb is the mark's pseudo
@@ -155,7 +159,7 @@
     color-mix(
       in oklch,
       var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
-      white
+      var(--yk-color-surface, white)
     )
   );
   transform: translateX(0);
@@ -174,7 +178,10 @@
       var(--yk-input-checkbox-size, 1em)
     )
   );
-  background-color: var(--yk-input-checkbox-checked-color, #fff);
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
 }
 
 :host input:focus {
@@ -182,18 +189,21 @@
     --yk-input-checkbox-focus-border-color,
     color-mix(
       in oklch,
-      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
-      white
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
     )
   );
   outline: 0;
   box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
     var(
       --yk-input-checkbox-focus-ring-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%,
-        transparent
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
       )
     );
 }
@@ -201,7 +211,7 @@
 :host input:user-invalid {
   border-color: var(
     --yk-input-checkbox-invalid-border-color,
-    var(--yk-color-danger, oklch(59.2% 0.202 21.2))
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
   );
 }
 
@@ -211,7 +221,7 @@
       --yk-input-checkbox-invalid-ring-color,
       color-mix(
         in oklch,
-        var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
         transparent
       )
     );

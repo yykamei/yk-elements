@@ -6,7 +6,7 @@
   font-size: var(--yk-badge-font-size, 0.75em);
   font-weight: var(--yk-badge-font-weight, 700);
   line-height: 1;
-  color: var(--yk-badge-color, #fff);
+  color: var(--yk-badge-color, var(--yk-color-on-tone, #fff));
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
@@ -26,9 +26,9 @@
 }
 
 :host([variant="primary"]) {
-  background-color: var(--yk-color-primary, oklch(57.8% 0.228 260));
+  background-color: var(--yk-color-primary, oklch(56% 0.228 260));
 }
 
 :host([variant="danger"]) {
-  background-color: var(--yk-color-danger, oklch(59.2% 0.202 21.2));
+  background-color: var(--yk-color-danger, oklch(57% 0.205 21.2));
 }

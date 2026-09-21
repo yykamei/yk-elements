@@ -4,14 +4,17 @@
 
 :host button,
 :host a {
-  --face: var(--yk-button-bg, #fff);
-  --ink: var(--yk-button-color, oklch(26.2% 0.009 248.2));
+  --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   --edge: var(
     --yk-button-border-color,
-    color-mix(
-      in oklch,
-      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-      white
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
     )
   );
 
@@ -36,34 +39,50 @@
 :host([variant="secondary"]) button,
 :host([variant="secondary"]) a {
   --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
-  --ink: var(--yk-button-on-tone, #fff);
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
   --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
 }
 
 :host([variant="primary"]) button,
 :host([variant="primary"]) a {
-  --face: var(--yk-color-primary, oklch(57.8% 0.228 260));
-  --ink: var(--yk-button-on-tone, #fff);
-  --edge: var(--yk-color-primary, oklch(57.8% 0.228 260));
+  --face: var(--yk-color-primary, oklch(56% 0.228 260));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-primary, oklch(56% 0.228 260));
 }
 
 :host([variant="danger"]) button,
 :host([variant="danger"]) a {
-  --face: var(--yk-color-danger, oklch(59.2% 0.202 21.2));
-  --ink: var(--yk-button-on-tone, #fff);
-  --edge: var(--yk-color-danger, oklch(59.2% 0.202 21.2));
+  --face: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-danger, oklch(57% 0.205 21.2));
 }
 
 :host button:hover,
 :host a:hover {
-  background-color: color-mix(in oklch, var(--face) 95%, black);
-  border-color: color-mix(in oklch, var(--edge) 95%, black);
+  background-color: color-mix(
+    in oklch,
+    var(--face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 95%,
+    var(--yk-color-shade, black)
+  );
 }
 
 :host button:active,
 :host a:active {
-  background-color: color-mix(in oklch, var(--face) 90%, black);
-  border-color: color-mix(in oklch, var(--edge) 90%, black);
+  background-color: color-mix(
+    in oklch,
+    var(--face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 90%,
+    var(--yk-color-shade, black)
+  );
 }
 
 :host button:focus-visible,

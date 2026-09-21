@@ -23,17 +23,20 @@
   box-sizing: border-box;
   display: block;
   padding: var(--yk-input-dropzone-padding, var(--yk-space-md, 1rem));
-  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
-  background-color: var(--yk-input-dropzone-bg, #f8f9fa);
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-dropzone-bg, var(--yk-color-bg, #f8f9fa));
   border: 1px dashed
     var(
       --yk-input-dropzone-border-color,
       var(
         --yk-input-border-color,
-        color-mix(
-          in oklch,
-          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-          white
+        var(
+          --yk-color-border,
+          color-mix(
+            in oklch,
+            var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+            var(--yk-color-surface, white)
+          )
         )
       )
     );
@@ -52,8 +55,8 @@
     --yk-input-focus-border-color,
     color-mix(
       in oklch,
-      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
-      white
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
     )
   );
 }
@@ -64,16 +67,16 @@
     --yk-input-dropzone-dragover-bg,
     color-mix(
       in oklch,
-      var(--yk-color-primary, oklch(57.8% 0.228 260)) 12%,
-      white
+      var(--yk-color-primary, oklch(56% 0.228 260)) 12%,
+      var(--yk-color-surface, white)
     )
   );
   border-color: var(
     --yk-input-dropzone-dragover-border-color,
     color-mix(
       in oklch,
-      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
-      white
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
     )
   );
 }
@@ -89,15 +92,18 @@
   display: inline-block;
   font: inherit;
   line-height: 1.5;
-  color: var(--yk-button-color, oklch(26.2% 0.009 248.2));
-  background-color: var(--yk-button-bg, #fff);
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
   border: 1px solid
     var(
       --yk-button-border-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-        white
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
       )
     );
   border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
@@ -111,7 +117,11 @@
 }
 
 :host [part="dropzone"]:hover [part="browse"] {
-  background-color: color-mix(in oklch, var(--yk-button-bg, #fff) 95%, black);
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
 }
 
 :host [part="file-list"] {
@@ -130,15 +140,18 @@
   padding-inline: var(--yk-input-padding-inline, 0.75rem);
   font: inherit;
   line-height: 1.5;
-  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
-  background-color: var(--yk-input-bg, #fff);
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
   border: 1px solid
     var(
       --yk-input-border-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-        white
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
       )
     );
   border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
@@ -159,15 +172,18 @@
   flex-shrink: 0;
   font: inherit;
   line-height: 1;
-  color: var(--yk-button-color, oklch(26.2% 0.009 248.2));
-  background-color: var(--yk-button-bg, #fff);
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
   border: 1px solid
     var(
       --yk-button-border-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-        white
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
       )
     );
   border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
@@ -176,5 +192,9 @@
 }
 
 :host [part="remove"]:hover {
-  background-color: color-mix(in oklch, var(--yk-button-bg, #fff) 95%, black);
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
 }
