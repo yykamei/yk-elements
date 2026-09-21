@@ -63,23 +63,23 @@ const buttonFaceProperties = [
   },
   {
     name: '--yk-button-bg',
-    default: '#fff',
+    default: 'var(--yk-color-surface, #fff)',
     description: 'Background of the default light face.',
   },
   {
     name: '--yk-button-color',
-    default: 'oklch(26.2% 0.009 248.2)',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
     description: 'Text color of the default light face.',
   },
   {
     name: '--yk-button-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
     description: 'Border color of the default light face.',
   },
   {
     name: '--yk-button-on-tone',
-    default: '#fff',
+    default: 'var(--yk-color-on-tone, #fff)',
     description: 'Text color on the solid tone faces.',
   },
 ];
@@ -102,53 +102,53 @@ const inputFaceProperties = [
   },
   {
     name: '--yk-input-bg',
-    default: '#fff',
+    default: 'var(--yk-color-surface, #fff)',
     description: 'Background of the face.',
   },
   {
     name: '--yk-input-color',
-    default: 'oklch(26.2% 0.009 248.2)',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
     description: 'Text color of the face.',
   },
   {
     name: '--yk-input-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
     description: 'Border color of the face.',
   },
   {
     name: '--yk-input-placeholder-color',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, white)',
+      'var(--yk-color-text-muted, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, var(--yk-color-surface, white)))',
     description: 'Text color of the placeholder.',
   },
   {
     name: '--yk-input-focus-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 55%, var(--yk-color-surface, white))',
     description: 'Border color while the field is focused.',
   },
   {
     name: '--yk-input-focus-ring-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%, transparent)',
+      'var(--yk-color-focus-ring, color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 25%, transparent))',
     description: 'Focus ring color.',
   },
   {
     name: '--yk-input-disabled-bg',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%, white)',
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%, var(--yk-color-surface, white))',
     description: 'Background of the disabled and readonly face.',
   },
   {
     name: '--yk-input-invalid-border-color',
-    default: 'var(--yk-color-danger, oklch(59.2% 0.202 21.2))',
+    default: 'var(--yk-color-danger, oklch(57% 0.205 21.2))',
     description: 'Border color of the user-invalid face.',
   },
   {
     name: '--yk-input-invalid-ring-color',
     default:
-      'color-mix(in oklch, var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%, transparent)',
+      'color-mix(in oklch, var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%, transparent)',
     description: 'Focus ring color of the user-invalid face.',
   },
 ];
@@ -345,7 +345,7 @@ const checkboxFaceProperties = [
   },
   {
     name: '--yk-input-checkbox-bg',
-    default: '#fff',
+    default: 'var(--yk-color-surface, #fff)',
     description: 'Background of the unchecked face.',
   },
   {
@@ -356,7 +356,7 @@ const checkboxFaceProperties = [
   {
     name: '--yk-input-checkbox-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
     description: 'Border color of the unchecked face and the off switch track.',
   },
   {
@@ -374,39 +374,39 @@ const checkboxFaceProperties = [
   {
     name: '--yk-input-checkbox-switch-thumb-color',
     default:
-      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, white)',
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%, var(--yk-color-surface, white))',
     description:
       'Color of the switch thumb while the switch is off; it turns to the checked color while the switch is on.',
   },
   {
     name: '--yk-input-checkbox-checked-bg',
-    default: 'var(--yk-color-primary, oklch(57.8% 0.228 260))',
+    default: 'var(--yk-color-primary, oklch(56% 0.228 260))',
     description:
       'Background of the checked and indeterminate faces and of the checked switch track, which also tints their border.',
   },
   {
     name: '--yk-input-checkbox-checked-border-color',
     default:
-      'var(--yk-input-checkbox-checked-bg, var(--yk-color-primary, oklch(57.8% 0.228 260)))',
+      'var(--yk-input-checkbox-checked-bg, var(--yk-color-primary, oklch(56% 0.228 260)))',
     description:
       'Border color of the checked and indeterminate faces and of the checked switch track.',
   },
   {
     name: '--yk-input-checkbox-checked-color',
-    default: '#fff',
+    default: 'var(--yk-color-on-tone, #fff)',
     description:
       'Color of the check and dash glyphs drawn on the checked and indeterminate faces and of the switch thumb while the switch is on.',
   },
   {
     name: '--yk-input-checkbox-focus-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 55%, var(--yk-color-surface, white))',
     description: 'Border color while the field is focused.',
   },
   {
     name: '--yk-input-checkbox-focus-ring-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%, transparent)',
+      'var(--yk-color-focus-ring, color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 25%, transparent))',
     description: 'Focus ring color.',
   },
   {
@@ -416,13 +416,13 @@ const checkboxFaceProperties = [
   },
   {
     name: '--yk-input-checkbox-invalid-border-color',
-    default: 'var(--yk-color-danger, oklch(59.2% 0.202 21.2))',
+    default: 'var(--yk-color-danger, oklch(57% 0.205 21.2))',
     description: 'Border color of the user-invalid face.',
   },
   {
     name: '--yk-input-checkbox-invalid-ring-color',
     default:
-      'color-mix(in oklch, var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%, transparent)',
+      'color-mix(in oklch, var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%, transparent)',
     description: 'Focus ring color of the user-invalid face.',
   },
   {
@@ -457,13 +457,13 @@ const demoItems = (labels) =>
 const dropzoneFaceProperties = [
   {
     name: '--yk-input-dropzone-bg',
-    default: '#f8f9fa',
+    default: 'var(--yk-color-bg, #f8f9fa)',
     description: 'Background of the dropzone face.',
   },
   {
     name: '--yk-input-dropzone-border-color',
     default:
-      'var(--yk-input-border-color, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white))',
+      'var(--yk-input-border-color, var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white))))',
     description: 'Border color of the dropzone face.',
   },
   {
@@ -479,14 +479,14 @@ const dropzoneFaceProperties = [
   {
     name: '--yk-input-dropzone-dragover-bg',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 12%, white)',
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 12%, var(--yk-color-surface, white))',
     description:
       'Background of the dropzone face while files are dragged over.',
   },
   {
     name: '--yk-input-dropzone-dragover-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%, white)',
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 55%, var(--yk-color-surface, white))',
     description:
       'Border color of the dropzone face while files are dragged over.',
   },
@@ -712,7 +712,7 @@ export const components = [
       },
       {
         name: '--yk-badge-color',
-        default: '#fff',
+        default: 'var(--yk-color-on-tone, #fff)',
         description: 'Text color of the badge.',
       },
       {
@@ -885,18 +885,18 @@ export const components = [
       ...inputFaceProperties,
       {
         name: '--yk-button-bg',
-        default: '#fff',
+        default: 'var(--yk-color-surface, #fff)',
         description: 'Background of the browse and remove buttons.',
       },
       {
         name: '--yk-button-color',
-        default: 'oklch(26.2% 0.009 248.2)',
+        default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
         description: 'Text color of the browse and remove buttons.',
       },
       {
         name: '--yk-button-border-color',
         default:
-          'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, white)',
+          'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
         description: 'Border color of the browse and remove buttons.',
       },
       {
@@ -963,8 +963,35 @@ export const tokens = [
     description: 'Large spacing unit; used for roomier paddings and gaps.',
   },
   {
+    name: '--yk-color-bg',
+    value: 'light-dark(oklch(98.4% 0.002 247.8), oklch(17.5% 0.012 250))',
+    description: 'Page background; the base layer beneath surfaces.',
+  },
+  {
+    name: '--yk-color-surface',
+    value: 'light-dark(oklch(100% 0 0), oklch(23% 0.012 250))',
+    description: 'Raised background for cards, fields, and control faces.',
+  },
+  {
+    name: '--yk-color-text',
+    value: 'light-dark(oklch(26.2% 0.009 248.2), oklch(92.5% 0.006 250))',
+    description:
+      'Default body text color; clears AA contrast on the background and surface in both schemes.',
+  },
+  {
+    name: '--yk-color-text-muted',
+    value: 'light-dark(oklch(48% 0.02 247), oklch(74% 0.015 250))',
+    description: 'Secondary text color for descriptions and hints.',
+  },
+  {
+    name: '--yk-color-on-tone',
+    value: 'oklch(100% 0 0)',
+    description:
+      'Text color placed on the solid primary, secondary, and danger tones.',
+  },
+  {
     name: '--yk-color-primary',
-    value: 'oklch(57.8% 0.228 260)',
+    value: 'oklch(56% 0.228 260)',
     description:
       'Primary accent color; solid primary tones and their focus rings.',
   },
@@ -975,8 +1002,26 @@ export const tokens = [
   },
   {
     name: '--yk-color-danger',
-    value: 'oklch(59.2% 0.202 21.2)',
+    value: 'oklch(57% 0.205 21.2)',
     description: 'Destructive accent color; danger tones.',
+  },
+  {
+    name: '--yk-color-border',
+    value:
+      'color-mix(in oklch, var(--yk-color-secondary) 40%, var(--yk-color-surface))',
+    description: 'Default border color for faces and separators.',
+  },
+  {
+    name: '--yk-color-focus-ring',
+    value:
+      'light-dark(color-mix(in oklch, var(--yk-color-primary) 25%, transparent), color-mix(in oklch, var(--yk-color-primary) 45%, transparent))',
+    description:
+      'Focus ring color; the dark scheme raises the alpha to stay visible.',
+  },
+  {
+    name: '--yk-color-shade',
+    value: 'light-dark(oklch(0% 0 0), oklch(100% 0 0))',
+    description: 'Neutral mixed into a face for hover and pressed shades.',
   },
   {
     name: '--yk-radius-md',

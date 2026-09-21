@@ -25,7 +25,13 @@ test('minified dist entry point self-registers components', async () => {
 test('dist mirrors the source tree with minified CSS', async () => {
   const tokens = await fetch('/dist/tokens.css');
   expect(tokens.ok).toBe(true);
-  expect(await tokens.text()).toContain('{--yk-space');
+  const text = await tokens.text();
+  // Vite wraps a requested .css in a JS module here, so the assertions match
+  // token names rather than their position; that keeps them independent of
+  // declaration order.
+  expect(text).toContain('--yk-space-sm');
+  expect(text).toContain('--yk-color-surface');
+  expect(text).toContain('color-scheme');
 
   const component = await fetch('/dist/src/layout/yk-vstack.js');
   expect(component.ok).toBe(true);

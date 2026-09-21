@@ -10,17 +10,20 @@
   padding-inline: var(--yk-input-padding-inline, 0.75rem);
   font: inherit;
   line-height: 1.5;
-  color: var(--yk-input-color, oklch(26.2% 0.009 248.2));
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   appearance: none;
-  background-color: var(--yk-input-bg, #fff);
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
   background-clip: padding-box;
   border: 1px solid
     var(
       --yk-input-border-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
-        white
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
       )
     );
   border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
@@ -32,10 +35,13 @@
 :host input::placeholder {
   color: var(
     --yk-input-placeholder-color,
-    color-mix(
-      in oklch,
-      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
-      white
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
     )
   );
   opacity: 1;
@@ -46,18 +52,21 @@
     --yk-input-focus-border-color,
     color-mix(
       in oklch,
-      var(--yk-color-primary, oklch(57.8% 0.228 260)) 55%,
-      white
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
     )
   );
   outline: 0;
   box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
     var(
       --yk-input-focus-ring-color,
-      color-mix(
-        in oklch,
-        var(--yk-color-primary, oklch(57.8% 0.228 260)) 25%,
-        transparent
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
       )
     );
 }
@@ -69,7 +78,7 @@
     color-mix(
       in oklch,
       var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
-      white
+      var(--yk-color-surface, white)
     )
   );
 }
@@ -77,7 +86,7 @@
 :host input:user-invalid {
   border-color: var(
     --yk-input-invalid-border-color,
-    var(--yk-color-danger, oklch(59.2% 0.202 21.2))
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
   );
 }
 
@@ -87,7 +96,7 @@
       --yk-input-invalid-ring-color,
       color-mix(
         in oklch,
-        var(--yk-color-danger, oklch(59.2% 0.202 21.2)) 25%,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
         transparent
       )
     );
