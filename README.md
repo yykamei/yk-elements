@@ -88,6 +88,95 @@ are inherited by components. Local overrides work the same way:
 </yk-vstack>
 ```
 
+### Theming
+
+`tokens.css` follows the operating system color scheme by default
+(`color-scheme: light dark`). `<yk-theme-switcher>` lets a visitor choose
+System, Light, or Dark; the choice is stored in `localStorage` under
+`yk-theme` and applied as `data-theme` on the root element. Load
+`yk-theme-init.js` render-blocking in the head so a stored choice is applied
+before the first paint:
+
+```html
+<head>
+  <meta name="color-scheme" content="light dark" />
+  <link rel="stylesheet" href="path/to/yk-elements/tokens.css" />
+  <script type="module" src="path/to/yk-elements/src/components/yk-theme-init.js" blocking="render"></script>
+</head>
+<body>
+  <script type="module" src="path/to/yk-elements/index.js"></script>
+  <yk-theme-switcher></yk-theme-switcher>
+</body>
+```
+
+`blocking="render"` is honored by current Chromium and Safari; Firefox ignores
+it, so an explicit stored choice may flash briefly there. The default System
+preference never flashes because the stylesheet already follows the OS. The
+options are icon-only and carry built-in accessible names (Theme, System,
+Light, and Dark); the names are not configurable, so a site that needs other
+wording should build its own control on `theme.js`.
+
+Two attributes adjust where the choice lives:
+
+- `theme="light|dark|system"` names the theme explicitly, taking precedence
+  over the stored preference. Selecting an option updates the attribute, so a
+  framework can render the value and read the applied theme back from the DOM.
+- `ephemeral` keeps the preference in memory for this page view only, without
+  reading or writing the configured store.
+
+```html
+<yk-theme-switcher theme="dark"></yk-theme-switcher>
+<yk-theme-switcher ephemeral></yk-theme-switcher>
+```
+
+Both attributes describe the document rather than a single element: the theme
+is applied to the root element and stored in one place, so instances on the
+same page should agree. While any connected switcher is ephemeral, the whole
+page keeps the preference in memory; persistence returns when the last one
+disconnects. A declared theme is applied and stored (unless `ephemeral`), so a
+server-rendered value also becomes the local preference.
+
+A server or framework that owns the choice can render `data-theme` on the root
+element (tokens.css maps it onto `color-scheme`) together with the element's
+`theme` attribute, and add `ephemeral` so the page never touches localStorage:
+
+```html
+<html data-theme="dark">
+  <body>
+    <yk-theme-switcher theme="dark" ephemeral></yk-theme-switcher>
+  </body>
+</html>
+```
+
+Listen for `yk-theme-change` (`detail: { preference, resolved }`) to save the
+choice to a user profile. To persist somewhere else, replace the store
+(`store: null` restores the built-in localStorage store):
+
+```html
+<script type="module">
+  import { configureTheme } from 'path/to/yk-elements/src/components/theme.js';
+  configureTheme({
+    store: {
+      read: () =>
+        document.cookie
+          .split('; ')
+          .find((entry) => entry.startsWith('theme='))
+          ?.slice('theme='.length) ?? null,
+      write: (value) => {
+        const secure = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `theme=${value}; path=/; max-age=31536000; SameSite=Lax${secure}`;
+      },
+    },
+  });
+</script>
+```
+
+Scope the cookie to the app (for example `__Host-yk-theme` on HTTPS, which is
+host-bound and requires `Secure`), and serve per-cookie responses with
+`Vary: Cookie` so a shared cache cannot hand one visitor's theme to another.
+The built-in store is the single `yk-theme` key scoped to the origin; on an
+origin shared with other apps, use a custom store or namespace it there.
+
 ## Component catalog
 
 Browse the component catalog at

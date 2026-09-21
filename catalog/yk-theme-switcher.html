@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>&lt;yk-grid&gt; — yk-elements</title>
+    <title>&lt;yk-theme-switcher&gt; — yk-elements</title>
     <link rel="stylesheet" href="../tokens.css" />
     <link rel="stylesheet" href="./catalog.css" />
     <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
     <script type="module" src="../index.js" blocking="render"></script>
     <script type="module" src="./catalog.js" blocking="render"></script>
   </head>
-  <body data-component="yk-grid">
+  <body data-component="yk-theme-switcher">
     <yk-soft-nav></yk-soft-nav>
     <div class="catalog">
       <aside data-sidebar></aside>
@@ -26,37 +26,31 @@
         <figure>
           <figcaption>Default</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
-            <yk-grid>
-              <p class="demo-item">First item</p>
-              <p class="demo-item">Second item</p>
-              <p class="demo-item">Third item</p>
-              <p class="demo-item">Fourth item</p>
-            </yk-grid>
+            <yk-theme-switcher></yk-theme-switcher>
           </yk-pad>
-          <pre><code>&lt;yk-grid&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-  &lt;p&gt;Fourth item&lt;/p&gt;
-&lt;/yk-grid&gt;</code></pre>
+          <pre><code>&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;</code></pre>
         </figure>
 
         <figure>
-          <figcaption>Custom min column width</figcaption>
+          <figcaption>Two instances stay in sync</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
-            <yk-grid style="--yk-grid-min: 12rem">
-              <p class="demo-item">First item</p>
-              <p class="demo-item">Second item</p>
-              <p class="demo-item">Third item</p>
-              <p class="demo-item">Fourth item</p>
-            </yk-grid>
+            <yk-cluster style="--yk-cluster-gap: var(--yk-space-md)">
+              <yk-theme-switcher></yk-theme-switcher>
+              <yk-theme-switcher></yk-theme-switcher>
+            </yk-cluster>
           </yk-pad>
-          <pre><code>&lt;yk-grid style="--yk-grid-min: 12rem"&gt;
-  &lt;p&gt;First item&lt;/p&gt;
-  &lt;p&gt;Second item&lt;/p&gt;
-  &lt;p&gt;Third item&lt;/p&gt;
-  &lt;p&gt;Fourth item&lt;/p&gt;
-&lt;/yk-grid&gt;</code></pre>
+          <pre><code>&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;
+&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Restyled through tokens</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-theme-switcher
+              style="--yk-theme-switcher-selected-bg: var(--yk-color-danger); --yk-theme-switcher-radius: 0.5rem"
+            ></yk-theme-switcher>
+          </yk-pad>
+          <pre><code>&lt;yk-theme-switcher style="--yk-theme-switcher-selected-bg: var(--yk-color-danger); --yk-theme-switcher-radius: 0.5rem"&gt;&lt;/yk-theme-switcher&gt;</code></pre>
         </figure>
         </yk-vstack>
       </main>
