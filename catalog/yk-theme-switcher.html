@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-theme-switcher&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-theme-switcher">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-theme-switcher></yk-theme-switcher>
+          </yk-pad>
+          <pre><code>&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Two instances stay in sync</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-cluster style="--yk-cluster-gap: var(--yk-space-md)">
+              <yk-theme-switcher></yk-theme-switcher>
+              <yk-theme-switcher></yk-theme-switcher>
+            </yk-cluster>
+          </yk-pad>
+          <pre><code>&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;
+&lt;yk-theme-switcher&gt;&lt;/yk-theme-switcher&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Restyled through tokens</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-theme-switcher
+              style="--yk-theme-switcher-selected-bg: var(--yk-color-danger); --yk-theme-switcher-radius: 0.5rem"
+            ></yk-theme-switcher>
+          </yk-pad>
+          <pre><code>&lt;yk-theme-switcher style="--yk-theme-switcher-selected-bg: var(--yk-color-danger); --yk-theme-switcher-radius: 0.5rem"&gt;&lt;/yk-theme-switcher&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

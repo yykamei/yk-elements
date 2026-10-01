@@ -1,0 +1,128 @@
+/* Segmented theme control. The three segments are native radio buttons kept
+   visually hidden; their labels carry the icon and the visually hidden text
+   that names the option, so the platform's keyboard and screen reader
+   behavior is preserved. The press shade and border follow the semantic
+   tokens, so the control reads correctly in either scheme. */
+:host {
+  --_edge: var(
+    --yk-theme-switcher-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+}
+
+[part="group"] {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: clip;
+  border: 1px solid var(--_edge);
+  border-radius: var(--yk-theme-switcher-radius, 50rem);
+  background-color: var(--yk-theme-switcher-bg, var(--yk-color-surface, #fff));
+}
+
+[part="option"] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--yk-theme-switcher-padding, 0.4rem);
+  color: var(
+    --yk-theme-switcher-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+}
+
+[part="option"] + [part="option"] {
+  border-inline-start: 1px solid var(--_edge);
+}
+
+[part="option"]:first-of-type {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+[part="option"]:last-of-type {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+[part="option"]:has(input:checked) {
+  color: var(--yk-theme-switcher-selected-color, var(--yk-color-on-tone, #fff));
+  background-color: var(
+    --yk-theme-switcher-selected-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+}
+
+[part="option"]:hover:not(:has(input:checked)) {
+  color: var(
+    --yk-theme-switcher-hover-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  background-color: var(
+    --yk-theme-switcher-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+}
+
+/* Drawn inside the segment: the group clips to its pill radius, so an outer
+   outline would be cut off. The ring follows the icon color by default, since
+   the icon already contrasts with the segment it sits on; a ring in the
+   primary color would vanish on the selected segment's primary fill. */
+[part="option"]:has(input:focus-visible) {
+  outline: 2px solid var(--yk-theme-switcher-focus-color, currentColor);
+  outline-offset: -2px;
+}
+
+input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+svg {
+  display: block;
+  width: var(--yk-theme-switcher-icon-size, 1rem);
+  height: var(--yk-theme-switcher-icon-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="option"] {
+    transition: none;
+  }
+}

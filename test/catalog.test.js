@@ -25,12 +25,16 @@ const VARIATIONS = {
   'yk-input-search': 9,
   'yk-input-file': 7,
   'yk-input-checkbox': 12,
+  'yk-theme-switcher': 3,
 };
 
 afterEach(() => {
   document.querySelectorAll('iframe').forEach((frame) => {
     frame.remove();
   });
+  // Catalog iframes share this document's origin, so a theme picked in one
+  // would leak into the next test through localStorage.
+  localStorage.removeItem('yk-theme');
 });
 
 async function fetchHtml(path) {
@@ -117,6 +121,26 @@ test('a catalog page adopts the view transition opt-in into its own document', a
       ),
     ).toContain('@view-transition { navigation: auto; }');
   });
+});
+
+test('the sidebar theme switcher applies and persists the picked theme', async () => {
+  const iframe = await loadIframe('/catalog/yk-button.html');
+  const doc = iframe.contentDocument;
+  const switcher = doc.querySelector('[data-sidebar] yk-theme-switcher');
+  expect(switcher).not.toBeNull();
+
+  const radios = [...switcher.shadowRoot.querySelectorAll('input')];
+  expect(radios.map((radio) => radio.value)).toEqual([
+    'system',
+    'light',
+    'dark',
+  ]);
+  radios.find((radio) => radio.value === 'dark').click();
+
+  await vi.waitFor(() => {
+    expect(doc.documentElement.dataset.theme).toBe('dark');
+  });
+  expect(iframe.contentWindow.localStorage.getItem('yk-theme')).toBe('dark');
 });
 
 test('navigating to the overview lands on one document with the transition opt-in', async () => {
@@ -963,5 +987,6 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-input-search')).toBeDefined();
   expect(customElements.get('yk-input-file')).toBeDefined();
   expect(customElements.get('yk-input-checkbox')).toBeDefined();
+  expect(customElements.get('yk-theme-switcher')).toBeDefined();
   expect((await fetch('/tokens.css')).ok).toBe(true);
 });
