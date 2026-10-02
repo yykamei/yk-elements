@@ -26,3 +26,4 @@ import './src/components/yk-input-password.js';
 import './src/components/yk-input-search.js';
 import './src/components/yk-input-file.js';
 import './src/components/yk-input-checkbox.js';
+import './src/components/yk-theme-switcher.js';

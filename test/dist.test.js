@@ -20,6 +20,7 @@ test('minified dist entry point self-registers components', async () => {
   expect(customElements.get('yk-input-search')).toBeDefined();
   expect(customElements.get('yk-input-file')).toBeDefined();
   expect(customElements.get('yk-input-checkbox')).toBeDefined();
+  expect(customElements.get('yk-theme-switcher')).toBeDefined();
 });
 
 test('dist mirrors the source tree with minified CSS', async () => {
