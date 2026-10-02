@@ -36,4 +36,7 @@ test('dist mirrors the source tree with minified CSS', async () => {
 
   const component = await fetch('/dist/src/layout/yk-vstack.js');
   expect(component.ok).toBe(true);
+
+  const theme = await fetch('/dist/src/components/yk-theme-init.js');
+  expect(theme.ok).toBe(true);
 });

@@ -105,10 +105,22 @@ test('every catalog page references the library entry point, tokens, and shared 
     // the component's placement, and the module scripts hold the first paint
     // until the JS-rendered chrome exists.
     expect(doc.querySelector('yk-soft-nav'), path).not.toBeNull();
+    // The init entry restores the stored theme before the component modules
+    // run, so it must come first among the render-blocking scripts.
+    const initScript = doc.querySelector(
+      'script[type="module"][src="../src/components/yk-theme-init.js"][blocking="render"]',
+    );
+    expect(initScript, path).not.toBeNull();
+    expect(
+      initScript.compareDocumentPosition(
+        doc.querySelector('script[type="module"][src="../index.js"]'),
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+      path,
+    ).toBeTruthy();
     expect(
       doc.querySelectorAll('script[type="module"][blocking="render"]').length,
       path,
-    ).toBe(2);
+    ).toBe(3);
   }
 });
 
