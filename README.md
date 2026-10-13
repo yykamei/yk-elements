@@ -204,6 +204,21 @@ npm run lint   # lint and check formatting (Biome)
 npm run format # format all files (Biome)
 ```
 
+### Releasing
+
+Releases run from GitHub Actions: **Actions → Release → Run workflow** on
+`main`, optionally entering the version (`X.Y.Z`, no `v` prefix). Leaving the
+version empty releases the next patch after the version currently on npm. A
+first `verify` job runs lint and tests and builds `dist/`; a second `release`
+job then bumps the version, commits the bump to `main`, creates the `vX.Y.Z`
+tag and GitHub Release with generated notes, and publishes to npm via trusted
+publishing (OIDC). Every step skips work that a previous run already did, so a
+partially completed release can be retried by dispatching the same version
+again (or, when the version was left empty, by dispatching again as-is).
+
+The package's Trusted Publisher on npmjs.com must name this workflow file
+(`release.yml`); the configuration lives in the package settings there.
+
 ## Browser support
 
 Components load their styles via CSS Module Scripts

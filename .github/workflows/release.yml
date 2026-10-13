@@ -1,0 +1,176 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release as X.Y.Z (no "v" prefix). Empty releases the next patch after the published version.'
+        required: false
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      commit: ${{ steps.commit.outputs.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Record the tested commit
+        id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Install Playwright Chromium
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Run tests
+        run: npm test
+      - name: Upload the built dist
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 3
+
+  release:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # Commit the version bump and create the tag and GitHub Release
+      id-token: write # Required for npm trusted publishing (OIDC)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - name: Check the tested commit is still main
+        env:
+          TESTED_SHA: ${{ needs.verify.outputs.commit }}
+        run: |
+          set -euo pipefail
+          actual=$(git rev-parse HEAD)
+          if [ "$actual" != "$TESTED_SHA" ]; then
+            echo "::error::main is now $actual but $TESTED_SHA was verified; re-run the release"
+            exit 1
+          fi
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Download the built dist
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - name: Verify the built dist
+        run: test -f dist/index.js
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          npm_latest=$(npm view "@yykamei/yk-elements" version)
+          if [ -n "$INPUT_VERSION" ]; then
+            version="$INPUT_VERSION"
+          else
+            version=$(NPM_LATEST="$npm_latest" node -p "const [major, minor, patch] = process.env.NPM_LATEST.split('.').map(Number); \`\${major}.\${minor}.\${patch + 1}\`")
+            echo "No version input; releasing $version (next patch after the published $npm_latest)"
+          fi
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::version must be X.Y.Z (e.g. 0.2.0), got '$version'"
+            exit 1
+          fi
+          pkg=$(node -p "require('./package.json').version")
+          older() { printf '%s\n%s\n' "$1" "$2" | sort -V | head -n 1; }
+          if [ "$version" != "$npm_latest" ] && [ "$(older "$version" "$npm_latest")" = "$version" ]; then
+            echo "::error::version $version is older than the published $npm_latest"
+            exit 1
+          fi
+          if [ "$version" != "$pkg" ] && [ "$(older "$version" "$pkg")" = "$version" ]; then
+            echo "::error::version $version is lower than the package.json version $pkg"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Bump package version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          current=$(node -p "require('./package.json').version")
+          if [ "$current" = "$VERSION" ]; then
+            echo "package.json is already at $VERSION; skipping the bump"
+          else
+            npm version "$VERSION" --no-git-tag-version --ignore-scripts
+          fi
+      - name: Update README CDN version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          sed -i -E "s|(yk-elements)@[0-9]+\.[0-9]+\.[0-9]+|\1@$VERSION|g" README.md
+      # A push authenticated with GITHUB_TOKEN does not start other workflows, so
+      # this bump commit does not rerun CI or redeploy Pages. The verify job already
+      # gated it on lint and tests, and the commit only changes the version fields
+      # and the README CDN link.
+      - name: Commit and push the version bump
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json README.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(release): v$VERSION"
+            git push origin main
+          fi
+      - name: Create the tag and GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "GitHub Release v$VERSION already exists; skipping"
+          else
+            if ! git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
+              git tag -a "v$VERSION" -m "v$VERSION"
+              git push origin "v$VERSION"
+            fi
+            gh release create "v$VERSION" --verify-tag --title "v$VERSION" --generate-notes
+          fi
+      - name: Publish to npm
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if npm view "@yykamei/yk-elements@$VERSION" version >/dev/null 2>&1; then
+            echo "$VERSION is already published to npm; skipping"
+          else
+            npm publish --ignore-scripts
+          fi
