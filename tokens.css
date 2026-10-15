@@ -30,6 +30,8 @@
   --yk-color-primary: oklch(56% 0.228 260);
   --yk-color-secondary: oklch(55.8% 0.016 244.9);
   --yk-color-danger: oklch(57% 0.205 21.2);
+  --yk-color-success: oklch(58% 0.15 152);
+  --yk-color-warning: oklch(72% 0.16 75);
   --yk-color-border: color-mix(
     in oklch,
     var(--yk-color-secondary) 40%,

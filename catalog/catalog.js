@@ -217,6 +217,47 @@ const cardFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the alert face. The tone comes from the variant;
+ * these tokens override the tint, text, and dismiss affordances.
+ */
+const alertFaceProperties = [
+  {
+    name: '--yk-alert-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 12%, var(--yk-color-surface, white))',
+    description:
+      'Background of the face. The value shown is the base (info) default; a variant replaces the tone it tints with.',
+  },
+  {
+    name: '--yk-alert-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the face.',
+  },
+  {
+    name: '--yk-alert-border-color',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 40%, var(--yk-color-surface, white))',
+    description:
+      'Border color of the face. The value shown is the base (info) default; a variant replaces the tone it blends with.',
+  },
+  {
+    name: '--yk-alert-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the face.',
+  },
+  {
+    name: '--yk-alert-padding',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Inset from the face edges to its content.',
+  },
+  {
+    name: '--yk-alert-dismiss-color',
+    default: 'currentColor',
+    description: 'Color of the dismiss button icon.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -906,6 +947,33 @@ export const components = [
     attributes: [],
   },
   {
+    tag: 'yk-alert',
+    category: 'Components',
+    description:
+      'Inline message that tints its face with a variant tone and can be dismissed; it sets no ARIA role, so add role=alert on the host for messages that must be announced.',
+    playground: {
+      content: 'Something happened',
+    },
+    cssProperties: alertFaceProperties,
+    attributes: [
+      {
+        name: 'variant',
+        control: 'select',
+        options: ['info', 'danger', 'warning', 'success'],
+        default: 'unset',
+        description:
+          'Tone of the face: info, danger, warning, or success. Without the attribute the face uses the info tone.',
+      },
+      {
+        name: 'dismissible',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that shows a close button; activating it emits a cancelable yk-alert-dismiss event and removes the element unless the event is canceled.',
+      },
+    ],
+  },
+  {
     tag: 'yk-input-text',
     category: 'Components',
     description:
@@ -1228,6 +1296,16 @@ export const tokens = [
     name: '--yk-color-danger',
     value: 'oklch(57% 0.205 21.2)',
     description: 'Destructive accent color; danger tones.',
+  },
+  {
+    name: '--yk-color-success',
+    value: 'oklch(58% 0.15 152)',
+    description: 'Positive accent color; success tones.',
+  },
+  {
+    name: '--yk-color-warning',
+    value: 'oklch(72% 0.16 75)',
+    description: 'Cautionary accent color; warning tones.',
   },
   {
     name: '--yk-color-border',
@@ -1644,11 +1722,7 @@ function renderPlayground() {
   const preview = section.querySelector('[data-playground-preview]');
   const code = section.querySelector('[data-playground-code]');
 
-  const host = document.createElement(tag);
-  host.innerHTML = component.playground.content;
-  preview.append(host);
-
-  const sync = () => {
+  const applyControls = (target) => {
     // The metadata guard test constrains attribute and property names to safe
     // identifiers, so they are interpolated into these selectors unescaped.
     for (const attribute of component.attributes) {
@@ -1656,11 +1730,11 @@ function renderPlayground() {
         `[data-playground-attribute="${attribute.name}"]`,
       );
       if (attribute.control === 'boolean') {
-        host.toggleAttribute(attribute.name, control.checked);
+        target.toggleAttribute(attribute.name, control.checked);
       } else if (control.value === '') {
-        host.removeAttribute(attribute.name);
+        target.removeAttribute(attribute.name);
       } else {
-        host.setAttribute(attribute.name, control.value);
+        target.setAttribute(attribute.name, control.value);
       }
     }
     for (const property of component.cssProperties) {
@@ -1668,15 +1742,42 @@ function renderPlayground() {
         `[data-playground-property="${property.name}"]`,
       );
       if (control.value.trim() === '') {
-        host.style.removeProperty(property.name);
+        target.style.removeProperty(property.name);
       } else {
-        host.style.setProperty(property.name, control.value);
+        target.style.setProperty(property.name, control.value);
       }
     }
+  };
+
+  const buildHost = () => {
+    const next = document.createElement(tag);
+    next.innerHTML = component.playground.content;
+    applyControls(next);
+    return next;
+  };
+
+  const current = () => preview.querySelector(tag);
+
+  const sync = () => {
+    const target = current();
+    if (!target) return;
+    applyControls(target);
     // Clearing the last property leaves an empty style attribute behind;
     // generated code ignores it, so the leftover is harmless and left alone.
-    code.textContent = codeFor(component, host);
+    code.textContent = codeFor(component, target);
   };
+
+  // A component whose own interaction removes it (dismissing a yk-alert) would
+  // leave the preview empty; rebuild from the current controls so it stays
+  // usable.
+  new MutationObserver(() => {
+    if (current()) return;
+    preview.append(buildHost());
+    sync();
+  }).observe(preview, { childList: true });
+
+  preview.append(buildHost());
+  sync();
 
   panel.addEventListener('input', sync);
 

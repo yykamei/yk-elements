@@ -18,6 +18,7 @@ const VARIATIONS = {
   'yk-link': 5,
   'yk-badge': 5,
   'yk-card': 4,
+  'yk-alert': 6,
   'yk-input-text': 9,
   'yk-input-email': 10,
   'yk-input-tel': 9,
@@ -477,6 +478,24 @@ test('generated code lists attributes in metadata order', async () => {
   expect(codeOf(section)).toBe(
     '<yk-input-text placeholder="you@example.com" name="email"></yk-input-text>',
   );
+});
+
+test('playground rebuilds a component that removes itself', async () => {
+  const { iframe, section } = await loadPlayground('yk-alert');
+  setControl(section, 'dismissible', true);
+
+  const preview = section.querySelector('[data-playground-preview]');
+  preview
+    .querySelector('yk-alert')
+    .shadowRoot.querySelector('[part="dismiss"]')
+    .click();
+  await new Promise((resolve) =>
+    iframe.contentWindow.requestAnimationFrame(resolve),
+  );
+
+  const rebuilt = preview.querySelector('yk-alert');
+  expect(rebuilt).not.toBeNull();
+  expect(rebuilt.hasAttribute('dismissible')).toBe(true);
 });
 
 test('mobile playground shows the preview first and keeps it sticky', async () => {
