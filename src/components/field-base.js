@@ -49,7 +49,8 @@ export class YKFieldElement extends HTMLElement {
 
   // The constructable stylesheet adopted into the shadow root. The default is
   // the shared form-control face; subclasses whose face differs (e.g. a
-  // checkbox) override it with their own sheet.
+  // checkbox) override it with their own sheet, and one that needs a second
+  // sheet pushes it onto `adoptedStyleSheets` after `super()`.
   static coreStylesheet = sheet;
 
   static inputAttributes = [

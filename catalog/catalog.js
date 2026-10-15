@@ -154,6 +154,30 @@ const inputFaceProperties = [
 ];
 
 /**
+ * CSS custom properties used by the select face, layered on top of the shared
+ * `inputFaceProperties`. The arrow is drawn with a mask so it follows the
+ * scheme through a plain color token.
+ */
+const selectFaceProperties = [
+  ...inputFaceProperties,
+  {
+    name: '--yk-select-arrow-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Color of the dropdown arrow.',
+  },
+  {
+    name: '--yk-select-arrow-size',
+    default: '1rem',
+    description: 'Size of the dropdown arrow square.',
+  },
+  {
+    name: '--yk-select-arrow-gap',
+    default: '0.5rem',
+    description: 'Gap between the dropdown arrow and the reserved padding.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -1016,6 +1040,40 @@ export const components = [
       ],
       { includePattern: false, controlNoun: 'textarea' },
     ),
+  },
+  {
+    tag: 'yk-select',
+    category: 'Components',
+    description:
+      'Single-choice selector that renders a native select with a Bootstrap-style face and an arrow; options come from its light-DOM option children, which it mirrors into the internal select.',
+    playground: {
+      content:
+        '  <option value="noun" selected>noun</option>\n  <option value="verb">verb</option>\n  <option value="adjective">adjective</option>',
+    },
+    cssProperties: selectFaceProperties,
+    attributes: [
+      {
+        name: 'required',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that blocks submission while the selected option has an empty value, mirrored onto the internal select.',
+      },
+      {
+        name: 'disabled',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that disables the field and excludes its value from the form, like the native select disabled attribute.',
+      },
+      {
+        name: 'name',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Entry name used when the owner form submits the value, like the native select name attribute.',
+      },
+    ],
   },
   {
     tag: 'yk-theme-switcher',

@@ -2,7 +2,7 @@
   display: block;
 }
 
-:host :is(input, textarea) {
+:host :is(input, textarea, select) {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -47,7 +47,7 @@
   opacity: 1;
 }
 
-:host :is(input, textarea):focus {
+:host :is(input, textarea, select):focus {
   border-color: var(
     --yk-input-focus-border-color,
     color-mix(
@@ -71,8 +71,11 @@
     );
 }
 
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
 :host :is(input, textarea):disabled,
-:host :is(input, textarea):read-only {
+:host :is(input, textarea):read-only,
+:host select:disabled {
   background-color: var(
     --yk-input-disabled-bg,
     color-mix(
@@ -83,14 +86,14 @@
   );
 }
 
-:host :is(input, textarea):user-invalid {
+:host :is(input, textarea, select):user-invalid {
   border-color: var(
     --yk-input-invalid-border-color,
     var(--yk-color-danger, oklch(57% 0.205 21.2))
   );
 }
 
-:host :is(input, textarea):user-invalid:focus {
+:host :is(input, textarea, select):user-invalid:focus {
   box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
     var(
       --yk-input-invalid-ring-color,

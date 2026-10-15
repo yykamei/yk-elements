@@ -26,6 +26,7 @@ const VARIATIONS = {
   'yk-input-file': 7,
   'yk-input-checkbox': 12,
   'yk-textarea': 9,
+  'yk-select': 6,
   'yk-theme-switcher': 3,
 };
 
