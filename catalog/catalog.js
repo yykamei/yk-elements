@@ -154,78 +154,78 @@ const inputFaceProperties = [
 ];
 
 /**
- * Builds the attribute metadata for an input component, optionally inserting
- * type-specific boolean attributes (e.g. `multiple` on yk-input-email) before
- * the shared `disabled` and `name` entries. `sensitiveValue` marks the `value`
- * attribute as sensitive so the playground masks its control and the
- * generated code never echoes the value back (see `playgroundControl` and
- * `codeFor`).
+ * Builds the attribute metadata for a form field component, optionally
+ * inserting type-specific boolean attributes (e.g. `multiple` on
+ * yk-input-email) before the shared `disabled` and `name` entries.
+ * `sensitiveValue` marks the `value` attribute as sensitive so the playground
+ * masks its control and the generated code never echoes the value back (see
+ * `playgroundControl` and `codeFor`); `includePattern` is cleared for a field
+ * whose native control has no pattern constraint, and `controlNoun` names the
+ * native control in the descriptions, so both can be adjusted for a textarea.
  */
-const inputFieldAttributes = (extra = [], { sensitiveValue = false } = {}) => [
+const inputFieldAttributes = (
+  extra = [],
+  { sensitiveValue = false, includePattern = true, controlNoun = 'input' } = {},
+) => [
   {
     name: 'value',
     control: 'text',
     default: 'unset',
     ...(sensitiveValue && { sensitive: true }),
-    description:
-      'Default value shown initially and restored by form reset, mirrored onto the internal input.',
+    description: `Default value shown initially and restored by form reset, mirrored onto the internal ${controlNoun}.`,
   },
   {
     name: 'placeholder',
     control: 'text',
     default: 'unset',
-    description:
-      'Hint text shown while the field is empty, mirrored onto the internal input.',
+    description: `Hint text shown while the field is empty, mirrored onto the internal ${controlNoun}.`,
   },
   {
     name: 'maxlength',
     control: 'text',
     default: 'unset',
-    description:
-      'Maximum string length the user may enter, mirrored onto the internal input.',
+    description: `Maximum string length the user may enter, mirrored onto the internal ${controlNoun}.`,
   },
   {
     name: 'minlength',
     control: 'text',
     default: 'unset',
-    description:
-      'Minimum string length checked by constraint validation, mirrored onto the internal input.',
+    description: `Minimum string length checked by constraint validation, mirrored onto the internal ${controlNoun}.`,
   },
-  {
-    name: 'pattern',
-    control: 'text',
-    default: 'unset',
-    description:
-      'Regular expression the value must match, mirrored onto the internal input.',
-  },
+  ...(includePattern
+    ? [
+        {
+          name: 'pattern',
+          control: 'text',
+          default: 'unset',
+          description: `Regular expression the value must match, mirrored onto the internal ${controlNoun}.`,
+        },
+      ]
+    : []),
   {
     name: 'required',
     control: 'boolean',
     default: 'unset',
-    description:
-      'Boolean attribute that makes the field mandatory and blocks submission while it is empty, mirrored onto the internal input.',
+    description: `Boolean attribute that makes the field mandatory and blocks submission while it is empty, mirrored onto the internal ${controlNoun}.`,
   },
   {
     name: 'readonly',
     control: 'boolean',
     default: 'unset',
-    description:
-      'Boolean attribute that makes the field read-only, mirrored onto the internal input.',
+    description: `Boolean attribute that makes the field read-only, mirrored onto the internal ${controlNoun}.`,
   },
   ...extra,
   {
     name: 'disabled',
     control: 'boolean',
     default: 'unset',
-    description:
-      'Boolean attribute that disables the field and excludes its value from the form, like the native input disabled attribute.',
+    description: `Boolean attribute that disables the field and excludes its value from the form, like the native ${controlNoun} disabled attribute.`,
   },
   {
     name: 'name',
     control: 'text',
     default: 'unset',
-    description:
-      'Entry name used when the owner form submits the value, like the native input name attribute.',
+    description: `Entry name used when the owner form submits the value, like the native ${controlNoun} name attribute.`,
   },
 ];
 
@@ -994,6 +994,28 @@ export const components = [
     },
     cssProperties: checkboxFaceProperties,
     attributes: checkboxFieldAttributes,
+  },
+  {
+    tag: 'yk-textarea',
+    category: 'Components',
+    description:
+      'Multi-line text field that renders a native textarea with a Bootstrap-style face and full form participation; it has no pattern attribute because a native textarea has no pattern constraint.',
+    playground: {
+      content: '',
+    },
+    cssProperties: inputFaceProperties,
+    attributes: inputFieldAttributes(
+      [
+        {
+          name: 'rows',
+          control: 'text',
+          default: 'unset',
+          description:
+            'Visible height in text lines, mirrored onto the internal textarea.',
+        },
+      ],
+      { includePattern: false, controlNoun: 'textarea' },
+    ),
   },
   {
     tag: 'yk-theme-switcher',

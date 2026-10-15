@@ -45,6 +45,11 @@ test('applies property writes made before the module upgrades the elements', asy
   checkbox.required = true;
   checkbox.disabled = true;
   checkbox.indeterminate = true;
+  const textarea = document.createElement('yk-textarea');
+  textarea.value = 'pre-upgrade note';
+  textarea.placeholder = 'Write here';
+  textarea.rows = 4;
+  textarea.required = true;
   const switchedCheckbox = document.createElement('yk-input-checkbox');
   switchedCheckbox.switch = true;
   const declaredCheckbox = document.createElement('yk-input-checkbox');
@@ -62,6 +67,7 @@ test('applies property writes made before the module upgrades the elements', asy
     checkbox,
     switchedCheckbox,
     declaredCheckbox,
+    textarea,
   );
 
   await Promise.all([
@@ -75,6 +81,7 @@ test('applies property writes made before the module upgrades the elements', asy
     import('../src/components/yk-input-search.js'),
     import('../src/components/yk-input-file.js'),
     import('../src/components/yk-input-checkbox.js'),
+    import('../src/components/yk-textarea.js'),
   ]);
 
   expect(button.getAttribute('type')).toBe('submit');
@@ -151,4 +158,14 @@ test('applies property writes made before the module upgrades the elements', asy
   expect(declaredCheckbox.shadowRoot.querySelector('input').indeterminate).toBe(
     true,
   );
+  expect(textarea.shadowRoot.querySelector('textarea').value).toBe(
+    'pre-upgrade note',
+  );
+  expect(textarea.getAttribute('placeholder')).toBe('Write here');
+  expect(
+    textarea.shadowRoot.querySelector('textarea').getAttribute('placeholder'),
+  ).toBe('Write here');
+  expect(textarea.rows).toBe(4);
+  expect(textarea.shadowRoot.querySelector('textarea').rows).toBe(4);
+  expect(textarea.shadowRoot.querySelector('textarea').required).toBe(true);
 });

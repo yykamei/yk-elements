@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
-import { runInputBehaviorSuite } from './helpers/input-suite.js';
+import { runFieldBehaviorSuite } from './helpers/field-suite.js';
 import '../src/components/yk-input-tel.js';
 
 afterEach(() => {
@@ -11,7 +11,7 @@ test('self-registers in the custom element registry', () => {
   expect(customElements.get('yk-input-tel')).toBeDefined();
 });
 
-runInputBehaviorSuite('yk-input-tel', {
+runFieldBehaviorSuite('yk-input-tel', {
   inputType: 'tel',
   shortPrefill: 'ab',
   shortMinlength: '3',

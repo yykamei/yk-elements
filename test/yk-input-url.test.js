@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
-import { runInputBehaviorSuite } from './helpers/input-suite.js';
+import { runFieldBehaviorSuite } from './helpers/field-suite.js';
 import '../src/components/yk-input-url.js';
 
 afterEach(() => {
@@ -11,7 +11,7 @@ test('self-registers in the custom element registry', () => {
   expect(customElements.get('yk-input-url')).toBeDefined();
 });
 
-runInputBehaviorSuite('yk-input-url', {
+runFieldBehaviorSuite('yk-input-url', {
   inputType: 'url',
   shortPrefill: 'https://a.io',
   shortMinlength: '20',
