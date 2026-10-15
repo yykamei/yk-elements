@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-card&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-card">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-card>
+              <p>Body content</p>
+            </yk-card>
+          </yk-pad>
+          <pre><code>&lt;yk-card&gt;
+  &lt;p&gt;Body content&lt;/p&gt;
+&lt;/yk-card&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>header / body / footer</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-card>
+              <h2 slot="header">name one's price</h2>
+              <p>To state the price one is willing to pay.</p>
+              <span slot="footer">noun · phrase</span>
+            </yk-card>
+          </yk-pad>
+          <pre><code>&lt;yk-card&gt;
+  &lt;h2 slot="header"&gt;name one's price&lt;/h2&gt;
+  &lt;p&gt;To state the price one is willing to pay.&lt;/p&gt;
+  &lt;span slot="footer"&gt;noun · phrase&lt;/span&gt;
+&lt;/yk-card&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>footer actions</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-card>
+              <p>To state the price one is willing to pay.</p>
+              <yk-cluster slot="footer" style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)">
+                <yk-button>Edit</yk-button>
+                <yk-button variant="danger">Delete</yk-button>
+              </yk-cluster>
+            </yk-card>
+          </yk-pad>
+          <pre><code>&lt;yk-card&gt;
+  &lt;p&gt;To state the price one is willing to pay.&lt;/p&gt;
+  &lt;yk-cluster slot="footer" style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)"&gt;
+    &lt;yk-button&gt;Edit&lt;/yk-button&gt;
+    &lt;yk-button variant="danger"&gt;Delete&lt;/yk-button&gt;
+  &lt;/yk-cluster&gt;
+&lt;/yk-card&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>elevation through the shadow token</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-card style="--yk-card-shadow: 0 0.5rem 1rem color-mix(in oklch, var(--yk-color-shade) 20%, transparent)">
+              <p>Elevated surface</p>
+            </yk-card>
+          </yk-pad>
+          <pre><code>&lt;yk-card style="--yk-card-shadow: 0 0.5rem 1rem color-mix(in oklch, var(--yk-color-shade) 20%, transparent)"&gt;
+  &lt;p&gt;Elevated surface&lt;/p&gt;
+&lt;/yk-card&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
