@@ -345,6 +345,52 @@ const progressFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the audio player.
+ */
+const audioFaceProperties = [
+  {
+    name: '--yk-audio-gap',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Spacing between the button, timeline, and time display.',
+  },
+  {
+    name: '--yk-audio-button-size',
+    default: '2rem',
+    description: 'Diameter of the round play/pause button.',
+  },
+  {
+    name: '--yk-audio-button-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the play/pause button.',
+  },
+  {
+    name: '--yk-audio-button-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Color of the play and pause icons.',
+  },
+  {
+    name: '--yk-audio-button-radius',
+    default: '50%',
+    description: 'Corner radius of the play/pause button.',
+  },
+  {
+    name: '--yk-audio-accent-color',
+    default: 'var(--yk-color-primary, oklch(56% 0.228 260))',
+    description: 'Accent color of the seek timeline.',
+  },
+  {
+    name: '--yk-audio-time-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Text color of the time display.',
+  },
+  {
+    name: '--yk-audio-time-font-size',
+    default: '0.875rem',
+    description: 'Font size of the time display.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -1111,6 +1157,32 @@ export const components = [
         default: 'unset',
         description:
           'Amount that completes the bar, mirrored onto the internal progress; the native default is 1.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-audio',
+    category: 'Components',
+    description:
+      'Audio player for a clip: a play/pause button, a seek timeline, and a time display by default, or just the button with the compact attribute; playback state is reflected and control names localize through label slots.',
+    playground: {
+      content: '',
+    },
+    cssProperties: audioFaceProperties,
+    attributes: [
+      {
+        name: 'src',
+        control: 'text',
+        default: 'unset',
+        description:
+          'URL of the audio clip, mirrored onto the internal audio; without it the control is inert.',
+      },
+      {
+        name: 'compact',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that hides the timeline and time display, leaving the play/pause button for a tap-to-play control.',
       },
     ],
   },
