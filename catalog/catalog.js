@@ -318,6 +318,33 @@ const dialogFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the progress bar.
+ */
+const progressFaceProperties = [
+  {
+    name: '--yk-progress-height',
+    default: '0.5rem',
+    description: 'Thickness of the bar.',
+  },
+  {
+    name: '--yk-progress-radius',
+    default: '999px',
+    description: 'Corner radius of the track and the filled portion.',
+  },
+  {
+    name: '--yk-progress-bg',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Background of the unfilled track.',
+  },
+  {
+    name: '--yk-progress-fill-bg',
+    default: 'var(--yk-color-primary, oklch(56% 0.228 260))',
+    description: 'Background of the filled portion.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -1058,6 +1085,32 @@ export const components = [
         default: 'unset',
         description:
           'What may dismiss the dialog besides its own controls: any allows a backdrop click and Escape, none disables both. Without the attribute, any applies; the built-in close button always closes the dialog.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-progress',
+    category: 'Components',
+    description:
+      'Progress bar that renders a native progress element; without a value it is indeterminate, and it scales to the available width.',
+    playground: {
+      content: '',
+    },
+    cssProperties: progressFaceProperties,
+    attributes: [
+      {
+        name: 'value',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Current progress amount, mirrored onto the internal progress; without it the bar is indeterminate.',
+      },
+      {
+        name: 'max',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Amount that completes the bar, mirrored onto the internal progress; the native default is 1.',
       },
     ],
   },

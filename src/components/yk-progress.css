@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+progress {
+  --_progress-bg: var(
+    --yk-progress-bg,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  block-size: var(--yk-progress-height, 0.5rem);
+  overflow: hidden;
+  appearance: none;
+  background-color: var(--_progress-bg);
+  border: 0;
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--_progress-bg);
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-value {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-moz-progress-bar {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
