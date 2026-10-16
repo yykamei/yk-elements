@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
-import { runInputBehaviorSuite } from './helpers/input-suite.js';
+import { runFieldBehaviorSuite } from './helpers/field-suite.js';
 import '../src/components/yk-input-password.js';
 
 afterEach(() => {
@@ -11,7 +11,7 @@ test('self-registers in the custom element registry', () => {
   expect(customElements.get('yk-input-password')).toBeDefined();
 });
 
-runInputBehaviorSuite('yk-input-password', {
+runFieldBehaviorSuite('yk-input-password', {
   inputType: 'password',
   shortPrefill: 'ab',
   shortMinlength: '8',

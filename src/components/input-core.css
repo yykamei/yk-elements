@@ -2,7 +2,7 @@
   display: block;
 }
 
-:host input {
+:host :is(input, textarea) {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -32,7 +32,7 @@
     box-shadow 0.15s ease-in-out;
 }
 
-:host input::placeholder {
+:host :is(input, textarea)::placeholder {
   color: var(
     --yk-input-placeholder-color,
     var(
@@ -47,7 +47,7 @@
   opacity: 1;
 }
 
-:host input:focus {
+:host :is(input, textarea):focus {
   border-color: var(
     --yk-input-focus-border-color,
     color-mix(
@@ -71,8 +71,8 @@
     );
 }
 
-:host input:disabled,
-:host input:read-only {
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only {
   background-color: var(
     --yk-input-disabled-bg,
     color-mix(
@@ -83,14 +83,14 @@
   );
 }
 
-:host input:user-invalid {
+:host :is(input, textarea):user-invalid {
   border-color: var(
     --yk-input-invalid-border-color,
     var(--yk-color-danger, oklch(57% 0.205 21.2))
   );
 }
 
-:host input:user-invalid:focus {
+:host :is(input, textarea):user-invalid:focus {
   box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
     var(
       --yk-input-invalid-ring-color,

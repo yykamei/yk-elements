@@ -62,6 +62,13 @@ export class YKFieldElement extends HTMLElement {
     'readonly',
   ];
 
+  // Mirrored attributes whose meaning does not live in a control attribute of
+  // the same name, mapped to the control property that carries it instead. A
+  // textarea takes its default value from its text content, not from a `value`
+  // attribute, so `value` maps to `defaultValue` there. Attributes not listed
+  // are written through with setAttribute/removeAttribute.
+  static controlProperties = {};
+
   // A static getter, not an initializer, so each subclass's own
   // `inputAttributes` override is read at upgrade time instead of the base
   // list being frozen when the base class is defined.
@@ -287,6 +294,11 @@ export class YKFieldElement extends HTMLElement {
 
   #mirror(name) {
     const value = this.getAttribute(name);
+    const properties = this.constructor.controlProperties;
+    if (Object.hasOwn(properties, name)) {
+      this.#input[properties[name]] = value ?? '';
+      return;
+    }
     if (value === null) {
       this.#input.removeAttribute(name);
     } else {

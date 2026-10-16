@@ -4,12 +4,16 @@ import { expect, test } from 'vitest';
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
 /**
- * Runs the behavior contract shared by every input component. Per-type test
- * files call this with their tag and type-specific sample values and only add
- * tests for behavior that differs between input types.
+ * Runs the behavior contract shared by the form fields that render a native
+ * text control (`yk-input-*`, `yk-textarea`). Per-type test files call this
+ * with their tag and type-specific sample values and only add tests for
+ * behavior that differs between fields. The pattern-driven cases are skipped
+ * when no `pattern` is given, since a native textarea has no pattern support.
  *
  * ```js
- * runInputBehaviorSuite('yk-input-tel', {
+ * runFieldBehaviorSuite('yk-input-tel', {
+ *   controlTag: 'input',
+ *   controlPart: 'input',
  *   inputType: 'tel',
  *   shortPrefill: 'ab',
  *   shortMinlength: '3',
@@ -21,16 +25,27 @@ const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
  *     new URL('../src/components/yk-input-text.js', import.meta.url).href,
  *   ],
  * });
+ *
+ * // A multi-line field names its control and drops the pattern cases:
+ * runFieldBehaviorSuite('yk-textarea', {
+ *   controlTag: 'textarea',
+ *   controlPart: 'textarea',
+ *   fillValue: 'the meaning of a word',
+ *   shortPrefill: 'ab',
+ *   shortMinlength: '3',
+ * });
  * ```
  *
  * @param {string} tag
  * @param {{
- *   inputType: string,
+ *   controlTag?: string,
+ *   controlPart?: string,
+ *   inputType?: string,
  *   fillValue: string,
  *   shortPrefill: string,
  *   shortMinlength: string,
- *   pattern: string,
- *   invalidPatternValue: string,
+ *   pattern?: string,
+ *   invalidPatternValue?: string,
  *   sharedFaceWith?: [tag: string, moduleUrl: string],
  * }} options
  *
@@ -38,9 +53,11 @@ const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
  * `new URL('../src/components/yk-input-text.js', import.meta.url).href`),
  * because the suite imports it from its own location.
  */
-export function runInputBehaviorSuite(
+export function runFieldBehaviorSuite(
   tag,
   {
+    controlTag = 'input',
+    controlPart = 'input',
     inputType,
     fillValue,
     shortPrefill,
@@ -51,7 +68,10 @@ export function runInputBehaviorSuite(
   },
 ) {
   const hostOf = () => document.createElement(tag);
-  const inputOf = (host) => host.shadowRoot.querySelector('input');
+  const controlOf = (host) =>
+    /** @type {HTMLInputElement | HTMLTextAreaElement | null} */ (
+      host.shadowRoot.querySelector(controlTag)
+    );
 
   test('adopts its stylesheet as a constructable CSSStyleSheet', async () => {
     const host = hostOf();
@@ -61,36 +81,45 @@ export function runInputBehaviorSuite(
     expect(host.shadowRoot.adoptedStyleSheets[0]).toBeInstanceOf(CSSStyleSheet);
   });
 
-  test(`renders an internal ${inputType} input marked as a part`, async () => {
+  test(`renders an internal ${controlTag} control marked as a part`, async () => {
     const host = hostOf();
     document.body.appendChild(host);
     await frame();
 
-    const input = inputOf(host);
-    expect(input).not.toBeNull();
-    expect(input.type).toBe(inputType);
-    expect(input.getAttribute('part')).toBe('input');
+    const control = controlOf(host);
+    expect(control).not.toBeNull();
+    if (inputType) {
+      expect(/** @type {HTMLInputElement} */ (control).type).toBe(inputType);
+    }
+    expect(control.getAttribute('part')).toBe(controlPart);
   });
 
-  test('mirrors field attributes onto the internal input', () => {
+  test('mirrors field attributes onto the internal control', () => {
     const host = hostOf();
     host.setAttribute('placeholder', 'Your name');
     host.setAttribute('maxlength', '10');
     host.setAttribute('minlength', '3');
-    host.setAttribute('pattern', pattern);
+    if (pattern) {
+      host.setAttribute('pattern', pattern);
+    }
     host.setAttribute('value', fillValue);
     host.setAttribute('readonly', '');
     host.setAttribute('required', '');
     document.body.appendChild(host);
 
-    const input = inputOf(host);
-    expect(input.getAttribute('placeholder')).toBe('Your name');
-    expect(input.getAttribute('maxlength')).toBe('10');
-    expect(input.getAttribute('minlength')).toBe('3');
-    expect(input.getAttribute('pattern')).toBe(pattern);
-    expect(input.getAttribute('value')).toBe(fillValue);
-    expect(input.readOnly).toBe(true);
-    expect(input.required).toBe(true);
+    const control = controlOf(host);
+    expect(control.getAttribute('placeholder')).toBe('Your name');
+    expect(control.getAttribute('maxlength')).toBe('10');
+    expect(control.getAttribute('minlength')).toBe('3');
+    if (pattern) {
+      expect(control.getAttribute('pattern')).toBe(pattern);
+    }
+    expect(control.value).toBe(fillValue);
+    if (inputType) {
+      expect(control.getAttribute('value')).toBe(fillValue);
+    }
+    expect(control.readOnly).toBe(true);
+    expect(control.required).toBe(true);
   });
 
   test('keeps mirrored attributes in sync when they change later', () => {
@@ -98,25 +127,27 @@ export function runInputBehaviorSuite(
     host.setAttribute('maxlength', '10');
     document.body.appendChild(host);
 
-    const input = inputOf(host);
+    const control = controlOf(host);
     host.setAttribute('maxlength', '5');
     host.setAttribute('placeholder', 'Updated');
-    expect(input.getAttribute('maxlength')).toBe('5');
-    expect(input.getAttribute('placeholder')).toBe('Updated');
+    expect(control.getAttribute('maxlength')).toBe('5');
+    expect(control.getAttribute('placeholder')).toBe('Updated');
 
     host.removeAttribute('maxlength');
     host.removeAttribute('placeholder');
-    expect(input.hasAttribute('maxlength')).toBe(false);
-    expect(input.hasAttribute('placeholder')).toBe(false);
+    expect(control.hasAttribute('maxlength')).toBe(false);
+    expect(control.hasAttribute('placeholder')).toBe(false);
   });
 
-  test('exposes field properties backed by the internal input', () => {
+  test('exposes field properties backed by the internal control', () => {
     const host = hostOf();
     host.value = fillValue;
     host.name = 'field';
     host.placeholder = 'Type here';
     host.maxLength = 12;
-    host.pattern = pattern;
+    if (pattern) {
+      host.pattern = pattern;
+    }
     host.required = true;
     host.readOnly = true;
     document.body.appendChild(host);
@@ -125,10 +156,12 @@ export function runInputBehaviorSuite(
     expect(host.name).toBe('field');
     expect(host.placeholder).toBe('Type here');
     expect(host.maxLength).toBe(12);
-    expect(host.pattern).toBe(pattern);
+    if (pattern) {
+      expect(host.pattern).toBe(pattern);
+    }
     expect(host.required).toBe(true);
     expect(host.readOnly).toBe(true);
-    expect(inputOf(host).readOnly).toBe(true);
+    expect(controlOf(host).readOnly).toBe(true);
   });
 
   test('uses the value attribute as the initial value', () => {
@@ -137,7 +170,7 @@ export function runInputBehaviorSuite(
     document.body.appendChild(host);
 
     expect(host.value).toBe(fillValue);
-    expect(inputOf(host).value).toBe(fillValue);
+    expect(controlOf(host).value).toBe(fillValue);
   });
 
   test('contributes name=value to the owner form', () => {
@@ -171,9 +204,11 @@ export function runInputBehaviorSuite(
     document.body.appendChild(form);
     await frame();
 
-    const input = inputOf(host);
-    input.value = 'yk';
-    input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    const control = controlOf(host);
+    control.value = 'yk';
+    control.dispatchEvent(
+      new Event('input', { bubbles: true, composed: true }),
+    );
 
     expect(new FormData(form).get('field')).toBe('yk');
   });
@@ -205,7 +240,7 @@ export function runInputBehaviorSuite(
     expect(new FormData(form).get('field')).toBe('new-default');
   });
 
-  test('keeps the fresh input wired and focused after a form reset', async () => {
+  test('keeps the fresh control wired and focused after a form reset', async () => {
     const form = document.createElement('form');
     const host = hostOf();
     host.setAttribute('name', 'field');
@@ -217,43 +252,47 @@ export function runInputBehaviorSuite(
     host.focus();
     form.reset();
 
-    const input = inputOf(host);
-    expect(input.getAttribute('part')).toBe('input');
-    expect(host.shadowRoot.activeElement).toBe(input);
+    const control = controlOf(host);
+    expect(control.getAttribute('part')).toBe(controlPart);
+    expect(host.shadowRoot.activeElement).toBe(control);
 
-    input.value = 'typed';
-    input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    control.value = 'typed';
+    control.dispatchEvent(
+      new Event('input', { bubbles: true, composed: true }),
+    );
 
     expect(new FormData(form).get('field')).toBe('typed');
   });
 
-  test('surfaces pattern violations and blocks form submission until fixed', () => {
-    const form = document.createElement('form');
-    const host = hostOf();
-    host.setAttribute('name', 'field');
-    host.setAttribute('pattern', pattern);
-    host.value = invalidPatternValue;
-    const submissions = [];
-    form.addEventListener('submit', (event) => {
-      submissions.push(event);
-      event.preventDefault();
+  if (pattern) {
+    test('surfaces pattern violations and blocks form submission until fixed', () => {
+      const form = document.createElement('form');
+      const host = hostOf();
+      host.setAttribute('name', 'field');
+      host.setAttribute('pattern', pattern);
+      host.value = invalidPatternValue;
+      const submissions = [];
+      form.addEventListener('submit', (event) => {
+        submissions.push(event);
+        event.preventDefault();
+      });
+      form.append(host);
+      document.body.appendChild(form);
+
+      expect(host.validity.patternMismatch).toBe(true);
+      expect(host.checkValidity()).toBe(false);
+      expect(host.validationMessage).not.toBe('');
+      expect(host.matches(':invalid')).toBe(true);
+
+      form.requestSubmit();
+      expect(submissions.length).toBe(0);
+
+      host.value = fillValue;
+      expect(host.checkValidity()).toBe(true);
+      form.requestSubmit();
+      expect(submissions.length).toBe(1);
     });
-    form.append(host);
-    document.body.appendChild(form);
-
-    expect(host.validity.patternMismatch).toBe(true);
-    expect(host.checkValidity()).toBe(false);
-    expect(host.validationMessage).not.toBe('');
-    expect(host.matches(':invalid')).toBe(true);
-
-    form.requestSubmit();
-    expect(submissions.length).toBe(0);
-
-    host.value = fillValue;
-    expect(host.checkValidity()).toBe(true);
-    form.requestSubmit();
-    expect(submissions.length).toBe(1);
-  });
+  }
 
   test('does not flag a prefilled too-short value as invalid', () => {
     const host = hostOf();
@@ -303,17 +342,19 @@ export function runInputBehaviorSuite(
     expect(submissions.length).toBe(1);
   });
 
-  test('focuses the internal input when reportValidity reports a violation', async () => {
-    const host = hostOf();
-    host.setAttribute('pattern', pattern);
-    host.value = invalidPatternValue;
-    document.body.appendChild(host);
-    await frame();
+  if (pattern) {
+    test('focuses the internal control when reportValidity reports a violation', async () => {
+      const host = hostOf();
+      host.setAttribute('pattern', pattern);
+      host.value = invalidPatternValue;
+      document.body.appendChild(host);
+      await frame();
 
-    expect(host.reportValidity()).toBe(false);
-    expect(document.activeElement).toBe(host);
-    expect(host.shadowRoot.activeElement).toBe(inputOf(host));
-  });
+      expect(host.reportValidity()).toBe(false);
+      expect(document.activeElement).toBe(host);
+      expect(host.shadowRoot.activeElement).toBe(controlOf(host));
+    });
+  }
 
   test('restores the value attribute default when the owner form resets', () => {
     const form = document.createElement('form');
@@ -330,16 +371,16 @@ export function runInputBehaviorSuite(
     expect(new FormData(form).get('field')).toBe('default');
   });
 
-  test('mirrors the disabled attribute onto the internal input and bars validation', () => {
+  test('mirrors the disabled attribute onto the internal control and bars validation', () => {
     const host = hostOf();
     host.disabled = true;
     document.body.appendChild(host);
 
-    expect(inputOf(host).disabled).toBe(true);
+    expect(controlOf(host).disabled).toBe(true);
     expect(host.willValidate).toBe(false);
   });
 
-  test('disables the internal input while a form or fieldset ancestor is disabled', async () => {
+  test('disables the internal control while a form or fieldset ancestor is disabled', async () => {
     const form = document.createElement('form');
     const fieldset = document.createElement('fieldset');
     fieldset.disabled = true;
@@ -349,10 +390,10 @@ export function runInputBehaviorSuite(
     document.body.appendChild(form);
     await frame();
 
-    expect(inputOf(host).disabled).toBe(true);
+    expect(controlOf(host).disabled).toBe(true);
 
     fieldset.disabled = false;
-    expect(inputOf(host).disabled).toBe(false);
+    expect(controlOf(host).disabled).toBe(false);
   });
 
   test('excludes the field from the form while a fieldset ancestor is disabled and restores it after', async () => {
@@ -373,13 +414,13 @@ export function runInputBehaviorSuite(
     expect(new FormData(form).get('field')).toBe(fillValue);
   });
 
-  test('focuses the internal input when the host is focused', async () => {
+  test('focuses the internal control when the host is focused', async () => {
     const host = hostOf();
     document.body.appendChild(host);
     await frame();
 
     host.focus();
-    expect(host.shadowRoot.activeElement).toBe(inputOf(host));
+    expect(host.shadowRoot.activeElement).toBe(controlOf(host));
   });
 
   test('is activated by a label pointing at the host', async () => {
@@ -393,7 +434,7 @@ export function runInputBehaviorSuite(
     expect([...host.labels]).toContain(label);
 
     label.click();
-    expect(host.shadowRoot.activeElement).toBe(inputOf(host));
+    expect(host.shadowRoot.activeElement).toBe(controlOf(host));
   });
 
   test('styles the face like the Bootstrap form control', async () => {
@@ -402,7 +443,7 @@ export function runInputBehaviorSuite(
     await frame();
 
     const hostStyle = getComputedStyle(host);
-    const style = getComputedStyle(inputOf(host));
+    const style = getComputedStyle(controlOf(host));
     expect(hostStyle.display).toBe('block');
     expect(style.display).toBe('block');
     expect(style.boxSizing).toBe('border-box');
@@ -414,13 +455,13 @@ export function runInputBehaviorSuite(
 
   if (sharedFaceWith) {
     const [siblingTag, siblingModuleUrl] = sharedFaceWith;
-    test('reuses the appearance of a sibling input through the shared stylesheet', async () => {
+    test('reuses the appearance of a sibling field through the shared stylesheet', async () => {
       const host = hostOf();
       const sibling = document.createElement(siblingTag);
       document.body.append(host, sibling);
       await Promise.all([import(siblingModuleUrl), frame()]);
 
-      const style = getComputedStyle(inputOf(host));
+      const style = getComputedStyle(controlOf(host));
       expect(style.display).toBe('block');
       expect(style.backgroundColor).toBe('rgb(255, 255, 255)');
       expect(style.borderTopWidth).toBe('1px');
@@ -437,7 +478,7 @@ export function runInputBehaviorSuite(
     document.body.appendChild(host);
     await frame();
 
-    const style = getComputedStyle(inputOf(host));
+    const style = getComputedStyle(controlOf(host));
     expect(style.backgroundColor).toBe('rgb(9, 8, 7)');
     expect(style.color).toBe('rgb(6, 5, 4)');
     expect(style.borderTopColor).toBe('rgb(3, 2, 1)');
@@ -453,7 +494,11 @@ export function runInputBehaviorSuite(
     await frame();
 
     const white = 'rgb(255, 255, 255)';
-    expect(getComputedStyle(inputOf(disabled)).backgroundColor).not.toBe(white);
-    expect(getComputedStyle(inputOf(readonly)).backgroundColor).not.toBe(white);
+    expect(getComputedStyle(controlOf(disabled)).backgroundColor).not.toBe(
+      white,
+    );
+    expect(getComputedStyle(controlOf(readonly)).backgroundColor).not.toBe(
+      white,
+    );
   });
 }

@@ -1,6 +1,6 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
-import { runInputBehaviorSuite } from './helpers/input-suite.js';
+import { runFieldBehaviorSuite } from './helpers/field-suite.js';
 import '../src/components/yk-input-search.js';
 
 afterEach(() => {
@@ -11,7 +11,7 @@ test('self-registers in the custom element registry', () => {
   expect(customElements.get('yk-input-search')).toBeDefined();
 });
 
-runInputBehaviorSuite('yk-input-search', {
+runFieldBehaviorSuite('yk-input-search', {
   inputType: 'search',
   shortPrefill: 'ab',
   shortMinlength: '3',
