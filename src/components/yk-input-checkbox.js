@@ -143,7 +143,7 @@ class YKInputCheckbox extends YKInputElement {
 
   // The accessors read through the shadow root instead of a private field
   // because the base constructor routes pre-upgrade writes through them
-  // before subclass fields are installed (see input-base.js).
+  // before subclass fields are installed (see field-base.js).
   get checked() {
     return this.shadowRoot.querySelector('input').checked;
   }
