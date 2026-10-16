@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-select&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-select">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-select>
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+            </yk-select>
+          </yk-pad>
+          <pre><code>&lt;yk-select&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>options</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-select>
+              <option value="adverb">adverb</option>
+              <option value="adjective">adjective</option>
+              <option value="phrase">phrase</option>
+            </yk-select>
+          </yk-pad>
+          <pre><code>&lt;yk-select&gt;
+  &lt;option value="adverb"&gt;adverb&lt;/option&gt;
+  &lt;option value="adjective"&gt;adjective&lt;/option&gt;
+  &lt;option value="phrase"&gt;phrase&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>selected</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-select>
+              <option value="noun">noun</option>
+              <option value="verb" selected>verb</option>
+            </yk-select>
+          </yk-pad>
+          <pre><code>&lt;yk-select&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb" selected&gt;verb&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-select required name="part">
+              <option value="" selected disabled>Choose a part of speech…</option>
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+            </yk-select>
+          </yk-pad>
+          <pre><code>&lt;yk-select required name="part"&gt;
+  &lt;option value="" selected disabled&gt;Choose a part of speech…&lt;/option&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-select disabled>
+              <option value="noun" selected>noun</option>
+              <option value="verb">verb</option>
+            </yk-select>
+          </yk-pad>
+          <pre><code>&lt;yk-select disabled&gt;
+  &lt;option value="noun" selected&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-part">Part of speech</label>
+                <yk-select id="catalog-part" name="part" required>
+                  <option value="" selected disabled>Choose…</option>
+                  <option value="noun">noun</option>
+                  <option value="verb">verb</option>
+                </yk-select>
+                <yk-button type="submit" variant="primary">Save</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-part"&gt;Part of speech&lt;/label&gt;
+    &lt;yk-select id="catalog-part" name="part" required&gt;
+      &lt;option value="" selected disabled&gt;Choose…&lt;/option&gt;
+      &lt;option value="noun"&gt;noun&lt;/option&gt;
+      &lt;option value="verb"&gt;verb&lt;/option&gt;
+    &lt;/yk-select&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Save&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

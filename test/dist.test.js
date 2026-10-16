@@ -21,6 +21,7 @@ test('minified dist entry point self-registers components', async () => {
   expect(customElements.get('yk-input-file')).toBeDefined();
   expect(customElements.get('yk-input-checkbox')).toBeDefined();
   expect(customElements.get('yk-textarea')).toBeDefined();
+  expect(customElements.get('yk-select')).toBeDefined();
   expect(customElements.get('yk-theme-switcher')).toBeDefined();
 });
 
