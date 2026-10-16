@@ -17,6 +17,7 @@ const VARIATIONS = {
   'yk-button': 6,
   'yk-link': 5,
   'yk-badge': 5,
+  'yk-card': 4,
   'yk-input-text': 9,
   'yk-input-email': 10,
   'yk-input-tel': 9,

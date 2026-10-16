@@ -178,6 +178,45 @@ const selectFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the card surface.
+ */
+const cardFaceProperties = [
+  {
+    name: '--yk-card-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the surface.',
+  },
+  {
+    name: '--yk-card-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the surface.',
+  },
+  {
+    name: '--yk-card-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description:
+      'Border color of the surface and of the header and footer separators.',
+  },
+  {
+    name: '--yk-card-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the surface.',
+  },
+  {
+    name: '--yk-card-padding',
+    default: 'var(--yk-space-md, 1rem)',
+    description:
+      'Inset from the surface edges to the header, body, and footer content.',
+  },
+  {
+    name: '--yk-card-shadow',
+    default: 'none',
+    description: 'Box shadow of the surface; none by default.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -853,6 +892,18 @@ export const components = [
           'Boolean attribute that rounds the corners fully, like the Bootstrap rounded-pill utility.',
       },
     ],
+  },
+  {
+    tag: 'yk-card',
+    category: 'Components',
+    description:
+      'Surface that groups related content into an optional header, a body, and an optional footer, drawing a separator only when the header or footer has content.',
+    playground: {
+      content:
+        '  <h2 slot="header">Header</h2>\n  <p>Body content</p>\n  <span slot="footer">Footer</span>',
+    },
+    cssProperties: cardFaceProperties,
+    attributes: [],
   },
   {
     tag: 'yk-input-text',

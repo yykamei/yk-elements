@@ -1,0 +1,39 @@
+:host {
+  --_card-border-color: var(
+    --yk-card-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  background-color: var(--yk-card-bg, var(--yk-color-surface, #fff));
+  color: var(--yk-card-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  border: 1px solid var(--_card-border-color);
+  border-radius: var(--yk-card-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-card-shadow, none);
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-card-padding, var(--yk-space-md, 1rem));
+}
+
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  display: none;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_card-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_card-border-color);
+}
