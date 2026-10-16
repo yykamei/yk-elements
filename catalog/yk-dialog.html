@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-dialog&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-dialog">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-button data-dialog-open="catalog-dialog-basic">Open dialog</yk-button>
+            <yk-dialog id="catalog-dialog-basic" aria-label="About this target">
+              <h2 slot="header">About this target</h2>
+              <p>To state the price one is willing to pay.</p>
+              <yk-cluster slot="footer" style="--yk-cluster-justify: flex-end">
+                <yk-button data-dialog-close="catalog-dialog-basic">Close</yk-button>
+              </yk-cluster>
+            </yk-dialog>
+          </yk-pad>
+          <pre><code>&lt;yk-button id="open"&gt;Open dialog&lt;/yk-button&gt;
+&lt;yk-dialog id="confirm" aria-label="About this target"&gt;
+  &lt;h2 slot="header"&gt;About this target&lt;/h2&gt;
+  &lt;p&gt;To state the price one is willing to pay.&lt;/p&gt;
+  &lt;yk-cluster slot="footer" style="--yk-cluster-justify: flex-end"&gt;
+    &lt;yk-button&gt;Close&lt;/yk-button&gt;
+  &lt;/yk-cluster&gt;
+&lt;/yk-dialog&gt;
+
+&lt;script type="module"&gt;
+  document.getElementById('open').addEventListener('click', () =&gt; {
+    document.getElementById('confirm').showModal();
+  });
+&lt;/script&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>delete confirmation</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-button variant="danger" data-dialog-open="catalog-dialog-delete">Delete</yk-button>
+            <yk-dialog id="catalog-dialog-delete" aria-label="Delete this target?">
+              <h2 slot="header">Delete this target?</h2>
+              <p>This also deletes its example sentences.</p>
+              <yk-cluster slot="footer" style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)">
+                <yk-button data-dialog-close="catalog-dialog-delete" data-return-value="cancel">Cancel</yk-button>
+                <yk-button variant="danger" data-dialog-close="catalog-dialog-delete" data-return-value="confirm">Delete</yk-button>
+              </yk-cluster>
+            </yk-dialog>
+          </yk-pad>
+          <pre><code>&lt;yk-dialog id="confirm" aria-label="Delete this target?"&gt;
+  &lt;h2 slot="header"&gt;Delete this target?&lt;/h2&gt;
+  &lt;p&gt;This also deletes its example sentences.&lt;/p&gt;
+  &lt;yk-cluster slot="footer" style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)"&gt;
+    &lt;yk-button id="cancel"&gt;Cancel&lt;/yk-button&gt;
+    &lt;yk-button id="confirm" variant="danger"&gt;Delete&lt;/yk-button&gt;
+  &lt;/yk-cluster&gt;
+&lt;/yk-dialog&gt;
+
+&lt;script type="module"&gt;
+  const dialog = document.getElementById('confirm');
+  document.getElementById('cancel').addEventListener('click', () =&gt; dialog.close('cancel'));
+  document.getElementById('confirm').addEventListener('click', () =&gt; dialog.close('confirm'));
+&lt;/script&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>slotted form with method=dialog</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-button data-dialog-open="catalog-dialog-form">Open dialog</yk-button>
+            <yk-dialog id="catalog-dialog-form" aria-label="Delete this target?">
+              <h2 slot="header">Delete this target?</h2>
+              <p>The buttons' values become the dialog's return value.</p>
+              <form method="dialog" slot="footer">
+                <yk-cluster style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)">
+                  <button type="submit" value="cancel">Cancel</button>
+                  <button type="submit" value="confirm">Delete</button>
+                </yk-cluster>
+              </form>
+            </yk-dialog>
+          </yk-pad>
+          <pre><code>&lt;yk-dialog id="confirm" aria-label="Delete this target?"&gt;
+  &lt;h2 slot="header"&gt;Delete this target?&lt;/h2&gt;
+  &lt;p&gt;The buttons' values become the dialog's return value.&lt;/p&gt;
+  &lt;form method="dialog" slot="footer"&gt;
+    &lt;button value="cancel"&gt;Cancel&lt;/button&gt;
+    &lt;button value="confirm"&gt;Delete&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/yk-dialog&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>localized close label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-button data-dialog-open="catalog-dialog-close-label">Open dialog</yk-button>
+            <yk-dialog id="catalog-dialog-close-label" aria-label="削除の確認">
+              <h2 slot="header">この学習対象を削除しますか？</h2>
+              <p>例文もまとめて削除されます。</p>
+              <span slot="close-label">閉じる</span>
+              <yk-cluster slot="footer" style="--yk-cluster-justify: flex-end">
+                <yk-button data-dialog-close="catalog-dialog-close-label">キャンセル</yk-button>
+              </yk-cluster>
+            </yk-dialog>
+          </yk-pad>
+          <pre><code>&lt;yk-dialog id="confirm" aria-label="削除の確認"&gt;
+  &lt;h2 slot="header"&gt;この学習対象を削除しますか？&lt;/h2&gt;
+  &lt;p&gt;例文もまとめて削除されます。&lt;/p&gt;
+  &lt;span slot="close-label"&gt;閉じる&lt;/span&gt;
+  &lt;yk-cluster slot="footer" style="--yk-cluster-justify: flex-end"&gt;
+    &lt;yk-button id="cancel"&gt;キャンセル&lt;/yk-button&gt;
+  &lt;/yk-cluster&gt;
+&lt;/yk-dialog&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+    <script type="module">
+      // The catalog has no per-page scripting hook, so the dialog demos wire
+      // their buttons here: data-dialog-open names the dialog to open, and
+      // data-dialog-close names the one to close with an optional return value.
+      for (const button of document.querySelectorAll('[data-dialog-open]')) {
+        button.addEventListener('click', () => {
+          document.getElementById(button.dataset.dialogOpen).showModal();
+        });
+      }
+      for (const button of document.querySelectorAll('[data-dialog-close]')) {
+        button.addEventListener('click', () => {
+          document
+            .getElementById(button.dataset.dialogClose)
+            .close(button.dataset.returnValue ?? '');
+        });
+      }
+    </script>
+  </body>
+</html>

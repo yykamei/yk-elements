@@ -19,6 +19,7 @@ const VARIATIONS = {
   'yk-badge': 5,
   'yk-card': 4,
   'yk-alert': 6,
+  'yk-dialog': 4,
   'yk-input-text': 9,
   'yk-input-email': 10,
   'yk-input-tel': 9,
@@ -496,6 +497,29 @@ test('playground rebuilds a component that removes itself', async () => {
   const rebuilt = preview.querySelector('yk-alert');
   expect(rebuilt).not.toBeNull();
   expect(rebuilt.hasAttribute('dismissible')).toBe(true);
+});
+
+test('playground follows a dialog that closes itself', async () => {
+  const { section } = await loadPlayground('yk-dialog');
+  setControl(section, 'open', true);
+  const dialog = section.querySelector('[data-playground-preview] yk-dialog');
+  expect(dialog.open).toBe(true);
+
+  const closed = new Promise((resolve) =>
+    dialog.addEventListener('yk-dialog-close', resolve, { once: true }),
+  );
+  dialog.close();
+  await closed;
+
+  const openControl = section.querySelector(
+    '[data-playground-attribute="open"]',
+  );
+  expect(openControl.checked).toBe(false);
+  expect(parseCode(codeOf(section)).hasAttribute('open')).toBe(false);
+
+  // The next control interaction must not reopen the dialog.
+  setControl(section, 'closedby', 'none');
+  expect(dialog.open).toBe(false);
 });
 
 test('mobile playground shows the preview first and keeps it sticky', async () => {

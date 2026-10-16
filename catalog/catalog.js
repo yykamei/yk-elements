@@ -258,6 +258,66 @@ const alertFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the dialog surface.
+ */
+const dialogFaceProperties = [
+  {
+    name: '--yk-dialog-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the dialog surface.',
+  },
+  {
+    name: '--yk-dialog-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the dialog surface.',
+  },
+  {
+    name: '--yk-dialog-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description:
+      'Border color of the surface and of the header and footer separators.',
+  },
+  {
+    name: '--yk-dialog-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the dialog surface.',
+  },
+  {
+    name: '--yk-dialog-padding',
+    default: 'var(--yk-space-md, 1rem)',
+    description:
+      'Inset from the surface edges to the header, body, and footer content, and the offset of the close button from the corner.',
+  },
+  {
+    name: '--yk-dialog-shadow',
+    default: '0 0.5rem 1rem rgb(0 0 0 / 0.2)',
+    description: 'Box shadow of the dialog surface.',
+  },
+  {
+    name: '--yk-dialog-backdrop-bg',
+    default: 'rgb(0 0 0 / 0.5)',
+    description: 'Background of the backdrop behind a modal dialog.',
+  },
+  {
+    name: '--yk-dialog-max-inline-size',
+    default: 'min(32rem, calc(100vw - 2rem))',
+    description: 'Maximum width of the dialog surface.',
+  },
+  {
+    name: '--yk-dialog-max-block-size',
+    default: 'calc(100dvh - 2rem)',
+    description:
+      'Maximum height of the dialog surface; taller content scrolls in the body while the close button stays in the corner.',
+  },
+  {
+    name: '--yk-dialog-close-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Color of the close button icon.',
+  },
+];
+
+/**
  * Builds the attribute metadata for a form field component, optionally
  * inserting type-specific boolean attributes (e.g. `multiple` on
  * yk-input-email) before the shared `disabled` and `name` entries.
@@ -970,6 +1030,34 @@ export const components = [
         default: 'unset',
         description:
           'Boolean attribute that shows a close button; activating it emits a cancelable yk-alert-dismiss event and removes the element unless the event is canceled.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-dialog',
+    category: 'Components',
+    description:
+      'Modal dialog built on the native dialog element, with a close button in the corner and optional header and footer slots; the open attribute opens it as a modal, and a yk-dialog-close event carries the return value.',
+    playground: {
+      content:
+        '  <h2 slot="header">Delete this target?</h2>\n  <p>This also deletes its example sentences.</p>\n  <yk-cluster slot="footer" style="--yk-cluster-justify: flex-end; --yk-cluster-gap: var(--yk-space-sm)">\n    <yk-button>Cancel</yk-button>\n    <yk-button variant="danger">Delete</yk-button>\n  </yk-cluster>',
+    },
+    cssProperties: dialogFaceProperties,
+    attributes: [
+      {
+        name: 'open',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that opens the dialog as a modal and is reflected while it is open; close() and a dismissal clear it.',
+      },
+      {
+        name: 'closedby',
+        control: 'select',
+        options: ['any', 'none'],
+        default: 'unset',
+        description:
+          'What may dismiss the dialog besides its own controls: any allows a backdrop click and Escape, none disables both. Without the attribute, any applies; the built-in close button always closes the dialog.',
       },
     ],
   },
@@ -1778,6 +1866,19 @@ function renderPlayground() {
 
   preview.append(buildHost());
   sync();
+
+  // A modal preview can be dismissed from inside itself (a backdrop click or
+  // Escape); mirror that on the `open` control so the generated code stays
+  // truthful and the next control interaction does not reopen the dialog.
+  const openControl = panel.querySelector('[data-playground-attribute="open"]');
+  if (openControl) {
+    preview.addEventListener('yk-dialog-close', (event) => {
+      // A nested dialog's close must not clear this dialog's control.
+      if (event.target !== current()) return;
+      openControl.checked = false;
+      sync();
+    });
+  }
 
   panel.addEventListener('input', sync);
 
