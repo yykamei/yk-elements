@@ -19,6 +19,7 @@ import './src/components/yk-link.js';
 import './src/components/yk-badge.js';
 import './src/components/yk-card.js';
 import './src/components/yk-alert.js';
+import './src/components/yk-dialog.js';
 import './src/components/yk-soft-nav.js';
 import './src/components/yk-input-email.js';
 import './src/components/yk-input-text.js';

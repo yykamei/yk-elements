@@ -1,0 +1,127 @@
+:host {
+  display: contents;
+}
+
+dialog {
+  --_dialog-border-color: var(
+    --yk-dialog-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_dialog-close-size: 1.5rem;
+
+  box-sizing: border-box;
+  max-inline-size: var(
+    --yk-dialog-max-inline-size,
+    min(32rem, calc(100vw - 2rem))
+  );
+  max-block-size: var(--yk-dialog-max-block-size, calc(100dvh - 2rem));
+  padding: 0;
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-dialog-bg, var(--yk-color-surface, #fff));
+  border: 1px solid var(--_dialog-border-color);
+  border-radius: var(--yk-dialog-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-dialog-shadow, 0 0.5rem 1rem rgb(0 0 0 / 0.2));
+}
+
+dialog::backdrop {
+  background-color: var(--yk-dialog-backdrop-bg, rgb(0 0 0 / 0.5));
+}
+
+/* The column layout is scoped to the open state so the UA rule that hides a
+   closed dialog (dialog:not([open]) { display: none }) still applies. */
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+}
+
+/* The body is the scroll region, so the header, footer, and the absolutely
+   positioned close button stay in place while long content scrolls. */
+[part="header"],
+[part="footer"] {
+  flex: none;
+}
+
+[part="body"] {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* Keep the first line of the header (or of the body when there is no header)
+   clear of the close button in the corner. */
+[part="header"],
+:host(:not([has-header])) [part="body"] {
+  padding-inline-end: calc(
+    var(--yk-dialog-padding, var(--yk-space-md, 1rem)) +
+    var(--_dialog-close-size) +
+    var(--yk-space-sm, 0.5rem)
+  );
+}
+
+/* An empty region is collapsed rather than display: none, so its content stays
+   focusable the moment it gains a slot assignment (a display switch would not
+   be reflected in time for showModal() to pick it as the initial focus). */
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  block-size: 0;
+  padding-block: 0;
+  overflow: hidden;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_dialog-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_dialog-border-color);
+}
+
+[part="close"] {
+  position: absolute;
+  inset-block-start: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  inset-inline-end: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--_dialog-close-size);
+  block-size: var(--_dialog-close-size);
+  padding: 0;
+  color: var(
+    --yk-dialog-close-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="close"]:hover {
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+}
+
+[part="close"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
