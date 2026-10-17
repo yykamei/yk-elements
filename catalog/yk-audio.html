@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-audio&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-audio">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-audio src="data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA" aria-label="Pronunciation"></yk-audio>
+          </yk-pad>
+          <pre><code>&lt;yk-audio src="clip.mp3" aria-label="Pronunciation"&gt;&lt;/yk-audio&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>compact</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-audio src="data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA" compact aria-label="Pronunciation"></yk-audio>
+          </yk-pad>
+          <pre><code>&lt;yk-audio src="clip.mp3" compact aria-label="Pronunciation"&gt;&lt;/yk-audio&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>localized labels</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-audio src="data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA">
+              <span slot="play-label">再生</span>
+              <span slot="pause-label">一時停止</span>
+              <span slot="seek-label">シーク</span>
+            </yk-audio>
+          </yk-pad>
+          <pre><code>&lt;yk-audio src="clip.mp3"&gt;
+  &lt;span slot="play-label"&gt;再生&lt;/span&gt;
+  &lt;span slot="pause-label"&gt;一時停止&lt;/span&gt;
+  &lt;span slot="seek-label"&gt;シーク&lt;/span&gt;
+&lt;/yk-audio&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>custom button tokens</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-audio
+              src="data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA"
+              aria-label="Pronunciation"
+              style="--yk-audio-button-bg: var(--yk-color-primary); --yk-audio-button-color: var(--yk-color-on-tone)"
+            ></yk-audio>
+          </yk-pad>
+          <pre><code>&lt;yk-audio
+  src="clip.mp3"
+  aria-label="Pronunciation"
+  style="--yk-audio-button-bg: var(--yk-color-primary); --yk-audio-button-color: var(--yk-color-on-tone)"
+&gt;&lt;/yk-audio&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>without a source</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-audio aria-label="Pronunciation"></yk-audio>
+          </yk-pad>
+          <pre><code>&lt;yk-audio aria-label="Pronunciation"&gt;&lt;/yk-audio&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
