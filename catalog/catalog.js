@@ -966,7 +966,7 @@ export const components = [
         control: 'text',
         default: 'unset',
         description:
-          'URL of the link target, mirrored onto the internal anchor.',
+          'URL of the link target, mirrored onto the internal anchor. Unsafe schemes (javascript:, data:, vbscript:) are dropped from the mirror.',
       },
       {
         name: 'target',

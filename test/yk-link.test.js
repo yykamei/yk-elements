@@ -74,6 +74,92 @@ test('reflects the href property onto the attribute and the internal anchor', ()
   expect(host.href).toBe('/pricing');
 });
 
+test('does not mirror a javascript: href onto the internal anchor', () => {
+  const host = document.createElement('yk-link');
+  host.setAttribute('href', 'javascript:alert(1)');
+  document.body.appendChild(host);
+
+  expect(host.getAttribute('href')).toBe('javascript:alert(1)');
+  expect(host.shadowRoot.querySelector('a').hasAttribute('href')).toBe(false);
+});
+
+test('does not mirror data: or vbscript: hrefs onto the internal anchor', () => {
+  const unsafe = [
+    'data:text/html,<script>alert(1)</script>',
+    'vbscript:msgbox(1)',
+  ];
+  for (const href of unsafe) {
+    const host = document.createElement('yk-link');
+    host.setAttribute('href', href);
+    document.body.appendChild(host);
+
+    expect(host.getAttribute('href'), href).toBe(href);
+    expect(host.shadowRoot.querySelector('a').hasAttribute('href'), href).toBe(
+      false,
+    );
+  }
+});
+
+test('rejects unsafe schemes hidden by whitespace, tabs, newlines, or case', () => {
+  const disguised = [
+    ' JaVaScRiPt:alert(1)',
+    'java\tscript:alert(1)',
+    'java\nscript:alert(1)',
+  ];
+  for (const href of disguised) {
+    const host = document.createElement('yk-link');
+    host.setAttribute('href', href);
+    document.body.appendChild(host);
+
+    expect(host.shadowRoot.querySelector('a').hasAttribute('href'), href).toBe(
+      false,
+    );
+  }
+});
+
+test('drops an href the URL parser cannot parse', () => {
+  const host = document.createElement('yk-link');
+  host.setAttribute('href', 'http://[');
+  document.body.appendChild(host);
+
+  expect(host.getAttribute('href')).toBe('http://[');
+  expect(host.shadowRoot.querySelector('a').hasAttribute('href')).toBe(false);
+});
+
+test('still mirrors safe hrefs onto the internal anchor', () => {
+  const safe = [
+    'https://example.com/x',
+    '/docs',
+    '#section',
+    'mailto:a@b.c',
+    'tel:+1234567890',
+  ];
+  for (const href of safe) {
+    const host = document.createElement('yk-link');
+    host.setAttribute('href', href);
+    document.body.appendChild(host);
+
+    expect(host.shadowRoot.querySelector('a').getAttribute('href'), href).toBe(
+      href,
+    );
+  }
+});
+
+test('mirrors the href again once an unsafe value becomes safe', () => {
+  const host = document.createElement('yk-link');
+  document.body.appendChild(host);
+  const anchor = host.shadowRoot.querySelector('a');
+
+  host.href = 'javascript:alert(1)';
+  expect(anchor.hasAttribute('href')).toBe(false);
+
+  host.setAttribute('href', '/safe');
+  expect(anchor.getAttribute('href')).toBe('/safe');
+
+  host.setAttribute('href', 'javascript:alert(1)');
+  expect(anchor.hasAttribute('href')).toBe(false);
+});
+
 test('shares the default yk-button face', async () => {
   const button = document.createElement('yk-button');
   const link = document.createElement('yk-link');

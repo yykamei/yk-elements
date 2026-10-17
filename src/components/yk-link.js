@@ -5,7 +5,10 @@
  * shares yk-button's face styles through button-core.css; `variant` selects
  * the tone and design tokens restyle it without class names. Link attributes
  * (href, target, rel, download) are mirrored onto the internal anchor, so
- * navigation stays entirely native.
+ * navigation stays entirely native. An href whose scheme can run script
+ * (javascript:, data:, vbscript:) is not mirrored, so a dynamically bound
+ * value cannot turn the link into a script vector; the host attribute keeps
+ * the raw value.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
@@ -15,6 +18,11 @@
  */
 import coreSheet from './button-core.css' with { type: 'css' };
 import sheet from './yk-link.css' with { type: 'css' };
+
+// Schemes that can run script when a link is followed. It is a deny-list on
+// purpose: apps rely on yk-link for custom deep-link schemes, so only the
+// schemes the component must never activate are enumerated.
+const UNSAFE_SCHEMES = new Set(['javascript:', 'data:', 'vbscript:']);
 
 class YKLink extends HTMLElement {
   static observedAttributes = ['href', 'target', 'rel', 'download'];
@@ -48,10 +56,27 @@ class YKLink extends HTMLElement {
 
   #mirror(name) {
     const value = this.getAttribute(name);
-    if (value === null) {
+    if (value === null || (name === 'href' && !this.#isSafeHref(value))) {
       this.#anchor.removeAttribute(name);
     } else {
       this.#anchor.setAttribute(name, value);
+    }
+  }
+
+  // Only the scheme matters, and a fixed base classifies relative hrefs
+  // without depending on the embedding document (which may be opaque in a
+  // sandboxed frame). The base host uses the reserved .invalid TLD, which is
+  // specified to never resolve, marking the parsed URL as a never-used
+  // sentinel: only its scheme is read, so no real host can ever be reached
+  // through it. Parsing also normalizes case and embedded whitespace, so
+  // disguised javascript: URLs are caught. A value the parser rejects is
+  // treated as unsafe.
+  #isSafeHref(value) {
+    try {
+      const { protocol } = new URL(value, 'https://yk.invalid/');
+      return !UNSAFE_SCHEMES.has(protocol);
+    } catch {
+      return false;
     }
   }
 
