@@ -63,6 +63,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+          # This job pushes the bump commit and tag, so unlike the other
+          # checkouts it keeps the token that checkout stores in .git/config.
+          persist-credentials: true
       - name: Check the tested commit is still main
         env:
           TESTED_SHA: ${{ needs.verify.outputs.commit }}
@@ -96,6 +99,10 @@ jobs:
           if [ -n "$INPUT_VERSION" ]; then
             version="$INPUT_VERSION"
           else
+            if ! [[ "$npm_latest" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "::error::published version must be X.Y.Z (e.g. 0.2.0), got '${npm_latest//$'\n'/ }'"
+              exit 1
+            fi
             version=$(NPM_LATEST="$npm_latest" node -p "const [major, minor, patch] = process.env.NPM_LATEST.split('.').map(Number); \`\${major}.\${minor}.\${patch + 1}\`")
             echo "No version input; releasing $version (next patch after the published $npm_latest)"
           fi
