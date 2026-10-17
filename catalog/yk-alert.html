@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-alert&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-alert">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>info (default)</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-alert>Heads up, this is an informational message.</yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert&gt;Heads up, this is an informational message.&lt;/yk-alert&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>danger</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <!-- biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: yk-alert is not interactive; role=alert announces the message -->
+            <yk-alert variant="danger" role="alert">The target is not in the example sentence.</yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert variant="danger" role="alert"&gt;The target is not in the example sentence.&lt;/yk-alert&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>warning</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-alert variant="warning">This target already exists.</yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert variant="warning"&gt;This target already exists.&lt;/yk-alert&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>success</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-alert variant="success">The target was saved.</yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert variant="success"&gt;The target was saved.&lt;/yk-alert&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>dismissible</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-alert variant="danger" dismissible>Fix the example sentence, then save again.</yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert variant="danger" dismissible&gt;Fix the example sentence, then save again.&lt;/yk-alert&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>localized dismiss label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-alert variant="warning" dismissible>
+              <span slot="dismiss-label">閉じる</span>
+              This target already exists.
+            </yk-alert>
+          </yk-pad>
+          <pre><code>&lt;yk-alert variant="warning" dismissible&gt;
+  &lt;span slot="dismiss-label"&gt;閉じる&lt;/span&gt;
+  This target already exists.
+&lt;/yk-alert&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
