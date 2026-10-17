@@ -7,12 +7,18 @@
     <script>
       // A bare /catalog URL (no trailing slash) makes ./catalog.css and
       // ./catalog.js resolve against the parent directory and fail to load,
-      // so normalize it to the trailing-slash form before resources load.
+      // so normalize it to the trailing-slash form before resources load. The
+      // target is pinned to location.origin because a pathname that starts
+      // with two slashes would otherwise resolve as a protocol-relative URL
+      // and leave this host; query and hash are carried over too.
       if (
         !location.pathname.endsWith('/') &&
         !location.pathname.endsWith('.html')
       ) {
-        location.replace(`${location.pathname}/`);
+        const path = `/${location.pathname.replace(/^\/+/, '')}/`;
+        location.replace(
+          `${location.origin}${path}${location.search}${location.hash}`,
+        );
       }
     </script>
     <link rel="stylesheet" href="../tokens.css" />
