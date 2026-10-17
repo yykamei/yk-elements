@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-progress&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-progress">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>indeterminate</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-progress aria-label="Loading"></yk-progress>
+          </yk-pad>
+          <pre><code>&lt;yk-progress aria-label="Loading"&gt;&lt;/yk-progress&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-progress aria-label="Progress" value="0.4"></yk-progress>
+          </yk-pad>
+          <pre><code>&lt;yk-progress aria-label="Progress" value="0.4"&gt;&lt;/yk-progress&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>value + max</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-progress aria-label="Progress" value="40" max="100"></yk-progress>
+          </yk-pad>
+          <pre><code>&lt;yk-progress aria-label="Progress" value="40" max="100"&gt;&lt;/yk-progress&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>with a visible label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+              <span>Learning progress: 40%</span>
+              <yk-progress aria-label="Learning progress" value="40" max="100"></yk-progress>
+            </yk-vstack>
+          </yk-pad>
+          <pre><code>&lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+  &lt;span&gt;Learning progress: 40%&lt;/span&gt;
+  &lt;yk-progress aria-label="Learning progress" value="40" max="100"&gt;&lt;/yk-progress&gt;
+&lt;/yk-vstack&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
