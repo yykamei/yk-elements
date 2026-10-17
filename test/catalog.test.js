@@ -219,6 +219,73 @@ test('bare /catalog URL is normalized to the trailing-slash form', async () => {
   ).toBeGreaterThan(0);
 });
 
+// The dev server answers a bare /catalog request with the site root (its SPA
+// fallback), so the catalog page's own redirect script never runs for an
+// iframe load there. Exercising the shipped script against a stubbed location
+// tests the exact source that browsers run on a server without that fallback.
+async function catalogRedirectTargets(location) {
+  const doc = await fetchHtml('/catalog/index.html');
+  const script = [...doc.querySelectorAll('head script')].find(
+    (element) => !element.src,
+  );
+  expect(script?.textContent, 'inline redirect script').toContain(
+    'location.replace',
+  );
+  const replaced = [];
+  new Function('location', script.textContent)({
+    ...location,
+    replace: (target) => replaced.push(target),
+  });
+  return replaced;
+}
+
+test('the bare-URL redirect builds an origin-pinned trailing-slash target', async () => {
+  const cases = [
+    { pathname: '/catalog', search: '', hash: '', target: '/catalog/' },
+    { pathname: 'catalog', search: '', hash: '', target: '/catalog/' },
+    {
+      pathname: '//evil.example/catalog',
+      search: '?x=1',
+      hash: '#frag',
+      target: '/evil.example/catalog/?x=1#frag',
+    },
+    {
+      pathname: '///evil.example/catalog',
+      search: '',
+      hash: '',
+      target: '/evil.example/catalog/',
+    },
+  ];
+  for (const { pathname, search, hash, target } of cases) {
+    const replaced = await catalogRedirectTargets({
+      origin: 'https://example.test',
+      pathname,
+      search,
+      hash,
+    });
+
+    expect(replaced, pathname).toEqual([`https://example.test${target}`]);
+  }
+});
+
+test('the bare-URL redirect leaves a trailing-slash or .html URL alone', async () => {
+  const trailing = await catalogRedirectTargets({
+    origin: 'https://example.test',
+    pathname: '/catalog/',
+    search: '?x=1',
+    hash: '#frag',
+  });
+  const html = await catalogRedirectTargets({
+    origin: 'https://example.test',
+    pathname: '/catalog/index.html',
+    search: '?x=1',
+    hash: '#frag',
+  });
+
+  expect(trailing).toEqual([]);
+  expect(html).toEqual([]);
+});
+
 test('each component page declares its component and lists its variations', async () => {
   for (const { tag } of components) {
     const variations = VARIATIONS[tag];
