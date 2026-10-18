@@ -114,6 +114,34 @@
         </figure>
 
         <figure>
+          <figcaption>external filtering</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox
+              id="catalog-combobox-external"
+              filter="external"
+              placeholder="Search parts of speech…"
+            >
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+              <option value="adjective">adjective</option>
+              <option value="adverb">adverb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox filter="external" placeholder="Search parts of speech…"&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  ...
+&lt;/yk-combobox&gt;
+
+&lt;script type="module"&gt;
+  const host = document.querySelector('yk-combobox[filter="external"]');
+  host.addEventListener('yk-combobox-filter', ({ detail }) =&gt; {
+    // Answer the query with fresh options; a real app would fetch them.
+    host.replaceChildren(...search(detail.query).map(toOption));
+  });
+&lt;/script&gt;</code></pre>
+        </figure>
+
+        <figure>
           <figcaption>label and submission inside a form</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <form onsubmit="event.preventDefault()">
@@ -145,5 +173,24 @@
         <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
       </footer>
     </div>
+    <script type="module">
+      // Answers the external-filter example with a search over a fixed list; a
+      // real application would debounce and fetch the matches instead.
+      const parts = ['noun', 'verb', 'adjective', 'adverb'];
+      const external = document.getElementById('catalog-combobox-external');
+      external.addEventListener('yk-combobox-filter', ({ detail }) => {
+        const query = detail.query.trim().toLowerCase();
+        external.replaceChildren(
+          ...parts
+            .filter((part) => part.includes(query))
+            .map((part) => {
+              const option = document.createElement('option');
+              option.value = part;
+              option.textContent = part;
+              return option;
+            }),
+        );
+      });
+    </script>
   </body>
 </html>

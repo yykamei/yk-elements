@@ -1497,6 +1497,14 @@ export const components = [
           'Boolean attribute that lets the user select several options, shown as chips, and submits one name=value entry per selected option.',
       },
       {
+        name: 'filter',
+        control: 'select',
+        options: ['client', 'external'],
+        default: 'unset',
+        description:
+          'How options are filtered. client (the default) hides non-matching options as the user types; external leaves filtering to the consumer, which answers the composed yk-combobox-filter event by replacing the option children.',
+      },
+      {
         name: 'required',
         control: 'boolean',
         default: 'unset',

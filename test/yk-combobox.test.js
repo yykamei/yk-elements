@@ -788,6 +788,144 @@ test('keeps the first selection and drops the chips when multiple is removed', (
   expect(chipValues(host)).toEqual([]);
 });
 
+function makeExternalCombobox(options = MULTI) {
+  const host = document.createElement('yk-combobox');
+  host.setAttribute('filter', 'external');
+  host.innerHTML = options;
+  document.body.appendChild(host);
+  return host;
+}
+
+test('does not filter rows when external filtering is requested', () => {
+  const host = makeExternalCombobox();
+
+  inputOf(host).click();
+  type(host, 'zzz');
+
+  expect(visibleRowsOf(host).map((row) => row.dataset.value)).toEqual([
+    'noun',
+    'verb',
+    'adjective',
+  ]);
+});
+
+test('dispatches yk-combobox-filter with the query as the user types', () => {
+  const host = makeExternalCombobox();
+  const queries = [];
+  host.addEventListener('yk-combobox-filter', (event) =>
+    queries.push(event.detail.query),
+  );
+
+  inputOf(host).click();
+  type(host, 'ver');
+
+  expect(queries.at(-1)).toBe('ver');
+});
+
+test('dispatches yk-combobox-filter with an empty query when it opens', () => {
+  const host = makeExternalCombobox();
+  const queries = [];
+  host.addEventListener('yk-combobox-filter', (event) =>
+    queries.push(event.detail.query),
+  );
+
+  inputOf(host).click();
+
+  expect(queries).toEqual(['']);
+});
+
+test('keeps the popup open with the empty state while results load', async () => {
+  const host = makeExternalCombobox('<option value="noun">noun</option>');
+  inputOf(host).click();
+  const filtered = [];
+  host.addEventListener('yk-combobox-filter', (event) => {
+    filtered.push(event.detail.query);
+    host.replaceChildren();
+  });
+  type(host, 'xyz');
+  await frame();
+
+  expect(rowsOf(host).length).toBe(0);
+  expect(emptyOf(host).hidden).toBe(false);
+  expect(isOpen(host)).toBe(true);
+  expect(filtered).toEqual(['xyz']);
+});
+
+test('shows options the consumer adds while external filtering is active', async () => {
+  const host = makeExternalCombobox('<option value="noun">noun</option>');
+  host.addEventListener('yk-combobox-filter', () => {
+    const option = document.createElement('option');
+    option.value = 'verb';
+    option.textContent = 'verb';
+    host.append(option);
+  });
+  inputOf(host).click();
+  type(host, 'v');
+  await frame();
+
+  expect(visibleRowsOf(host).map((row) => row.dataset.value)).toContain('verb');
+});
+
+test('reports the current value in the filter event so it can be kept', () => {
+  const host = makeExternalCombobox();
+  const details = [];
+  host.addEventListener('yk-combobox-filter', (event) =>
+    details.push(event.detail),
+  );
+  inputOf(host).click();
+  rowsOf(host)[0].click();
+
+  type(host, 'v');
+
+  expect(details.at(-1)).toEqual({ query: 'v', value: 'noun' });
+});
+
+test('notifies the consumer when external filtering is switched on while open', () => {
+  const host = makeCombobox();
+  inputOf(host).click();
+  type(host, 'no');
+  const queries = [];
+  host.addEventListener('yk-combobox-filter', (event) =>
+    queries.push(event.detail.query),
+  );
+
+  host.filter = 'external';
+
+  expect(queries).toEqual(['no']);
+});
+
+test('normalizes an unknown filter value to client', () => {
+  const host = makeCombobox();
+
+  host.filter = 'bogus';
+
+  expect(host.filter).toBe('client');
+  expect(host.getAttribute('filter')).toBe('client');
+});
+
+test('exposes the filter mode through a property', () => {
+  const host = makeExternalCombobox();
+
+  expect(host.filter).toBe('external');
+
+  host.filter = 'client';
+
+  expect(host.filter).toBe('client');
+  expect(host.getAttribute('filter')).toBe('client');
+});
+
+test('toggles options under external filtering when multiple', () => {
+  const host = makeMultipleCombobox();
+  host.filter = 'external';
+
+  inputOf(host).click();
+  type(host, 'noun');
+  rowsOf(host)[0].click();
+
+  expect(chipValues(host)).toEqual(['noun']);
+  expect(visibleRowsOf(host).length).toBe(3);
+});
+
 test('styles the face like the Bootstrap form control', async () => {
   const host = makeCombobox();
   await frame();

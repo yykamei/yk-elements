@@ -20,6 +20,18 @@
  * receives one `name=value` entry per selected option. Chips wrap inside the
  * field and scroll, showing an overflow shadow, once they pass a few rows.
  *
+ * With `filter="external"` the component filters by the typed text no longer:
+ * it dispatches a composed `yk-combobox-filter` event (`detail: { query, value }`)
+ * on every query change and on open, and the consumer replaces the `<option>`
+ * children with the results, asynchronously if it wants. The empty slot can
+ * carry a placeholder such as "Searching…" while a search is in flight.
+ * Because the selection lives in the options, replacing them drops a selected
+ * value they no longer contain; the event carries the current `value` so the
+ * consumer can keep it in the results. The consumer should listen on the
+ * element (the event bubbles, so a document listener would also catch events
+ * from unrelated comboboxes), treat `query` as untrusted input to encode, and
+ * debounce or cancel in-flight requests as it sees fit.
+ *
  * The host carries the same form behavior as the other fields: it is
  * form-associated, contributes `name=value`, mirrors `required` validation
  * through ElementInternals, supports disabled form/fieldset ancestors, and is
@@ -69,11 +81,12 @@ class YKCombobox extends YKFieldElement {
   static coreStylesheet = sheet;
 
   // `name` is observed so the multi-value form payload is rebuilt when it
-  // changes after a selection, and `multiple` so the selection model and the
-  // chips follow it. Neither is mirrored onto the internal input.
+  // changes after a selection, `multiple` so the selection model and the chips
+  // follow it, and `filter` so the external mode takes effect at once. None of
+  // them is mirrored onto the internal input.
   static get observedAttributes() {
     // biome-ignore lint/complexity/noThisInStatic: super must dispatch through the base getter so this class's `inputAttributes` override is honored
-    return [...super.observedAttributes, 'name', 'multiple'];
+    return [...super.observedAttributes, 'name', 'multiple', 'filter'];
   }
 
   #id;
@@ -139,6 +152,9 @@ class YKCombobox extends YKFieldElement {
     listbox.setAttribute('role', 'listbox');
     listbox.id = `${this.#id}-listbox`;
     empty.setAttribute('part', 'empty');
+    // A status region so the visible placeholder (including a consumer's
+    // "Searching…") is exposed to assistive technology.
+    empty.setAttribute('role', 'status');
     const emptySlot = document.createElement('slot');
     emptySlot.name = 'empty';
     emptySlot.textContent = EMPTY_TEXT;
@@ -159,10 +175,10 @@ class YKCombobox extends YKFieldElement {
     this.addEventListener('keydown', (event) => this.#onKeydown(event));
     this.addEventListener('click', (event) => this.#onClick(event));
     this.addEventListener('focusin', (event) => this.#onFocusIn(event));
-    // Pre-upgrade writes to `value` and `multiple` are not in the base capture
-    // list (a native select has neither as a mirrored property), so they are
-    // routed through the accessors here instead.
-    for (const name of ['value', 'multiple']) {
+    // Pre-upgrade writes to `value`, `multiple`, and `filter` are not in the
+    // base capture list (a native select has none of them as a mirrored
+    // property), so they are routed through the accessors here instead.
+    for (const name of ['value', 'multiple', 'filter']) {
       if (Object.hasOwn(this, name)) {
         const value = this[name];
         delete this[name];
@@ -209,12 +225,18 @@ class YKCombobox extends YKFieldElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'name' || name === 'multiple') {
+    if (name === 'name' || name === 'multiple' || name === 'filter') {
       // Host-only attributes: mirroring them onto the internal text input is
       // meaningless, so they never reach it. `#syncMultiple` refreshes the
       // form state itself.
       if (name === 'multiple') this.#syncMultiple();
-      else this.refreshFormState();
+      else if (name === 'name') this.refreshFormState();
+      else {
+        // Switching to external while open must still tell the consumer about
+        // the query already typed.
+        this.#applyFilter();
+        this.#emitFilter();
+      }
       return;
     }
     super.attributeChangedCallback(name, oldValue, newValue);
@@ -263,6 +285,19 @@ class YKCombobox extends YKFieldElement {
 
   set multiple(value) {
     this.toggleAttribute('multiple', Boolean(value));
+  }
+
+  // `external` hands filtering to the consumer; anything else filters locally.
+  get filter() {
+    return this.getAttribute('filter') === 'external' ? 'external' : 'client';
+  }
+
+  set filter(value) {
+    if (value == null) {
+      this.removeAttribute('filter');
+    } else {
+      this.setAttribute('filter', value === 'external' ? 'external' : 'client');
+    }
   }
 
   formValue() {
@@ -373,7 +408,15 @@ class YKCombobox extends YKFieldElement {
       option.hidden = true;
     }
     this.#applyFilter();
-    if (options.length === 0 && this.#open) this.#hide();
+    // An external search may legitimately clear the options while it loads, so
+    // only the client mode closes an empty popup.
+    if (options.length === 0 && this.#open && this.filter === 'client') {
+      this.#hide();
+      return;
+    }
+    // External results arrive asynchronously and can change the list height, so
+    // the popup is re-placed when its content changes while open.
+    if (this.#open) this.#position();
   }
 
   #rebuildRows(options) {
@@ -543,7 +586,10 @@ class YKCombobox extends YKFieldElement {
   }
 
   #applyFilter() {
-    const query = this.#query.trim().toLowerCase();
+    // External filtering leaves the rows the consumer supplied untouched; the
+    // empty state still reflects whether there are any rows to show.
+    const query =
+      this.filter === 'external' ? '' : this.#query.trim().toLowerCase();
     for (const row of this.#rows()) {
       row.hidden = query !== '' && !this.#matches(row, query);
     }
@@ -571,6 +617,7 @@ class YKCombobox extends YKFieldElement {
     this.#applyFilter();
     this.#activate(fromEnd);
     this.#position();
+    this.#emitFilter();
     input.setAttribute('aria-expanded', 'true');
     document.addEventListener('pointerdown', this.#onDocumentPointerDown, true);
     document.addEventListener('focusin', this.#onDocumentFocusIn, true);
@@ -690,6 +737,19 @@ class YKCombobox extends YKFieldElement {
     this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
   }
 
+  // Tells an external filter consumer which query to answer; a no-op in the
+  // default client mode.
+  #emitFilter() {
+    if (this.filter !== 'external' || !this.#open) return;
+    this.dispatchEvent(
+      new CustomEvent('yk-combobox-filter', {
+        detail: { query: this.#query, value: this.value },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   #onOptionClick(event) {
     const row = event.target.closest?.('[part="option"]');
     if (!row || row.hidden) return;
@@ -714,8 +774,13 @@ class YKCombobox extends YKFieldElement {
     // are typing, so a commit does not reopen a popup it just closed.
     if (event.composedPath()[0] !== this.#input()) return;
     this.#query = this.#input().value;
-    if (!this.#open) this.#show();
-    else this.#applyFilter();
+    if (!this.#open) {
+      // Opening reports the query through #show's own emit.
+      this.#show();
+      return;
+    }
+    this.#applyFilter();
+    this.#emitFilter();
   }
 
   #onClick(event) {
