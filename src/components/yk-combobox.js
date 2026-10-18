@@ -1,6 +1,6 @@
 /**
- * Searchable single-choice selector that renders an editable combobox kept in
- * Shadow DOM: a text input (`part="input"`, `role="combobox"`) over a listbox
+ * Searchable selector that renders an editable combobox kept in Shadow DOM: a
+ * text input (`part="input"`, `role="combobox"`) over a listbox
  * popup (`part="popup"`, `role="listbox"`) that opens below the field and flips
  * above it when there is no room.
  *
@@ -13,6 +13,12 @@
  * `aria-activedescendant`. A selected option is committed on Enter or a click
  * and closes the popup; Escape or an outside interaction closes it without
  * changing the selection and restores the label.
+ *
+ * With the `multiple` attribute the host selects several options: choosing one
+ * toggles it and keeps the popup open, each choice shows as a chip with a
+ * remove button, `value` is an array normalized to option order, and the form
+ * receives one `name=value` entry per selected option. Chips wrap inside the
+ * field and scroll, showing an overflow shadow, once they pass a few rows.
  *
  * The host carries the same form behavior as the other fields: it is
  * form-associated, contributes `name=value`, mirrors `required` validation
@@ -62,6 +68,14 @@ class YKCombobox extends YKFieldElement {
 
   static coreStylesheet = sheet;
 
+  // `name` is observed so the multi-value form payload is rebuilt when it
+  // changes after a selection, and `multiple` so the selection model and the
+  // chips follow it. Neither is mirrored onto the internal input.
+  static get observedAttributes() {
+    // biome-ignore lint/complexity/noThisInStatic: super must dispatch through the base getter so this class's `inputAttributes` override is honored
+    return [...super.observedAttributes, 'name', 'multiple'];
+  }
+
   #id;
 
   #open = false;
@@ -73,6 +87,10 @@ class YKCombobox extends YKFieldElement {
   #query = '';
 
   #observer;
+
+  #overflowObserver;
+
+  #overflowFrame;
 
   // A pre-upgrade `value` write (or one made before the options exist) is held
   // here and applied once the popup rows are built; see syncOptions().
@@ -100,13 +118,21 @@ class YKCombobox extends YKFieldElement {
     this.#id = `yk-combobox-${++instanceCount}`;
     const shadowRoot = this.shadowRoot;
     const field = document.createElement('span');
+    const chips = document.createElement('ul');
     const arrow = document.createElement('span');
+    const removeLabel = document.createElement('slot');
     const popup = document.createElement('div');
     const listbox = document.createElement('ul');
     const empty = document.createElement('div');
     field.setAttribute('part', 'field');
+    chips.setAttribute('part', 'chips');
     arrow.setAttribute('part', 'arrow');
     arrow.setAttribute('aria-hidden', 'true');
+    // Hidden data source for the chip remove labels, localized the same way as
+    // the file field's remove-label slot.
+    removeLabel.name = 'remove-label';
+    removeLabel.hidden = true;
+    removeLabel.textContent = 'Remove';
     popup.setAttribute('part', 'popup');
     popup.setAttribute('popover', 'manual');
     listbox.setAttribute('part', 'listbox');
@@ -117,26 +143,34 @@ class YKCombobox extends YKFieldElement {
     emptySlot.name = 'empty';
     emptySlot.textContent = EMPTY_TEXT;
     empty.append(emptySlot);
-    field.append(shadowRoot.querySelector('input'), arrow);
+    // The input comes first in DOM order so `delegatesFocus` (and thus
+    // clicking a `<label for>`) lands on it, not on a chip remove button; the
+    // chips are placed before it visually with flex `order`.
+    field.append(shadowRoot.querySelector('input'), chips, arrow);
     popup.append(listbox, empty);
-    shadowRoot.append(field, popup);
+    shadowRoot.append(field, popup, removeLabel);
     popup.addEventListener('mousedown', (event) => {
       if (event.target.closest('[part="option"]')) event.preventDefault();
     });
     popup.addEventListener('click', (event) => this.#onOptionClick(event));
+    chips.addEventListener('click', (event) => this.#onChipClick(event));
+    removeLabel.addEventListener('slotchange', () => this.#renderChips());
     this.addEventListener('input', (event) => this.#onInput(event));
     this.addEventListener('keydown', (event) => this.#onKeydown(event));
     this.addEventListener('click', (event) => this.#onClick(event));
     this.addEventListener('focusin', (event) => this.#onFocusIn(event));
-    // Pre-upgrade writes to `value` are not in the base capture list (a native
-    // select has no value attribute), so they are routed through the accessor
-    // here instead.
-    if (Object.hasOwn(this, 'value')) {
-      const value = this.value;
-      delete this.value;
-      this.value = value;
+    // Pre-upgrade writes to `value` and `multiple` are not in the base capture
+    // list (a native select has neither as a mirrored property), so they are
+    // routed through the accessors here instead.
+    for (const name of ['value', 'multiple']) {
+      if (Object.hasOwn(this, name)) {
+        const value = this[name];
+        delete this[name];
+        this[name] = value;
+      }
     }
     this.#syncAria();
+    this.#syncMultiple();
     this.refreshFormState();
   }
 
@@ -159,13 +193,33 @@ class YKCombobox extends YKFieldElement {
         'data-description',
       ],
     });
+    this.#overflowObserver?.disconnect();
+    this.#overflowObserver = new ResizeObserver(() => this.#syncOverflow());
+    this.#overflowObserver.observe(this.#chips());
     this.#syncAria();
     this.#syncOptions();
   }
 
   disconnectedCallback() {
     this.#observer?.disconnect();
+    this.#overflowObserver?.disconnect();
+    if (this.#overflowFrame) cancelAnimationFrame(this.#overflowFrame);
+    this.#overflowFrame = 0;
     this.#hide();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'name' || name === 'multiple') {
+      // Host-only attributes: mirroring them onto the internal text input is
+      // meaningless, so they never reach it. `#syncMultiple` refreshes the
+      // form state itself.
+      if (name === 'multiple') this.#syncMultiple();
+      else this.refreshFormState();
+      return;
+    }
+    super.attributeChangedCallback(name, oldValue, newValue);
+    // The base mirrors `required` onto the input; multiple mode must undo it.
+    if (name === 'required') this.#syncRequired();
   }
 
   createControl() {
@@ -180,36 +234,55 @@ class YKCombobox extends YKFieldElement {
     // the rows so the reset lands on the options marked `selected`.
     super.formResetCallback();
     this.#syncAria();
+    // The base's fresh input re-mirrors `required`, which multiple mode undoes.
+    this.#syncRequired();
     this.#defaultsPending = true;
     this.#pendingValue = undefined;
     this.#syncOptions();
   }
 
   get value() {
-    return selectionValues(this)[0] ?? '';
+    const selected = selectionValues(this);
+    return this.multiple ? selected : (selected[0] ?? '');
   }
 
   set value(value) {
-    const wanted = (value == null ? [] : Array.isArray(value) ? value : [value])
-      .map(String)
-      .slice(0, 1);
+    const wanted = (
+      value == null ? [] : Array.isArray(value) ? value : [value]
+    ).map(String);
     if (this.#rows().length === 0 && wanted.length > 0) {
       this.#pendingValue = wanted;
       return;
     }
-    this.#setSelection(wanted);
+    this.#setSelection(this.multiple ? wanted : wanted.slice(0, 1));
+  }
+
+  get multiple() {
+    return this.hasAttribute('multiple');
+  }
+
+  set multiple(value) {
+    this.toggleAttribute('multiple', Boolean(value));
   }
 
   formValue() {
-    return this.value;
+    if (!this.multiple) return this.value;
+    const values = selectionValues(this);
+    // Nothing selected contributes no entry, like a native select multiple;
+    // values are normalized to option order by the rows themselves.
+    if (this.name === '' || values.length === 0) return null;
+    const data = new FormData();
+    for (const value of values) data.append(this.name, value);
+    return data;
   }
 
   formValidity() {
     const input = this.shadowRoot.querySelector('[part="input"]');
     const selected = selectionValues(this);
-    const missing =
-      this.required && (selected.length === 0 || selected[0] === '');
-    if (!missing) return { validity: {}, message: '' };
+    const missing = this.multiple
+      ? selected.length === 0
+      : selected.length === 0 || selected[0] === '';
+    if (!missing || !this.required) return { validity: {}, message: '' };
     return {
       validity: { valueMissing: true },
       message: input?.validationMessage || 'Please select an item in the list.',
@@ -234,6 +307,10 @@ class YKCombobox extends YKFieldElement {
 
   #empty() {
     return this.shadowRoot.querySelector('[part="empty"]');
+  }
+
+  #chips() {
+    return this.shadowRoot.querySelector('[part="chips"]');
   }
 
   #rows() {
@@ -325,17 +402,23 @@ class YKCombobox extends YKFieldElement {
     this.#listbox().replaceChildren(...rows);
   }
 
-  // Marks the rows whose values are in `values` as selected (the first match
-  // only, since this component selects one option at a time) and refreshes the
-  // field and the form state to match.
+  // Marks the rows whose values are in `values` as selected and refreshes the
+  // chips, the field, and the form state to match. A value that matches several
+  // rows marks only the first, and single-select mode keeps only the first
+  // value, so the selection never outruns what the field can show.
   #setSelection(values) {
     const wanted = new Set(values);
-    let assigned = false;
+    const seen = new Set();
     for (const row of this.#rows()) {
-      const selected = wanted.has(row.dataset.value ?? '') && !assigned;
+      const value = row.dataset.value ?? '';
+      const selected =
+        wanted.has(value) &&
+        !seen.has(value) &&
+        (this.multiple || seen.size === 0);
       row.setAttribute('aria-selected', String(selected));
-      if (selected) assigned = true;
+      if (selected) seen.add(value);
     }
+    this.#renderChips();
     this.#renderField();
     this.refreshFormState();
   }
@@ -343,10 +426,15 @@ class YKCombobox extends YKFieldElement {
   // Shows the selected option's label in the input while the popup is closed;
   // an in-progress query is left alone while it is open. The label is selected
   // while the field keeps focus so the next keystroke starts a fresh search
-  // instead of appending to the label.
+  // instead of appending to the label. In multiple mode the input only ever
+  // holds a query, so it is cleared once the popup is closed.
   #renderField() {
     if (this.#open) return;
     const input = this.#input();
+    if (this.multiple) {
+      input.value = '';
+      return;
+    }
     const selected = this.#rows().find(
       (row) => row.getAttribute('aria-selected') === 'true',
     );
@@ -354,6 +442,104 @@ class YKCombobox extends YKFieldElement {
     if (input.value !== '' && this.shadowRoot.activeElement === input) {
       input.select();
     }
+  }
+
+  #renderChips() {
+    const chips = this.#chips();
+    if (!this.multiple) {
+      chips.replaceChildren();
+      this.#scheduleOverflowSync();
+      return;
+    }
+    const selected = this.#rows().filter(
+      (row) => row.getAttribute('aria-selected') === 'true',
+    );
+    const verb = this.#removeLabel();
+    chips.replaceChildren(
+      ...selected.map((row) => {
+        const chip = document.createElement('li');
+        const label = document.createElement('span');
+        const remove = document.createElement('button');
+        chip.setAttribute('part', 'chip');
+        chip.dataset.value = row.dataset.value ?? '';
+        label.setAttribute('part', 'chip-label');
+        label.textContent = row.dataset.label ?? '';
+        remove.setAttribute('part', 'chip-remove');
+        remove.type = 'button';
+        remove.setAttribute('aria-label', `${verb} ${row.dataset.label ?? ''}`);
+        remove.append(this.#removeIcon());
+        chip.append(label, remove);
+        return chip;
+      }),
+    );
+    this.#scheduleOverflowSync();
+  }
+
+  // The remove verb localizes through the remove-label slot; assigned light
+  // DOM text wins over the fallback text, matching the file field.
+  #removeLabel() {
+    const slot = this.shadowRoot.querySelector('slot[name="remove-label"]');
+    const assigned = slot
+      .assignedNodes()
+      .find((node) => (node.textContent ?? '').trim() !== '');
+    return (assigned?.textContent ?? slot.textContent).trim();
+  }
+
+  #removeIcon() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('width', '12');
+    svg.setAttribute('height', '12');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M4 4l8 8M12 4l-8 8');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.append(path);
+    return svg;
+  }
+
+  // Recomputes the overflow affordance in the next frame rather than inline,
+  // because reading scrollHeight forces a layout; deferring keeps the style
+  // and layout work off the current task (the repository avoids forced
+  // synchronous layout). The ResizeObserver covers pure size changes.
+  #scheduleOverflowSync() {
+    if (this.#overflowFrame) return;
+    this.#overflowFrame = requestAnimationFrame(() => {
+      this.#overflowFrame = 0;
+      this.#syncOverflow();
+    });
+  }
+
+  // Marks an overflow shadow affordance on the chip list once its content is
+  // taller than the box, so a scrolled-away selection stays discoverable.
+  #syncOverflow() {
+    const chips = this.#chips();
+    chips.toggleAttribute(
+      'data-overflow',
+      chips.scrollHeight > chips.clientHeight,
+    );
+  }
+
+  #syncMultiple() {
+    const listbox = this.#listbox();
+    if (listbox) {
+      listbox.setAttribute('aria-multiselectable', String(this.multiple));
+    }
+    this.#syncRequired();
+    const selected = selectionValues(this);
+    this.#setSelection(this.multiple ? selected : selected.slice(0, 1));
+  }
+
+  // In multiple mode the input holds only a search query, so it must not carry
+  // the required constraint: an always-empty required input would report
+  // valueMissing and paint the invalid face even while a chip is selected. The
+  // host's formValidity() owns the constraint there, while single-select keeps
+  // the native required on the input so its message stays localized.
+  #syncRequired() {
+    this.#input().required = !this.multiple && this.hasAttribute('required');
   }
 
   #applyFilter() {
@@ -467,12 +653,36 @@ class YKCombobox extends YKFieldElement {
 
   #chooseRow(row) {
     const value = row.dataset.value ?? '';
+    if (this.multiple) {
+      this.#toggleValue(value);
+      return;
+    }
     const changed = selectionValues(this)[0] !== value;
     this.#setSelection([value]);
     // A native select fires change only when the value actually changes, so
     // re-committing the current option is silent.
     if (changed) this.#emitChange();
     this.#hide();
+  }
+
+  #toggleValue(value) {
+    const selected = selectionValues(this);
+    const next = selected.includes(value)
+      ? selected.filter((item) => item !== value)
+      : [...selected, value];
+    this.#setSelection(next);
+    this.#emitChange();
+  }
+
+  #onChipClick(event) {
+    const remove = event.target.closest?.('[part="chip-remove"]');
+    if (!remove) return;
+    // Keep the click from reaching the field handler, which would reopen the
+    // popup instead of just removing the chip.
+    event.stopPropagation();
+    const chip = remove.closest('[part="chip"]');
+    this.#toggleValue(chip.dataset.value ?? '');
+    this.#input().focus();
   }
 
   #emitChange() {
@@ -489,10 +699,13 @@ class YKCombobox extends YKFieldElement {
   }
 
   // Selecting the label on focus lets a keyboard user type straight into a
-  // new search, matching the click path in onKeydown's sibling handler.
+  // new search, matching the click path in onKeydown's sibling handler. In
+  // multiple mode the input holds only a query, so there is nothing to select.
   #onFocusIn(event) {
     if (event.composedPath()[0] !== this.#input()) return;
-    if (selectionValues(this).length > 0) this.#input().select();
+    if (!this.multiple && selectionValues(this).length > 0) {
+      this.#input().select();
+    }
   }
 
   #onInput(event) {
@@ -511,7 +724,7 @@ class YKCombobox extends YKFieldElement {
     if (input.disabled) return;
     if (path[0] === input) {
       if (!this.#open) this.#show();
-      if (selectionValues(this).length > 0) input.select();
+      if (!this.multiple && selectionValues(this).length > 0) input.select();
       return;
     }
     if (path.includes(this.#field()) && !path.includes(this.#popup())) {
@@ -550,6 +763,16 @@ class YKCombobox extends YKFieldElement {
       this.#hide();
     } else if (key === 'Tab') {
       if (this.#open) this.#hide();
+    } else if (
+      key === 'Backspace' &&
+      this.multiple &&
+      this.#input().value === ''
+    ) {
+      const values = selectionValues(this);
+      if (values.length > 0) {
+        event.preventDefault();
+        this.#toggleValue(values[values.length - 1]);
+      }
     }
   }
 }

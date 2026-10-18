@@ -217,6 +217,24 @@ const comboboxFaceProperties = [
     description: 'Background of the highlighted option row.',
   },
   {
+    name: '--yk-combobox-chips-max-height',
+    default: '4.5rem',
+    description:
+      'Maximum height of the selected-chip list before it scrolls, about three rows.',
+  },
+  {
+    name: '--yk-combobox-chip-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 15%, var(--yk-color-surface, white))',
+    description: 'Background of a selected chip.',
+  },
+  {
+    name: '--yk-combobox-chip-overflow-shadow',
+    default: 'oklch(0% 0 0 / 25%)',
+    description:
+      'Shadow shown under the chip list while it overflows and can scroll.',
+  },
+  {
     name: '--yk-combobox-popup-shadow',
     default: '0 0.5rem 1rem oklch(0% 0 0 / 15%)',
     description: 'Shadow of the option list popup.',
@@ -1457,7 +1475,7 @@ export const components = [
     tag: 'yk-combobox',
     category: 'Components',
     description:
-      'Searchable single-choice selector that renders an editable combobox with an option list popup; options come from its light-DOM option children, which it filters by the typed text and mirrors into the popup, showing the data-description attribute as a second line when present.',
+      'Searchable selector that renders an editable combobox with an option list popup; options come from its light-DOM option children, which it filters by the typed text and mirrors into the popup, showing the data-description attribute as a second line when present. With multiple it selects several options as chips and submits one entry per option.',
     playground: {
       content:
         '  <option value="noun" data-description="A naming word">noun</option>\n  <option value="verb" data-description="An action word">verb</option>\n  <option value="adjective">adjective</option>',
@@ -1470,6 +1488,13 @@ export const components = [
         default: 'unset',
         description:
           'Hint text shown while no option is selected, mirrored onto the internal input.',
+      },
+      {
+        name: 'multiple',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that lets the user select several options, shown as chips, and submits one name=value entry per selected option.',
       },
       {
         name: 'required',

@@ -6,6 +6,7 @@
   position: relative;
   box-sizing: border-box;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--yk-space-sm, 0.5rem);
   inline-size: 100%;
@@ -95,10 +96,85 @@
     );
 }
 
+/* The chips precede the input visually but follow it in DOM order, so a label
+   click focuses the input rather than a remove button. */
+[part="chips"] {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+  margin: 0;
+  padding: 0;
+  max-block-size: var(--yk-combobox-chips-max-height, 4.5rem);
+  overflow-y: auto;
+  list-style: none;
+}
+
+/* An empty chip list must not add a gap before the input. */
+[part="chips"]:empty {
+  display: none;
+}
+
+/* The overflow affordance MongoDB-style: an inset shadow that hints the list
+   scrolls once the chips pass the visible rows. */
+[part="chips"][data-overflow] {
+  box-shadow: inset 0 -0.5rem 0.5rem -0.5rem
+    var(--yk-combobox-chip-overflow-shadow, oklch(0% 0 0 / 25%));
+}
+
+[part="chip"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-block: 0.125rem;
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  font-size: 0.875em;
+  color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+  background-color: var(
+    --yk-combobox-chip-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 15%,
+      var(--yk-color-surface, white)
+    )
+  );
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="chip-remove"] {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Expands the hit target around the small icon without growing the chip. */
+[part="chip-remove"]::after {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+}
+
+[part="chip-remove"]:focus-visible {
+  outline: 2px solid
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+  outline-offset: 1px;
+}
+
 /* The face lives on the field wrapper, so the input inside it is stripped of
    the shared form-control border and background. */
 [part="input"] {
-  flex: 1 1 auto;
+  flex: 1 1 4rem;
   min-inline-size: 0;
   margin: 0;
   padding: 0;

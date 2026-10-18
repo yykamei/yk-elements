@@ -526,6 +526,268 @@ test('shows the empty slot default when there are no options', () => {
   expect(emptyOf(host).hidden).toBe(false);
 });
 
+const MULTI = `
+  <option value="noun">noun</option>
+  <option value="verb">verb</option>
+  <option value="adjective">adjective</option>
+`;
+
+function makeMultipleCombobox(options = MULTI) {
+  const host = document.createElement('yk-combobox');
+  host.setAttribute('multiple', '');
+  host.innerHTML = options;
+  document.body.appendChild(host);
+  return host;
+}
+
+const chipsOf = (host) => host.shadowRoot.querySelector('[part="chips"]');
+const chipValues = (host) =>
+  [...chipsOf(host).querySelectorAll('[part="chip"]')].map(
+    (chip) => chip.dataset.value,
+  );
+const chipRemoveOf = (host, value) =>
+  chipsOf(host).querySelector(
+    `[part="chip"][data-value="${value}"] [part="chip-remove"]`,
+  );
+
+test('marks the listbox as multiselectable when multiple', () => {
+  const host = makeMultipleCombobox();
+
+  expect(listboxOf(host).getAttribute('aria-multiselectable')).toBe('true');
+});
+
+test('renders a chip for each selected option', () => {
+  const host = makeMultipleCombobox(
+    '<option value="noun" selected>noun</option><option value="verb">verb</option>',
+  );
+
+  expect(chipValues(host)).toEqual(['noun']);
+  expect(chipRemoveOf(host, 'noun').getAttribute('aria-label')).toBe(
+    'Remove noun',
+  );
+});
+
+test('adds and removes chips while the popup stays open', () => {
+  const host = makeMultipleCombobox();
+
+  inputOf(host).click();
+  rowsOf(host)[0].click();
+  expect(chipValues(host)).toEqual(['noun']);
+  expect(isOpen(host)).toBe(true);
+
+  rowsOf(host)[1].click();
+  expect(chipValues(host)).toEqual(['noun', 'verb']);
+
+  rowsOf(host)[0].click();
+  expect(chipValues(host)).toEqual(['verb']);
+});
+
+test('toggles options with Enter and keeps the popup open', () => {
+  const host = makeMultipleCombobox();
+
+  press(host, 'ArrowDown');
+  press(host, 'Enter');
+  expect(chipValues(host)).toEqual(['noun']);
+
+  press(host, 'ArrowDown');
+  press(host, 'Enter');
+  expect(chipValues(host)).toEqual(['noun', 'verb']);
+  expect(isOpen(host)).toBe(true);
+});
+
+test('reads and writes an array through the value property', () => {
+  const host = makeMultipleCombobox();
+
+  host.value = ['noun', 'adjective'];
+
+  expect(host.value).toEqual(['noun', 'adjective']);
+  expect(chipValues(host)).toEqual(['noun', 'adjective']);
+});
+
+test('submits one entry per selected value in option order', () => {
+  const form = document.createElement('form');
+  const host = makeMultipleCombobox();
+  host.setAttribute('name', 'part');
+  host.value = ['adjective', 'noun'];
+  form.append(host);
+  document.body.appendChild(form);
+
+  expect(new FormData(form).getAll('part')).toEqual(['noun', 'adjective']);
+});
+
+test('surfaces valueMissing for a required multiple with no selection', () => {
+  const host = makeMultipleCombobox();
+  host.required = true;
+
+  expect(host.validity.valueMissing).toBe(true);
+
+  host.value = ['noun'];
+
+  expect(host.checkValidity()).toBe(true);
+});
+
+test('removes a chip through its remove button', () => {
+  const host = makeMultipleCombobox();
+  host.value = ['noun', 'verb'];
+  const changes = [];
+  host.addEventListener('change', () => changes.push(true));
+
+  chipRemoveOf(host, 'noun').click();
+
+  expect(chipValues(host)).toEqual(['verb']);
+  expect(host.value).toEqual(['verb']);
+  expect(changes.length).toBe(1);
+});
+
+test('removes the last chip on Backspace while the input is empty', () => {
+  const host = makeMultipleCombobox();
+  host.value = ['noun', 'verb'];
+  inputOf(host).focus();
+
+  press(host, 'Backspace');
+
+  expect(chipValues(host)).toEqual(['noun']);
+});
+
+test('restores the options marked selected when the form resets', () => {
+  const form = document.createElement('form');
+  const host = makeMultipleCombobox(
+    '<option value="noun" selected>noun</option><option value="verb">verb</option><option value="adjective">adjective</option>',
+  );
+  host.setAttribute('name', 'part');
+  form.append(host);
+  document.body.appendChild(form);
+
+  host.value = ['verb', 'adjective'];
+  form.reset();
+
+  expect(host.value).toEqual(['noun']);
+});
+
+test('is activated by a label pointing at the host in multiple mode', async () => {
+  const label = document.createElement('label');
+  label.htmlFor = 'catalog-combobox-multi';
+  const host = makeMultipleCombobox();
+  host.id = 'catalog-combobox-multi';
+  host.value = ['noun'];
+  document.body.append(label);
+  await frame();
+
+  label.click();
+
+  expect(host.shadowRoot.activeElement).toBe(inputOf(host));
+});
+
+test('rebuilds the form payload when the name changes after a selection', () => {
+  const form = document.createElement('form');
+  const host = makeMultipleCombobox();
+  host.value = ['noun', 'verb'];
+  form.append(host);
+  document.body.appendChild(form);
+
+  host.setAttribute('name', 'parts');
+
+  expect(new FormData(form).getAll('parts')).toEqual(['noun', 'verb']);
+});
+
+test('marks only one row when several options share a value', () => {
+  const host = makeMultipleCombobox(
+    '<option value="noun">noun</option><option value="noun">noun again</option><option value="verb">verb</option>',
+  );
+
+  host.value = ['noun'];
+
+  expect(chipValues(host)).toEqual(['noun']);
+  expect(
+    rowsOf(host).filter((row) => row.getAttribute('aria-selected') === 'true')
+      .length,
+  ).toBe(1);
+});
+
+test('keeps the current selection when multiple is added', () => {
+  const host = makeCombobox();
+  host.value = 'verb';
+
+  host.multiple = true;
+
+  expect(host.value).toEqual(['verb']);
+  expect(chipValues(host)).toEqual(['verb']);
+});
+
+test('does not mirror required onto the query input in multiple mode', () => {
+  const host = makeMultipleCombobox();
+  host.required = true;
+
+  expect(inputOf(host).required).toBe(false);
+  expect(host.validity.valueMissing).toBe(true);
+
+  host.value = ['noun'];
+
+  expect(inputOf(host).required).toBe(false);
+  expect(host.checkValidity()).toBe(true);
+});
+
+test('keeps required on the input in single mode', () => {
+  const host = makeCombobox();
+  host.required = true;
+
+  expect(inputOf(host).required).toBe(true);
+});
+
+test('does not mirror required onto the input in multiple mode after reset', () => {
+  const form = document.createElement('form');
+  const host = makeMultipleCombobox(
+    '<option value="noun" selected>noun</option><option value="verb">verb</option>',
+  );
+  host.setAttribute('name', 'part');
+  host.required = true;
+  form.append(host);
+  document.body.appendChild(form);
+
+  form.reset();
+
+  expect(inputOf(host).required).toBe(false);
+  expect(host.value).toEqual(['noun']);
+  expect(host.checkValidity()).toBe(true);
+});
+
+test('localizes the chip remove label through the remove-label slot', () => {
+  const host = makeMultipleCombobox();
+  const localized = document.createElement('span');
+  localized.slot = 'remove-label';
+  localized.textContent = '삭제';
+  host.append(localized);
+
+  host.value = ['noun'];
+
+  expect(chipRemoveOf(host, 'noun').getAttribute('aria-label')).toBe(
+    '삭제 noun',
+  );
+});
+
+test('shows an overflow affordance when the chips exceed the field', async () => {
+  const options = Array.from(
+    { length: 12 },
+    (_, index) => `<option value="o${index}">option ${index}</option>`,
+  ).join('');
+  const host = makeMultipleCombobox(options);
+  host.style.setProperty('--yk-combobox-chips-max-height', '0.5rem');
+  host.value = Array.from({ length: 12 }, (_, index) => `o${index}`);
+  await frame();
+
+  expect(chipsOf(host).hasAttribute('data-overflow')).toBe(true);
+});
+
+test('keeps the first selection and drops the chips when multiple is removed', () => {
+  const host = makeMultipleCombobox();
+  host.value = ['noun', 'verb'];
+
+  host.removeAttribute('multiple');
+
+  expect(host.value).toBe('noun');
+  expect(chipValues(host)).toEqual([]);
+});
+
 test('styles the face like the Bootstrap form control', async () => {
   const host = makeCombobox();
   await frame();
