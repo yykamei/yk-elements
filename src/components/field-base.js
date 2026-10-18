@@ -268,6 +268,20 @@ export class YKFieldElement extends HTMLElement {
     return this.#input.value;
   }
 
+  // Extension point for subclasses whose validity is not the internal
+  // control's own (e.g. a combobox whose internal input holds a search query
+  // rather than the selected value). Called on every form-state sync and
+  // mirrored to ElementInternals; the message must be non-empty whenever the
+  // flags mark a failure, as setValidity requires. The default is the
+  // internal control's own validity, so subclasses that do not override it
+  // behave exactly as before.
+  formValidity() {
+    return {
+      validity: this.#input.validity,
+      message: this.#input.validationMessage,
+    };
+  }
+
   // Extension point for subclasses that mutate the internal input outside an
   // input event (e.g. the yk-input-checkbox checked setter): re-runs the
   // form-state sync so setFormValue and setValidity mirror the new state.
@@ -279,11 +293,8 @@ export class YKFieldElement extends HTMLElement {
     const disabled = this.hasAttribute('disabled') || this.#formDisabled;
     this.#internals.setFormValue(disabled ? null : this.formValue());
     if (this.#input.willValidate) {
-      this.#internals.setValidity(
-        this.#input.validity,
-        this.#input.validationMessage,
-        this.#input,
-      );
+      const { validity, message } = this.formValidity();
+      this.#internals.setValidity(validity, message, this.#input);
     } else {
       this.#internals.setValidity({});
     }

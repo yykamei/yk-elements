@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-combobox&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-combobox">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox placeholder="Search…">
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox placeholder="Search…"&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>options with a description</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox placeholder="Search parts of speech…">
+              <option value="noun" data-description="A naming word">noun</option>
+              <option value="verb" data-description="An action word">verb</option>
+              <option value="adjective" data-description="A describing word">adjective</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox placeholder="Search parts of speech…"&gt;
+  &lt;option value="noun" data-description="A naming word"&gt;noun&lt;/option&gt;
+  &lt;option value="verb" data-description="An action word"&gt;verb&lt;/option&gt;
+  &lt;option value="adjective" data-description="A describing word"&gt;adjective&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>selected</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox>
+              <option value="noun">noun</option>
+              <option value="verb" selected>verb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb" selected&gt;verb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>required</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox required name="part" placeholder="Choose a part of speech…">
+              <option value="noun">noun</option>
+              <option value="verb">verb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox required name="part" placeholder="Choose a part of speech…"&gt;
+  &lt;option value="noun"&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>disabled</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox disabled>
+              <option value="noun" selected>noun</option>
+              <option value="verb">verb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox disabled&gt;
+  &lt;option value="noun" selected&gt;noun&lt;/option&gt;
+  &lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>label and submission inside a form</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <form onsubmit="event.preventDefault()">
+              <yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)">
+                <label for="catalog-combobox-part">Part of speech</label>
+                <yk-combobox id="catalog-combobox-part" name="part" required placeholder="Search…">
+                  <option value="noun" data-description="A naming word">noun</option>
+                  <option value="verb" data-description="An action word">verb</option>
+                </yk-combobox>
+                <yk-button type="submit" variant="primary">Save</yk-button>
+              </yk-vstack>
+            </form>
+          </yk-pad>
+          <pre><code>&lt;form onsubmit="event.preventDefault()"&gt;
+  &lt;yk-vstack style="--yk-vstack-gap: var(--yk-space-sm)"&gt;
+    &lt;label for="catalog-combobox-part"&gt;Part of speech&lt;/label&gt;
+    &lt;yk-combobox id="catalog-combobox-part" name="part" required placeholder="Search…"&gt;
+      &lt;option value="noun" data-description="A naming word"&gt;noun&lt;/option&gt;
+      &lt;option value="verb" data-description="An action word"&gt;verb&lt;/option&gt;
+    &lt;/yk-combobox&gt;
+    &lt;yk-button type="submit" variant="primary"&gt;Save&lt;/yk-button&gt;
+  &lt;/yk-vstack&gt;
+&lt;/form&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
