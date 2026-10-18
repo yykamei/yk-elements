@@ -68,6 +68,24 @@
         </figure>
 
         <figure>
+          <figcaption>multiple with chips</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-combobox multiple placeholder="Search parts of speech…">
+              <option value="noun" selected>noun</option>
+              <option value="verb" selected>verb</option>
+              <option value="adjective">adjective</option>
+              <option value="adverb">adverb</option>
+            </yk-combobox>
+          </yk-pad>
+          <pre><code>&lt;yk-combobox multiple placeholder="Search parts of speech…"&gt;
+  &lt;option value="noun" selected&gt;noun&lt;/option&gt;
+  &lt;option value="verb" selected&gt;verb&lt;/option&gt;
+  &lt;option value="adjective"&gt;adjective&lt;/option&gt;
+  &lt;option value="adverb"&gt;adverb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+        </figure>
+
+        <figure>
           <figcaption>required</figcaption>
           <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
             <yk-combobox required name="part" placeholder="Choose a part of speech…">
