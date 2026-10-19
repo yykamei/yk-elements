@@ -178,6 +178,52 @@ const selectFaceProperties = [
 ];
 
 /**
+ * CSS custom properties used by the combobox face, layered on top of the shared
+ * `inputFaceProperties`. The arrow is drawn with a mask so it follows the
+ * scheme through a plain color token, and the option list reuses the surface
+ * tokens for its own surface.
+ */
+const comboboxFaceProperties = [
+  ...inputFaceProperties,
+  {
+    name: '--yk-combobox-arrow-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Color of the dropdown arrow.',
+  },
+  {
+    name: '--yk-combobox-arrow-size',
+    default: '1rem',
+    description: 'Size of the dropdown arrow square.',
+  },
+  {
+    name: '--yk-combobox-arrow-gap',
+    default: '0.5rem',
+    description: 'Gap between the dropdown arrow and the reserved padding.',
+  },
+  {
+    name: '--yk-combobox-list-max-height',
+    default: '15rem',
+    description: 'Maximum height of the option list before it scrolls.',
+  },
+  {
+    name: '--yk-combobox-option-padding-block',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Vertical padding of an option row.',
+  },
+  {
+    name: '--yk-combobox-option-active-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 12%, var(--yk-color-surface, white))',
+    description: 'Background of the highlighted option row.',
+  },
+  {
+    name: '--yk-combobox-popup-shadow',
+    default: '0 0.5rem 1rem oklch(0% 0 0 / 15%)',
+    description: 'Shadow of the option list popup.',
+  },
+];
+
+/**
  * CSS custom properties of the card surface.
  */
 const cardFaceProperties = [
@@ -1390,6 +1436,54 @@ export const components = [
         default: 'unset',
         description:
           'Boolean attribute that blocks submission while the selected option has an empty value, mirrored onto the internal select.',
+      },
+      {
+        name: 'disabled',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that disables the field and excludes its value from the form, like the native select disabled attribute.',
+      },
+      {
+        name: 'name',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Entry name used when the owner form submits the value, like the native select name attribute.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-combobox',
+    category: 'Components',
+    description:
+      'Searchable single-choice selector that renders an editable combobox with an option list popup; options come from its light-DOM option children, which it filters by the typed text and mirrors into the popup, showing the data-description attribute as a second line when present.',
+    playground: {
+      content:
+        '  <option value="noun" data-description="A naming word">noun</option>\n  <option value="verb" data-description="An action word">verb</option>\n  <option value="adjective">adjective</option>',
+    },
+    cssProperties: comboboxFaceProperties,
+    attributes: [
+      {
+        name: 'placeholder',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Hint text shown while no option is selected, mirrored onto the internal input.',
+      },
+      {
+        name: 'required',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that blocks submission while no option is selected.',
+      },
+      {
+        name: 'readonly',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that bars typing, turning the field into a selection-only combobox.',
       },
       {
         name: 'disabled',
