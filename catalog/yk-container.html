@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-container&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-container">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-container style="background: rgba(0, 0, 0, 0.04)">
+            <p class="demo-item">Contained content</p>
+          </yk-container>
+          <pre><code>&lt;yk-container&gt;
+  &lt;p&gt;Contained content&lt;/p&gt;
+&lt;/yk-container&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Custom max width</figcaption>
+          <yk-container style="--yk-container-max: 20rem; background: rgba(0, 0, 0, 0.04)">
+            <p class="demo-item">Narrower section</p>
+          </yk-container>
+          <pre><code>&lt;yk-container style="--yk-container-max: 20rem"&gt;
+  &lt;p&gt;Narrower section&lt;/p&gt;
+&lt;/yk-container&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Composed with yk-vstack</figcaption>
+          <yk-container style="background: rgba(0, 0, 0, 0.04)">
+            <yk-vstack>
+              <p class="demo-item">Section heading</p>
+              <p class="demo-item">First paragraph</p>
+              <p class="demo-item">Second paragraph</p>
+            </yk-vstack>
+          </yk-container>
+          <pre><code>&lt;yk-container&gt;
+  &lt;yk-vstack&gt;
+    &lt;p&gt;Section heading&lt;/p&gt;
+    &lt;p&gt;First paragraph&lt;/p&gt;
+    &lt;p&gt;Second paragraph&lt;/p&gt;
+  &lt;/yk-vstack&gt;
+&lt;/yk-container&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
