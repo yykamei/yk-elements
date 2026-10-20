@@ -981,6 +981,28 @@ export const components = [
     attributes: [],
   },
   {
+    tag: 'yk-container',
+    category: 'Layout',
+    description:
+      'Layout primitive that constrains content to a readable max width with horizontal centering and side gutters.',
+    playground: {
+      content: demoItems(['Contained content']),
+    },
+    cssProperties: [
+      {
+        name: '--yk-container-max',
+        default: '64rem',
+        description: 'Maximum inline size of the centered content.',
+      },
+      {
+        name: '--yk-container-padding',
+        default: 'var(--yk-space-md, 1rem)',
+        description: 'Minimum gutter kept from the viewport edges.',
+      },
+    ],
+    attributes: [],
+  },
+  {
     tag: 'yk-button',
     category: 'Components',
     description:

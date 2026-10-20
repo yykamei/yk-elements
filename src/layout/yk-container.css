@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  /* Content-box keeps the gutters outside the max width. */
+  box-sizing: content-box;
+  margin-inline: auto;
+  max-inline-size: var(--yk-container-max, 64rem);
+  padding-inline: var(--yk-container-padding, var(--yk-space-md, 1rem));
+}

@@ -14,6 +14,7 @@ import './src/layout/yk-hstack.js';
 import './src/layout/yk-cluster.js';
 import './src/layout/yk-grid.js';
 import './src/layout/yk-pad.js';
+import './src/layout/yk-container.js';
 import './src/components/yk-button.js';
 import './src/components/yk-link.js';
 import './src/components/yk-badge.js';
