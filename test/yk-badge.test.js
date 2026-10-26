@@ -136,3 +136,17 @@ test('collapses when it has no content', async () => {
 
   expect(getComputedStyle(host).display).toBe('none');
 });
+
+test('reuses a declarative shadow root instead of replacing it', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-badge><template shadowrootmode="open"><style>:host{--dsd:1px}</style><slot></slot></template>New</yk-badge>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-badge');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('slot').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.firstChild.assignedSlot).not.toBeNull();
+});

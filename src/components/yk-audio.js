@@ -23,6 +23,7 @@
  * </yk-audio>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-audio.css' with { type: 'css' };
 
 const formatTime = (seconds) => {
@@ -50,9 +51,10 @@ class YKAudio extends HTMLElement {
 
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `
+    const shadowRoot = ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `
       <button part="play" type="button">
         <svg part="play-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M5 3l8 5-8 5z" fill="currentColor" />
@@ -68,6 +70,8 @@ class YKAudio extends HTMLElement {
       <slot name="pause-label" hidden>Pause</slot>
       <slot name="seek-label" hidden>Seek</slot>
     `;
+      },
+    });
     this.#audio = shadowRoot.querySelector('audio');
     this.#play = shadowRoot.querySelector('[part="play"]');
     this.#timeline = shadowRoot.querySelector('[part="timeline"]');

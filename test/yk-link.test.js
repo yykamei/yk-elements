@@ -206,3 +206,20 @@ test('clicking never submits an owner form', () => {
   host.shadowRoot.querySelector('a').click();
   expect(submitted).toBe(false);
 });
+
+test('reuses a declarative shadow root and keeps the mirrored href', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-link href="/pricing"><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><a part="link"><slot></slot></a></template>See pricing</yk-link>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-link');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('a').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.querySelector('a').getAttribute('href')).toBe(
+    '/pricing',
+  );
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
+});

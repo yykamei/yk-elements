@@ -18,18 +18,22 @@
  * </yk-card>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-card.css' with { type: 'css' };
 
 class YKCard extends HTMLElement {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `
+    ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `
       <div part="header"><slot name="header"></slot></div>
       <div part="body"><slot></slot></div>
       <div part="footer"><slot name="footer"></slot></div>
     `;
+      },
+    });
     this.#trackPresence('header');
     this.#trackPresence('footer');
   }

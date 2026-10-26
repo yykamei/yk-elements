@@ -401,3 +401,22 @@ test('restyles the surface through the component tokens', async () => {
   expect(style.borderTopLeftRadius).toBe('2px');
   expect(body.paddingTop).toBe('20px');
 });
+
+test('reuses a declarative shadow root and keeps naming the close button', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-dialog><template shadowrootmode="open"><style>:host{--dsd:1px}</style><dialog part="dialog"><div part="header"><slot name="header"></slot></div><div part="body"><slot></slot></div><div part="footer"><slot name="footer"></slot></div><button part="close" type="button"></button><slot name="close-label" hidden>Close</slot></dialog></template><p>Body</p></yk-dialog>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-dialog');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('dialog').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(regionOf(host, 'header')).not.toBeNull();
+  expect(regionOf(host, 'body')).not.toBeNull();
+  expect(regionOf(host, 'footer')).not.toBeNull();
+  expect(
+    host.shadowRoot.querySelector('[part="close"]').getAttribute('aria-label'),
+  ).toBe('Close');
+});

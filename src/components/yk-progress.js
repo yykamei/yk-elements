@@ -16,6 +16,7 @@
  * <yk-progress aria-label="Loading"></yk-progress>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-progress.css' with { type: 'css' };
 
 class YKProgress extends HTMLElement {
@@ -25,9 +26,12 @@ class YKProgress extends HTMLElement {
 
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `<progress part="progress"></progress>`;
+    const shadowRoot = ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `<progress part="progress"></progress>`;
+      },
+    });
     this.#progress = shadowRoot.querySelector('progress');
     this.#mirror('value');
     this.#mirror('max');

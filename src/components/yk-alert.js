@@ -24,14 +24,16 @@
  * </yk-alert>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-alert.css' with { type: 'css' };
 
 class YKAlert extends HTMLElement {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `
+    const shadowRoot = ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `
       <div part="content"><slot></slot></div>
       <button part="dismiss" type="button">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -40,6 +42,8 @@ class YKAlert extends HTMLElement {
       </button>
       <slot name="dismiss-label" hidden>Dismiss</slot>
     `;
+      },
+    });
     const labelSlot = shadowRoot.querySelector('slot[name="dismiss-label"]');
     const dismiss = shadowRoot.querySelector('[part="dismiss"]');
     labelSlot.addEventListener('slotchange', () => this.#nameDismiss(dismiss));

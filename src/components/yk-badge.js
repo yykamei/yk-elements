@@ -14,14 +14,18 @@
  * <yk-badge variant="danger" pill>99+</yk-badge>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-badge.css' with { type: 'css' };
 
 class YKBadge extends HTMLElement {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `<slot></slot>`;
+    ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `<slot></slot>`;
+      },
+    });
   }
 }
 

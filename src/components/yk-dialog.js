@@ -44,6 +44,7 @@
  * </script>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-dialog.css' with { type: 'css' };
 
 class YKDialog extends HTMLElement {
@@ -60,9 +61,10 @@ class YKDialog extends HTMLElement {
 
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `
+    const shadowRoot = ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `
       <dialog part="dialog">
         <div part="header"><slot name="header"></slot></div>
         <div part="body"><slot></slot></div>
@@ -75,6 +77,8 @@ class YKDialog extends HTMLElement {
         <slot name="close-label" hidden>Close</slot>
       </dialog>
     `;
+      },
+    });
     this.#dialog = shadowRoot.querySelector('dialog');
     this.#close = shadowRoot.querySelector('[part="close"]');
     this.#close.addEventListener('click', () => this.close());
