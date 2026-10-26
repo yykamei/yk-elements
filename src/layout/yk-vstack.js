@@ -14,14 +14,18 @@
  * </yk-vstack>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-vstack.css' with { type: 'css' };
 
 class YKVstack extends HTMLElement {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `<slot></slot>`;
+    ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `<slot></slot>`;
+      },
+    });
   }
 }
 
