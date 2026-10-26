@@ -1,0 +1,5419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Declarative Shadow DOM snippets — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <script type="module" src="../index.js"></script>
+  </head>
+  <body>
+    <h1>Declarative Shadow DOM snippets</h1>
+    <p>
+      Each demo below ships its shadow root in the initial HTML, so it paints
+      styled before the component module loads. Copy a snippet as-is; the live
+      demo above it is that exact markup. Templates must match exactly: field
+      templates hold the bare native control (wrappers are built on upgrade),
+      and focus-delegating templates carry shadowrootdelegatesfocus.
+    </p>
+<section>
+<h2><code>yk-vstack</code></h2>
+<div data-demo="yk-vstack">
+<yk-vstack>
+<template shadowrootmode="open"><style>
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-vstack-gap, var(--yk-space-md, 1rem));
+}
+</style><slot></slot></template>
+<p>First</p><p>Second</p>
+</yk-vstack>
+</div>
+<pre><code>&lt;yk-vstack&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-vstack-gap, var(--yk-space-md, 1rem));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;First&lt;/p&gt;&lt;p&gt;Second&lt;/p&gt;
+&lt;/yk-vstack&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-hstack</code></h2>
+<div data-demo="yk-hstack">
+<yk-hstack>
+<template shadowrootmode="open"><style>
+:host {
+  display: flex;
+  align-items: var(--yk-hstack-align, stretch);
+  gap: var(--yk-hstack-gap, var(--yk-space-md, 1rem));
+}
+</style><slot></slot></template>
+<p>First</p><p>Second</p>
+</yk-hstack>
+</div>
+<pre><code>&lt;yk-hstack&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: flex;
+  align-items: var(--yk-hstack-align, stretch);
+  gap: var(--yk-hstack-gap, var(--yk-space-md, 1rem));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;First&lt;/p&gt;&lt;p&gt;Second&lt;/p&gt;
+&lt;/yk-hstack&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-cluster</code></h2>
+<div data-demo="yk-cluster">
+<yk-cluster>
+<template shadowrootmode="open"><style>
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--yk-cluster-justify, center);
+  align-items: var(--yk-cluster-align, center);
+  gap: var(--yk-cluster-gap, var(--yk-space-md, 1rem));
+}
+</style><slot></slot></template>
+<p>First</p><p>Second</p>
+</yk-cluster>
+</div>
+<pre><code>&lt;yk-cluster&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--yk-cluster-justify, center);
+  align-items: var(--yk-cluster-align, center);
+  gap: var(--yk-cluster-gap, var(--yk-space-md, 1rem));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;First&lt;/p&gt;&lt;p&gt;Second&lt;/p&gt;
+&lt;/yk-cluster&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-grid</code></h2>
+<div data-demo="yk-grid">
+<yk-grid>
+<template shadowrootmode="open"><style>
+:host {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(100%, var(--yk-grid-min, 20rem)), 1fr)
+    );
+  gap: var(--yk-grid-gap, var(--yk-space-md, 1rem));
+}
+</style><slot></slot></template>
+<p>First</p><p>Second</p>
+</yk-grid>
+</div>
+<pre><code>&lt;yk-grid&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(100%, var(--yk-grid-min, 20rem)), 1fr)
+    );
+  gap: var(--yk-grid-gap, var(--yk-space-md, 1rem));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;First&lt;/p&gt;&lt;p&gt;Second&lt;/p&gt;
+&lt;/yk-grid&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-pad</code></h2>
+<div data-demo="yk-pad">
+<yk-pad>
+<template shadowrootmode="open"><style>
+:host {
+  display: block;
+  padding-block: var(
+    --yk-pad-padding-block,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+  padding-inline: var(
+    --yk-pad-padding-inline,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+}
+</style><slot></slot></template>
+<p>Padded</p>
+</yk-pad>
+</div>
+<pre><code>&lt;yk-pad&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: block;
+  padding-block: var(
+    --yk-pad-padding-block,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+  padding-inline: var(
+    --yk-pad-padding-inline,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;Padded&lt;/p&gt;
+&lt;/yk-pad&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-container</code></h2>
+<div data-demo="yk-container">
+<yk-container>
+<template shadowrootmode="open"><style>
+:host {
+  display: block;
+  /* Content-box keeps the gutters outside the max width. */
+  box-sizing: content-box;
+  margin-inline: auto;
+  max-inline-size: var(--yk-container-max, 64rem);
+  padding-inline: var(--yk-container-padding, var(--yk-space-md, 1rem));
+}
+</style><slot></slot></template>
+<p>Contained</p>
+</yk-container>
+</div>
+<pre><code>&lt;yk-container&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: block;
+  /* Content-box keeps the gutters outside the max width. */
+  box-sizing: content-box;
+  margin-inline: auto;
+  max-inline-size: var(--yk-container-max, 64rem);
+  padding-inline: var(--yk-container-padding, var(--yk-space-md, 1rem));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+&lt;p&gt;Contained&lt;/p&gt;
+&lt;/yk-container&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-button</code></h2>
+<div data-demo="yk-button">
+<yk-button variant="primary">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: inline-flex;
+}
+
+:host button,
+:host a {
+  --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  --edge: var(
+    --yk-button-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+  font: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--face);
+  border: 1px solid var(--edge);
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host([variant="secondary"]) button,
+:host([variant="secondary"]) a {
+  --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+}
+
+:host([variant="primary"]) button,
+:host([variant="primary"]) a {
+  --face: var(--yk-color-primary, oklch(56% 0.228 260));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) button,
+:host([variant="danger"]) a {
+  --face: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host button:hover,
+:host a:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:active,
+:host a:active {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:focus-visible,
+:host a:focus-visible {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    color-mix(in oklch, var(--edge) 50%, transparent);
+}
+:host button:disabled {
+  pointer-events: none;
+  opacity: 0.65;
+}
+</style><button part="button" type="button"><slot></slot></button></template>
+Save
+</yk-button>
+</div>
+<pre><code>&lt;yk-button variant="primary"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: inline-flex;
+}
+
+:host button,
+:host a {
+  --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  --edge: var(
+    --yk-button-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+  font: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--face);
+  border: 1px solid var(--edge);
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host([variant="secondary"]) button,
+:host([variant="secondary"]) a {
+  --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+}
+
+:host([variant="primary"]) button,
+:host([variant="primary"]) a {
+  --face: var(--yk-color-primary, oklch(56% 0.228 260));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) button,
+:host([variant="danger"]) a {
+  --face: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host button:hover,
+:host a:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:active,
+:host a:active {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:focus-visible,
+:host a:focus-visible {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    color-mix(in oklch, var(--edge) 50%, transparent);
+}
+:host button:disabled {
+  pointer-events: none;
+  opacity: 0.65;
+}
+&lt;/style&gt;&lt;button part="button" type="button"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/button&gt;&lt;/template&gt;
+Save
+&lt;/yk-button&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-link</code></h2>
+<div data-demo="yk-link">
+<yk-link href="/pricing" variant="primary">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: inline-flex;
+}
+
+:host button,
+:host a {
+  --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  --edge: var(
+    --yk-button-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+  font: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--face);
+  border: 1px solid var(--edge);
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host([variant="secondary"]) button,
+:host([variant="secondary"]) a {
+  --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+}
+
+:host([variant="primary"]) button,
+:host([variant="primary"]) a {
+  --face: var(--yk-color-primary, oklch(56% 0.228 260));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) button,
+:host([variant="danger"]) a {
+  --face: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host button:hover,
+:host a:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:active,
+:host a:active {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:focus-visible,
+:host a:focus-visible {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    color-mix(in oklch, var(--edge) 50%, transparent);
+}
+:host a {
+  text-decoration: none;
+}
+</style><a part="link"><slot></slot></a></template>
+See pricing
+</yk-link>
+</div>
+<pre><code>&lt;yk-link href="/pricing" variant="primary"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: inline-flex;
+}
+
+:host button,
+:host a {
+  --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  --edge: var(
+    --yk-button-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+  font: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--face);
+  border: 1px solid var(--edge);
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host([variant="secondary"]) button,
+:host([variant="secondary"]) a {
+  --face: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-secondary, oklch(55.8% 0.016 244.9));
+}
+
+:host([variant="primary"]) button,
+:host([variant="primary"]) a {
+  --face: var(--yk-color-primary, oklch(56% 0.228 260));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) button,
+:host([variant="danger"]) a {
+  --face: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  --ink: var(--yk-button-on-tone, var(--yk-color-on-tone, #fff));
+  --edge: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host button:hover,
+:host a:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:active,
+:host a:active {
+  background-color: color-mix(
+    in oklch,
+    var(--face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host button:focus-visible,
+:host a:focus-visible {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    color-mix(in oklch, var(--edge) 50%, transparent);
+}
+:host a {
+  text-decoration: none;
+}
+&lt;/style&gt;&lt;a part="link"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/a&gt;&lt;/template&gt;
+See pricing
+&lt;/yk-link&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-badge</code></h2>
+<div data-demo="yk-badge">
+<yk-badge variant="primary">
+<template shadowrootmode="open"><style>
+:host {
+  display: inline-block;
+  padding-block: var(--yk-badge-padding-block, 0.35em);
+  padding-inline: var(--yk-badge-padding-inline, 0.65em);
+  font: inherit;
+  font-size: var(--yk-badge-font-size, 0.75em);
+  font-weight: var(--yk-badge-font-weight, 700);
+  line-height: 1;
+  color: var(--yk-badge-color, var(--yk-color-on-tone, #fff));
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: var(
+    --yk-badge-bg,
+    var(--yk-color-secondary, oklch(55.8% 0.016 244.9))
+  );
+  border-radius: var(--yk-badge-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host([pill]) {
+  border-radius: var(--yk-badge-pill-radius, 50rem);
+}
+
+:host(:empty) {
+  display: none;
+}
+
+:host([variant="primary"]) {
+  background-color: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) {
+  background-color: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+</style><slot></slot></template>
+Beta
+</yk-badge>
+</div>
+<pre><code>&lt;yk-badge variant="primary"&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: inline-block;
+  padding-block: var(--yk-badge-padding-block, 0.35em);
+  padding-inline: var(--yk-badge-padding-inline, 0.65em);
+  font: inherit;
+  font-size: var(--yk-badge-font-size, 0.75em);
+  font-weight: var(--yk-badge-font-weight, 700);
+  line-height: 1;
+  color: var(--yk-badge-color, var(--yk-color-on-tone, #fff));
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: var(
+    --yk-badge-bg,
+    var(--yk-color-secondary, oklch(55.8% 0.016 244.9))
+  );
+  border-radius: var(--yk-badge-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host([pill]) {
+  border-radius: var(--yk-badge-pill-radius, 50rem);
+}
+
+:host(:empty) {
+  display: none;
+}
+
+:host([variant="primary"]) {
+  background-color: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+:host([variant="danger"]) {
+  background-color: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+&lt;/style&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/template&gt;
+Beta
+&lt;/yk-badge&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-card</code></h2>
+<div data-demo="yk-card">
+<yk-card>
+<template shadowrootmode="open"><style>
+:host {
+  --_card-border-color: var(
+    --yk-card-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  background-color: var(--yk-card-bg, var(--yk-color-surface, #fff));
+  color: var(--yk-card-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  border: 1px solid var(--_card-border-color);
+  border-radius: var(--yk-card-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-card-shadow, none);
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-card-padding, var(--yk-space-md, 1rem));
+}
+
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  display: none;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_card-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_card-border-color);
+}
+</style><div part="header"><slot name="header"></slot></div><div part="body"><slot></slot></div><div part="footer"><slot name="footer"></slot></div></template>
+<h2 slot="header">Title</h2><p>Body</p><span slot="footer">Footer</span>
+</yk-card>
+</div>
+<pre><code>&lt;yk-card&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  --_card-border-color: var(
+    --yk-card-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  background-color: var(--yk-card-bg, var(--yk-color-surface, #fff));
+  color: var(--yk-card-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  border: 1px solid var(--_card-border-color);
+  border-radius: var(--yk-card-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-card-shadow, none);
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-card-padding, var(--yk-space-md, 1rem));
+}
+
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  display: none;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_card-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_card-border-color);
+}
+&lt;/style&gt;&lt;div part="header"&gt;&lt;slot name="header"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="body"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="footer"&gt;&lt;slot name="footer"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;h2 slot="header"&gt;Title&lt;/h2&gt;&lt;p&gt;Body&lt;/p&gt;&lt;span slot="footer"&gt;Footer&lt;/span&gt;
+&lt;/yk-card&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-alert</code></h2>
+<div data-demo="yk-alert">
+<yk-alert variant="danger">
+<template shadowrootmode="open"><style>
+:host {
+  --_alert-tone: var(--yk-color-primary, oklch(56% 0.228 260));
+  --_alert-bg: var(
+    --yk-alert-bg,
+    color-mix(in oklch, var(--_alert-tone) 12%, var(--yk-color-surface, white))
+  );
+  --_alert-border-color: var(
+    --yk-alert-border-color,
+    color-mix(in oklch, var(--_alert-tone) 40%, var(--yk-color-surface, white))
+  );
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding: var(--yk-alert-padding, var(--yk-space-md, 1rem));
+  color: var(--yk-alert-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--_alert-bg);
+  border: 1px solid var(--_alert-border-color);
+  border-radius: var(--yk-alert-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host([variant="danger"]) {
+  --_alert-tone: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host([variant="warning"]) {
+  --_alert-tone: var(--yk-color-warning, oklch(72% 0.16 75));
+}
+
+:host([variant="success"]) {
+  --_alert-tone: var(--yk-color-success, oklch(58% 0.15 152));
+}
+
+:host([variant="info"]) {
+  --_alert-tone: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+[part="content"] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+[part="dismiss"] {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  padding: 0;
+  color: var(--yk-alert-dismiss-color, currentColor);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  opacity: 0.7;
+}
+
+[part="dismiss"]:hover {
+  opacity: 1;
+}
+
+[part="dismiss"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host(:not([dismissible])) [part="dismiss"] {
+  display: none;
+}
+</style><div part="content"><slot></slot></div><button part="dismiss" type="button"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg></button><slot name="dismiss-label" hidden>Dismiss</slot></template>
+Something happened
+</yk-alert>
+</div>
+<pre><code>&lt;yk-alert variant="danger"&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  --_alert-tone: var(--yk-color-primary, oklch(56% 0.228 260));
+  --_alert-bg: var(
+    --yk-alert-bg,
+    color-mix(in oklch, var(--_alert-tone) 12%, var(--yk-color-surface, white))
+  );
+  --_alert-border-color: var(
+    --yk-alert-border-color,
+    color-mix(in oklch, var(--_alert-tone) 40%, var(--yk-color-surface, white))
+  );
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding: var(--yk-alert-padding, var(--yk-space-md, 1rem));
+  color: var(--yk-alert-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--_alert-bg);
+  border: 1px solid var(--_alert-border-color);
+  border-radius: var(--yk-alert-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host([variant="danger"]) {
+  --_alert-tone: var(--yk-color-danger, oklch(57% 0.205 21.2));
+}
+
+:host([variant="warning"]) {
+  --_alert-tone: var(--yk-color-warning, oklch(72% 0.16 75));
+}
+
+:host([variant="success"]) {
+  --_alert-tone: var(--yk-color-success, oklch(58% 0.15 152));
+}
+
+:host([variant="info"]) {
+  --_alert-tone: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+[part="content"] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+[part="dismiss"] {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  padding: 0;
+  color: var(--yk-alert-dismiss-color, currentColor);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  opacity: 0.7;
+}
+
+[part="dismiss"]:hover {
+  opacity: 1;
+}
+
+[part="dismiss"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host(:not([dismissible])) [part="dismiss"] {
+  display: none;
+}
+&lt;/style&gt;&lt;div part="content"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;button part="dismiss" type="button"&gt;&lt;svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"&gt;&lt;path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;slot name="dismiss-label" hidden&gt;Dismiss&lt;/slot&gt;&lt;/template&gt;
+Something happened
+&lt;/yk-alert&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-dialog</code></h2>
+<div data-demo="yk-dialog">
+<yk-dialog>
+<template shadowrootmode="open"><style>
+:host {
+  display: contents;
+}
+
+dialog {
+  --_dialog-border-color: var(
+    --yk-dialog-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_dialog-close-size: 1.5rem;
+
+  box-sizing: border-box;
+  max-inline-size: var(
+    --yk-dialog-max-inline-size,
+    min(32rem, calc(100vw - 2rem))
+  );
+  max-block-size: var(--yk-dialog-max-block-size, calc(100dvh - 2rem));
+  padding: 0;
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-dialog-bg, var(--yk-color-surface, #fff));
+  border: 1px solid var(--_dialog-border-color);
+  border-radius: var(--yk-dialog-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-dialog-shadow, 0 0.5rem 1rem rgb(0 0 0 / 0.2));
+}
+
+dialog::backdrop {
+  background-color: var(--yk-dialog-backdrop-bg, rgb(0 0 0 / 0.5));
+}
+
+/* The column layout is scoped to the open state so the UA rule that hides a
+   closed dialog (dialog:not([open]) { display: none }) still applies. */
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+}
+
+/* The body is the scroll region, so the header, footer, and the absolutely
+   positioned close button stay in place while long content scrolls. */
+[part="header"],
+[part="footer"] {
+  flex: none;
+}
+
+[part="body"] {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* Keep the first line of the header (or of the body when there is no header)
+   clear of the close button in the corner. */
+[part="header"],
+:host(:not([has-header])) [part="body"] {
+  padding-inline-end: calc(
+    var(--yk-dialog-padding, var(--yk-space-md, 1rem)) +
+    var(--_dialog-close-size) +
+    var(--yk-space-sm, 0.5rem)
+  );
+}
+
+/* An empty region is collapsed rather than display: none, so its content stays
+   focusable the moment it gains a slot assignment (a display switch would not
+   be reflected in time for showModal() to pick it as the initial focus). */
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  block-size: 0;
+  padding-block: 0;
+  overflow: hidden;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_dialog-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_dialog-border-color);
+}
+
+[part="close"] {
+  position: absolute;
+  inset-block-start: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  inset-inline-end: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--_dialog-close-size);
+  block-size: var(--_dialog-close-size);
+  padding: 0;
+  color: var(
+    --yk-dialog-close-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="close"]:hover {
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+}
+
+[part="close"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+</style><dialog part="dialog"><div part="header"><slot name="header"></slot></div><div part="body"><slot></slot></div><div part="footer"><slot name="footer"></slot></div><button part="close" type="button"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg></button><slot name="close-label" hidden>Close</slot></dialog></template>
+<h2 slot="header">Title</h2><p>Body</p>
+</yk-dialog>
+</div>
+<pre><code>&lt;yk-dialog&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: contents;
+}
+
+dialog {
+  --_dialog-border-color: var(
+    --yk-dialog-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_dialog-close-size: 1.5rem;
+
+  box-sizing: border-box;
+  max-inline-size: var(
+    --yk-dialog-max-inline-size,
+    min(32rem, calc(100vw - 2rem))
+  );
+  max-block-size: var(--yk-dialog-max-block-size, calc(100dvh - 2rem));
+  padding: 0;
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-dialog-bg, var(--yk-color-surface, #fff));
+  border: 1px solid var(--_dialog-border-color);
+  border-radius: var(--yk-dialog-radius, var(--yk-radius-md, 0.375rem));
+  box-shadow: var(--yk-dialog-shadow, 0 0.5rem 1rem rgb(0 0 0 / 0.2));
+}
+
+dialog::backdrop {
+  background-color: var(--yk-dialog-backdrop-bg, rgb(0 0 0 / 0.5));
+}
+
+/* The column layout is scoped to the open state so the UA rule that hides a
+   closed dialog (dialog:not([open]) { display: none }) still applies. */
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+[part="header"],
+[part="body"],
+[part="footer"] {
+  padding: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+}
+
+/* The body is the scroll region, so the header, footer, and the absolutely
+   positioned close button stay in place while long content scrolls. */
+[part="header"],
+[part="footer"] {
+  flex: none;
+}
+
+[part="body"] {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* Keep the first line of the header (or of the body when there is no header)
+   clear of the close button in the corner. */
+[part="header"],
+:host(:not([has-header])) [part="body"] {
+  padding-inline-end: calc(
+    var(--yk-dialog-padding, var(--yk-space-md, 1rem)) +
+    var(--_dialog-close-size) +
+    var(--yk-space-sm, 0.5rem)
+  );
+}
+
+/* An empty region is collapsed rather than display: none, so its content stays
+   focusable the moment it gains a slot assignment (a display switch would not
+   be reflected in time for showModal() to pick it as the initial focus). */
+:host(:not([has-header])) [part="header"],
+:host(:not([has-footer])) [part="footer"] {
+  block-size: 0;
+  padding-block: 0;
+  overflow: hidden;
+}
+
+:host([has-header]) [part="header"] {
+  border-block-end: 1px solid var(--_dialog-border-color);
+}
+
+:host([has-footer]) [part="footer"] {
+  border-block-start: 1px solid var(--_dialog-border-color);
+}
+
+[part="close"] {
+  position: absolute;
+  inset-block-start: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  inset-inline-end: var(--yk-dialog-padding, var(--yk-space-md, 1rem));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--_dialog-close-size);
+  block-size: var(--_dialog-close-size);
+  padding: 0;
+  color: var(
+    --yk-dialog-close-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="close"]:hover {
+  color: var(--yk-dialog-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+}
+
+[part="close"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;dialog part="dialog"&gt;&lt;div part="header"&gt;&lt;slot name="header"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="body"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="footer"&gt;&lt;slot name="footer"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;button part="close" type="button"&gt;&lt;svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"&gt;&lt;path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;slot name="close-label" hidden&gt;Close&lt;/slot&gt;&lt;/dialog&gt;&lt;/template&gt;
+&lt;h2 slot="header"&gt;Title&lt;/h2&gt;&lt;p&gt;Body&lt;/p&gt;
+&lt;/yk-dialog&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-progress</code></h2>
+<div data-demo="yk-progress">
+<yk-progress value="40" max="100" aria-label="Progress">
+<template shadowrootmode="open"><style>
+:host {
+  display: block;
+}
+
+progress {
+  --_progress-bg: var(
+    --yk-progress-bg,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  block-size: var(--yk-progress-height, 0.5rem);
+  overflow: hidden;
+  appearance: none;
+  background-color: var(--_progress-bg);
+  border: 0;
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--_progress-bg);
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-value {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-moz-progress-bar {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
+</style><progress part="progress"></progress></template>
+
+</yk-progress>
+</div>
+<pre><code>&lt;yk-progress value="40" max="100" aria-label="Progress"&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+progress {
+  --_progress-bg: var(
+    --yk-progress-bg,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  block-size: var(--yk-progress-height, 0.5rem);
+  overflow: hidden;
+  appearance: none;
+  background-color: var(--_progress-bg);
+  border: 0;
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--_progress-bg);
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-webkit-progress-value {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
+
+progress::-moz-progress-bar {
+  background-color: var(
+    --yk-progress-fill-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-radius: var(--yk-progress-radius, 999px);
+}
+&lt;/style&gt;&lt;progress part="progress"&gt;&lt;/progress&gt;&lt;/template&gt;
+
+&lt;/yk-progress&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-audio</code></h2>
+<div data-demo="yk-audio">
+<yk-audio>
+<template shadowrootmode="open"><style>
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--yk-audio-gap, var(--yk-space-sm, 0.5rem));
+}
+
+:host([compact]) {
+  display: inline-flex;
+}
+
+[part="play"] {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--yk-audio-button-size, 2rem);
+  block-size: var(--yk-audio-button-size, 2rem);
+  padding: 0;
+  color: var(
+    --yk-audio-button-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  cursor: pointer;
+  background-color: var(--yk-audio-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    );
+  border-radius: var(--yk-audio-button-radius, 50%);
+}
+
+[part="play"]:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+[part="play"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host(:not([playing])) [part="pause-icon"],
+:host([playing]) [part="play-icon"] {
+  display: none;
+}
+
+[part="timeline"] {
+  flex: 1 1 auto;
+  min-inline-size: 6rem;
+  margin: 0;
+  accent-color: var(
+    --yk-audio-accent-color,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+}
+
+[part="time"] {
+  flex: none;
+  color: var(
+    --yk-audio-time-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: var(--yk-audio-time-font-size, 0.875rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+:host([compact]) [part="timeline"],
+:host([compact]) [part="time"] {
+  display: none;
+}
+</style><button part="play" type="button"><svg part="play-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l8 5-8 5z" fill="currentColor" /></svg><svg part="pause-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h2v10H5zM9 3h2v10H9z" fill="currentColor" /></svg></button><input part="timeline" type="range" min="0" max="0" value="0" step="any"><span part="time"></span><audio preload="metadata"></audio><slot name="play-label" hidden>Play</slot><slot name="pause-label" hidden>Pause</slot><slot name="seek-label" hidden>Seek</slot></template>
+
+</yk-audio>
+</div>
+<pre><code>&lt;yk-audio&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--yk-audio-gap, var(--yk-space-sm, 0.5rem));
+}
+
+:host([compact]) {
+  display: inline-flex;
+}
+
+[part="play"] {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--yk-audio-button-size, 2rem);
+  block-size: var(--yk-audio-button-size, 2rem);
+  padding: 0;
+  color: var(
+    --yk-audio-button-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  cursor: pointer;
+  background-color: var(--yk-audio-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    );
+  border-radius: var(--yk-audio-button-radius, 50%);
+}
+
+[part="play"]:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+[part="play"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+:host(:not([playing])) [part="pause-icon"],
+:host([playing]) [part="play-icon"] {
+  display: none;
+}
+
+[part="timeline"] {
+  flex: 1 1 auto;
+  min-inline-size: 6rem;
+  margin: 0;
+  accent-color: var(
+    --yk-audio-accent-color,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+}
+
+[part="time"] {
+  flex: none;
+  color: var(
+    --yk-audio-time-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: var(--yk-audio-time-font-size, 0.875rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+:host([compact]) [part="timeline"],
+:host([compact]) [part="time"] {
+  display: none;
+}
+&lt;/style&gt;&lt;button part="play" type="button"&gt;&lt;svg part="play-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;path d="M5 3l8 5-8 5z" fill="currentColor" /&gt;&lt;/svg&gt;&lt;svg part="pause-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;path d="M5 3h2v10H5zM9 3h2v10H9z" fill="currentColor" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;input part="timeline" type="range" min="0" max="0" value="0" step="any"&gt;&lt;span part="time"&gt;&lt;/span&gt;&lt;audio preload="metadata"&gt;&lt;/audio&gt;&lt;slot name="play-label" hidden&gt;Play&lt;/slot&gt;&lt;slot name="pause-label" hidden&gt;Pause&lt;/slot&gt;&lt;slot name="seek-label" hidden&gt;Seek&lt;/slot&gt;&lt;/template&gt;
+
+&lt;/yk-audio&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-theme-switcher</code></h2>
+<div data-demo="yk-theme-switcher">
+<yk-theme-switcher>
+<template shadowrootmode="open"><style>
+/* Segmented theme control. The three segments are native radio buttons kept
+   visually hidden; their labels carry the icon and the visually hidden text
+   that names the option, so the platform's keyboard and screen reader
+   behavior is preserved. The press shade and border follow the semantic
+   tokens, so the control reads correctly in either scheme. */
+:host {
+  --_edge: var(
+    --yk-theme-switcher-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+}
+
+[part="group"] {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: clip;
+  border: 1px solid var(--_edge);
+  border-radius: var(--yk-theme-switcher-radius, 50rem);
+  background-color: var(--yk-theme-switcher-bg, var(--yk-color-surface, #fff));
+}
+
+[part="option"] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--yk-theme-switcher-padding, 0.4rem);
+  color: var(
+    --yk-theme-switcher-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+}
+
+[part="option"] + [part="option"] {
+  border-inline-start: 1px solid var(--_edge);
+}
+
+[part="option"]:first-of-type {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+[part="option"]:last-of-type {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+[part="option"]:has(input:checked) {
+  color: var(--yk-theme-switcher-selected-color, var(--yk-color-on-tone, #fff));
+  background-color: var(
+    --yk-theme-switcher-selected-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+}
+
+[part="option"]:hover:not(:has(input:checked)) {
+  color: var(
+    --yk-theme-switcher-hover-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  background-color: var(
+    --yk-theme-switcher-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+}
+
+/* Drawn inside the segment: the group clips to its pill radius, so an outer
+   outline would be cut off. The ring follows the icon color by default, since
+   the icon already contrasts with the segment it sits on; a ring in the
+   primary color would vanish on the selected segment's primary fill. */
+[part="option"]:has(input:focus-visible) {
+  outline: 2px solid var(--yk-theme-switcher-focus-color, currentColor);
+  outline-offset: -2px;
+}
+
+input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+svg {
+  display: block;
+  width: var(--yk-theme-switcher-icon-size, 1rem);
+  height: var(--yk-theme-switcher-icon-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="option"] {
+    transition: none;
+  }
+}
+</style><div part="group" role="radiogroup" aria-label="Theme"><label part="option"><input type="radio" name="theme" value="system"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="8" rx="1" /><path d="M5 14h6M8 11v3" /></svg><span class="label">System</span></label><label part="option"><input type="radio" name="theme" value="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" /><path d="M8 1.5v1.25M8 13.25v1.25M2.575 3.575l.875.875M12.55 12.55l.875.875M1.5 8h1.25M13.25 8h1.25M3.575 12.55l.875-.875M12.55 3.575l-.875.875" /></svg><span class="label">Light</span></label><label part="option"><input type="radio" name="theme" value="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 10.6A5.5 5.5 0 015.4 2.8 6.5 6.5 0 1013.2 10.6z" /></svg><span class="label">Dark</span></label></div></template>
+
+</yk-theme-switcher>
+</div>
+<pre><code>&lt;yk-theme-switcher&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+/* Segmented theme control. The three segments are native radio buttons kept
+   visually hidden; their labels carry the icon and the visually hidden text
+   that names the option, so the platform's keyboard and screen reader
+   behavior is preserved. The press shade and border follow the semantic
+   tokens, so the control reads correctly in either scheme. */
+:host {
+  --_edge: var(
+    --yk-theme-switcher-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: inline-flex;
+}
+
+[part="group"] {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: clip;
+  border: 1px solid var(--_edge);
+  border-radius: var(--yk-theme-switcher-radius, 50rem);
+  background-color: var(--yk-theme-switcher-bg, var(--yk-color-surface, #fff));
+}
+
+[part="option"] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--yk-theme-switcher-padding, 0.4rem);
+  color: var(
+    --yk-theme-switcher-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+}
+
+[part="option"] + [part="option"] {
+  border-inline-start: 1px solid var(--_edge);
+}
+
+[part="option"]:first-of-type {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+[part="option"]:last-of-type {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+[part="option"]:has(input:checked) {
+  color: var(--yk-theme-switcher-selected-color, var(--yk-color-on-tone, #fff));
+  background-color: var(
+    --yk-theme-switcher-selected-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+}
+
+[part="option"]:hover:not(:has(input:checked)) {
+  color: var(
+    --yk-theme-switcher-hover-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  background-color: var(
+    --yk-theme-switcher-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+}
+
+/* Drawn inside the segment: the group clips to its pill radius, so an outer
+   outline would be cut off. The ring follows the icon color by default, since
+   the icon already contrasts with the segment it sits on; a ring in the
+   primary color would vanish on the selected segment's primary fill. */
+[part="option"]:has(input:focus-visible) {
+  outline: 2px solid var(--yk-theme-switcher-focus-color, currentColor);
+  outline-offset: -2px;
+}
+
+input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+svg {
+  display: block;
+  width: var(--yk-theme-switcher-icon-size, 1rem);
+  height: var(--yk-theme-switcher-icon-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="option"] {
+    transition: none;
+  }
+}
+&lt;/style&gt;&lt;div part="group" role="radiogroup" aria-label="Theme"&gt;&lt;label part="option"&gt;&lt;input type="radio" name="theme" value="system"&gt;&lt;svg viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;rect x="2" y="3" width="12" height="8" rx="1" /&gt;&lt;path d="M5 14h6M8 11v3" /&gt;&lt;/svg&gt;&lt;span class="label"&gt;System&lt;/span&gt;&lt;/label&gt;&lt;label part="option"&gt;&lt;input type="radio" name="theme" value="light"&gt;&lt;svg viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;circle cx="8" cy="8" r="3" /&gt;&lt;path d="M8 1.5v1.25M8 13.25v1.25M2.575 3.575l.875.875M12.55 12.55l.875.875M1.5 8h1.25M13.25 8h1.25M3.575 12.55l.875-.875M12.55 3.575l-.875.875" /&gt;&lt;/svg&gt;&lt;span class="label"&gt;Light&lt;/span&gt;&lt;/label&gt;&lt;label part="option"&gt;&lt;input type="radio" name="theme" value="dark"&gt;&lt;svg viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;path d="M13.2 10.6A5.5 5.5 0 015.4 2.8 6.5 6.5 0 1013.2 10.6z" /&gt;&lt;/svg&gt;&lt;span class="label"&gt;Dark&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;/template&gt;
+
+&lt;/yk-theme-switcher&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-text</code></h2>
+<div data-demo="yk-input-text">
+<yk-input-text value="prefill" placeholder="Type here">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="text" part="input"></template>
+
+</yk-input-text>
+</div>
+<pre><code>&lt;yk-input-text value="prefill" placeholder="Type here"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="text" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-text&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-email</code></h2>
+<div data-demo="yk-input-email">
+<yk-input-email value="a@b.co" placeholder="you@example.com">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="email" part="input"></template>
+
+</yk-input-email>
+</div>
+<pre><code>&lt;yk-input-email value="a@b.co" placeholder="you@example.com"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="email" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-email&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-tel</code></h2>
+<div data-demo="yk-input-tel">
+<yk-input-tel value="090-1234-5678">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="tel" part="input"></template>
+
+</yk-input-tel>
+</div>
+<pre><code>&lt;yk-input-tel value="090-1234-5678"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="tel" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-tel&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-url</code></h2>
+<div data-demo="yk-input-url">
+<yk-input-url value="https://example.com">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="url" part="input"></template>
+
+</yk-input-url>
+</div>
+<pre><code>&lt;yk-input-url value="https://example.com"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="url" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-url&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-password</code></h2>
+<div data-demo="yk-input-password">
+<yk-input-password autocomplete="current-password">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="password" part="input"></template>
+
+</yk-input-password>
+</div>
+<pre><code>&lt;yk-input-password autocomplete="current-password"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="password" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-password&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-search</code></h2>
+<div data-demo="yk-input-search">
+<yk-input-search value="query">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="search" part="input"></template>
+
+</yk-input-search>
+</div>
+<pre><code>&lt;yk-input-search value="query"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="search" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-search&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-file</code></h2>
+<div data-demo="yk-input-file">
+<yk-input-file accept="image/png">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+/* Dropzone face layered on top of the shared input-core.css tokens. The
+   native input stays in the tree (keyboard focus, label activation, and form
+   semantics keep working) but is visually hidden; the picker UI lives in a
+   bordered drop area whose selector button and remove buttons borrow the
+   default yk-button face tokens. */
+:host {
+  position: relative;
+}
+
+:host input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+:host [part="dropzone"] {
+  box-sizing: border-box;
+  display: block;
+  padding: var(--yk-input-dropzone-padding, var(--yk-space-md, 1rem));
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-dropzone-bg, var(--yk-color-bg, #f8f9fa));
+  border: 1px dashed
+    var(
+      --yk-input-dropzone-border-color,
+      var(
+        --yk-input-border-color,
+        var(
+          --yk-color-border,
+          color-mix(
+            in oklch,
+            var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+            var(--yk-color-surface, white)
+          )
+        )
+      )
+    );
+  border-radius: var(
+    --yk-input-dropzone-radius,
+    var(--yk-input-radius, var(--yk-radius-md, 0.375rem))
+  );
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host [part="dropzone"]:focus-within {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+/* The dragover class carries the drop-in-progress state for styling. */
+:host [part="dropzone"].dragover {
+  background-color: var(
+    --yk-input-dropzone-dragover-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+  border-color: var(
+    --yk-input-dropzone-dragover-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+/* The sibling selector follows the internal input so both the disabled
+   attribute and a disabled fieldset ancestor dim the zone. */
+:host input:disabled ~ [part="dropzone"] {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+:host [part="browse"] {
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+}
+
+:host [part="hint"] {
+  display: inline;
+  margin-inline-start: var(--yk-space-sm, 0.5rem);
+}
+
+:host [part="dropzone"]:hover [part="browse"] {
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host [part="file-list"] {
+  display: block;
+  margin: 0;
+  margin-block-start: var(--yk-space-sm, 0.5rem);
+  padding: 0;
+  list-style: none;
+}
+
+:host [part="file-item"] {
+  display: flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host [part="file-item"] + [part="file-item"] {
+  margin-block-start: calc(var(--yk-space-sm, 0.5rem) / 2);
+}
+
+:host [part="file-name"] {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:host [part="remove"] {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  font: inherit;
+  line-height: 1;
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding: calc(var(--yk-space-sm, 0.5rem) / 2);
+  cursor: pointer;
+}
+
+:host [part="remove"]:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+</style><input type="file" part="input"></template>
+
+</yk-input-file>
+</div>
+<pre><code>&lt;yk-input-file accept="image/png"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+/* Dropzone face layered on top of the shared input-core.css tokens. The
+   native input stays in the tree (keyboard focus, label activation, and form
+   semantics keep working) but is visually hidden; the picker UI lives in a
+   bordered drop area whose selector button and remove buttons borrow the
+   default yk-button face tokens. */
+:host {
+  position: relative;
+}
+
+:host input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+:host [part="dropzone"] {
+  box-sizing: border-box;
+  display: block;
+  padding: var(--yk-input-dropzone-padding, var(--yk-space-md, 1rem));
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-dropzone-bg, var(--yk-color-bg, #f8f9fa));
+  border: 1px dashed
+    var(
+      --yk-input-dropzone-border-color,
+      var(
+        --yk-input-border-color,
+        var(
+          --yk-color-border,
+          color-mix(
+            in oklch,
+            var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+            var(--yk-color-surface, white)
+          )
+        )
+      )
+    );
+  border-radius: var(
+    --yk-input-dropzone-radius,
+    var(--yk-input-radius, var(--yk-radius-md, 0.375rem))
+  );
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host [part="dropzone"]:focus-within {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+/* The dragover class carries the drop-in-progress state for styling. */
+:host [part="dropzone"].dragover {
+  background-color: var(
+    --yk-input-dropzone-dragover-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+  border-color: var(
+    --yk-input-dropzone-dragover-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+/* The sibling selector follows the internal input so both the disabled
+   attribute and a disabled fieldset ancestor dim the zone. */
+:host input:disabled ~ [part="dropzone"] {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+:host [part="browse"] {
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding-block: var(--yk-button-padding-block, var(--yk-space-sm, 0.5rem));
+  padding-inline: var(--yk-button-padding-inline, var(--yk-space-md, 1rem));
+}
+
+:host [part="hint"] {
+  display: inline;
+  margin-inline-start: var(--yk-space-sm, 0.5rem);
+}
+
+:host [part="dropzone"]:hover [part="browse"] {
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+:host [part="file-list"] {
+  display: block;
+  margin: 0;
+  margin-block-start: var(--yk-space-sm, 0.5rem);
+  padding: 0;
+  list-style: none;
+}
+
+:host [part="file-item"] {
+  display: flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+}
+
+:host [part="file-item"] + [part="file-item"] {
+  margin-block-start: calc(var(--yk-space-sm, 0.5rem) / 2);
+}
+
+:host [part="file-name"] {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:host [part="remove"] {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  font: inherit;
+  line-height: 1;
+  color: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-button-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-button-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-button-radius, var(--yk-radius-md, 0.375rem));
+  padding: calc(var(--yk-space-sm, 0.5rem) / 2);
+  cursor: pointer;
+}
+
+:host [part="remove"]:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--yk-button-bg, var(--yk-color-surface, #fff)) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+&lt;/style&gt;&lt;input type="file" part="input"&gt;&lt;/template&gt;
+
+&lt;/yk-input-file&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-input-checkbox</code></h2>
+<div data-demo="yk-input-checkbox">
+<yk-input-checkbox checked>
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+/* Bootstrap form-check face for the checkbox. The label wraps the native
+   input and the slotted text so a click on either toggles natively; the mark
+   span overlays the box and draws the check or dash glyph with borders, so
+   the glyph color stays a design token instead of a baked-in SVG stroke.
+   With the `switch` attribute the same elements become a toggle: the input is
+   the pill track and the mark draws a thumb that slides between its ends. */
+:host {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5em;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+}
+
+:host [part="label"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-input-checkbox-label-gap, 0.5em);
+  cursor: inherit;
+}
+
+/* Fieldset-disabled ancestors reach the input through the base class, so the
+   input's disabled state is the single source for dimming the whole control. */
+:host [part="label"]:has(input:disabled) {
+  cursor: default;
+  opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}
+
+/* The UA stylesheet sets the cursor on form controls directly, so the input
+   does not inherit the host's pointer and the box or switch track would show
+   the arrow while the rest of the label is clickable. A disabled input keeps
+   the UA default, which agrees with the label above it. */
+:host input:enabled {
+  cursor: pointer;
+}
+
+/* Positioning context for the mark overlay. */
+:host [part="label"] > span {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+
+:host input {
+  box-sizing: border-box;
+  display: block;
+  width: var(--yk-input-checkbox-size, 1em);
+  height: var(--yk-input-checkbox-size, 1em);
+  margin: 0;
+  font: inherit;
+  appearance: none;
+  background-color: var(--yk-input-checkbox-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: var(--yk-input-checkbox-border-width, 1px) solid
+    var(
+      --yk-input-checkbox-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    );
+  border-radius: var(--yk-input-checkbox-radius, 0.25em);
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  print-color-adjust: exact;
+}
+
+:host input:checked,
+:host input:indeterminate {
+  background-color: var(
+    --yk-input-checkbox-checked-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-color: var(
+    --yk-input-checkbox-checked-border-color,
+    var(
+      --yk-input-checkbox-checked-bg,
+      var(--yk-color-primary, oklch(56% 0.228 260))
+    )
+  );
+}
+
+:host [part="mark"] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+:host [part="mark"]::before {
+  content: "";
+  box-sizing: border-box;
+}
+
+:host input:active,
+:host input:active ~ [part="mark"] {
+  filter: var(--yk-input-checkbox-active-filter, brightness(90%));
+}
+
+:host input:checked ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.25em;
+  border-block-end: 0.125em solid
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
+  border-inline-start: 0.125em solid
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
+  border-start-start-radius: 0.0625em;
+  border-end-end-radius: 0.0625em;
+  transform: rotate(-45deg) translateY(-0.0625em);
+}
+
+/* The dash wins when a box is both checked and indeterminate, matching
+   Bootstrap's source order. */
+:host input:indeterminate ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.125em;
+  border: 0;
+  transform: none;
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
+}
+
+/* Switch face. The track is the input and the thumb is the mark's pseudo
+   element. The thumb is inset by a fraction of the size token and held at the
+   off end by padding; the checked transform advances it by the track width
+   minus the size token, which is exactly the distance the inset thumb may
+   travel for any track width. These rules come after the glyph rules and share
+   their specificity, so a checked switch replaces the check glyph with the
+   thumb by source order; the component suppresses the indeterminate flag on
+   the switch face, so the dash glyph never applies here. */
+:host([switch]) input {
+  width: var(
+    --yk-input-checkbox-switch-width,
+    calc(var(--yk-input-checkbox-size, 1em) * 2)
+  );
+  border-radius: calc(var(--yk-input-checkbox-size, 1em) / 2);
+}
+
+:host([switch]) input ~ [part="mark"] {
+  justify-content: flex-start;
+  padding: calc(var(--yk-input-checkbox-size, 1em) / 8);
+}
+
+:host([switch]) input ~ [part="mark"]::before {
+  width: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  height: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  border: 0;
+  border-radius: 50%;
+  background-color: var(
+    --yk-input-checkbox-switch-thumb-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+  transform: translateX(0);
+  transition:
+    transform 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host([switch]) input:checked ~ [part="mark"]::before {
+  transform: translateX(
+    calc(
+      var(
+        --yk-input-checkbox-switch-width,
+        calc(var(--yk-input-checkbox-size, 1em) * 2)
+      ) -
+      var(--yk-input-checkbox-size, 1em)
+    )
+  );
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
+}
+
+:host input:focus {
+  border-color: var(
+    --yk-input-checkbox-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+:host input:user-invalid {
+  border-color: var(
+    --yk-input-checkbox-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host input:user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><input type="checkbox" part="input"></template>
+Subscribe
+</yk-input-checkbox>
+</div>
+<pre><code>&lt;yk-input-checkbox checked&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+/* Bootstrap form-check face for the checkbox. The label wraps the native
+   input and the slotted text so a click on either toggles natively; the mark
+   span overlays the box and draws the check or dash glyph with borders, so
+   the glyph color stays a design token instead of a baked-in SVG stroke.
+   With the `switch` attribute the same elements become a toggle: the input is
+   the pill track and the mark draws a thumb that slides between its ends. */
+:host {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5em;
+  vertical-align: middle;
+  font: inherit;
+  cursor: pointer;
+}
+
+:host [part="label"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-input-checkbox-label-gap, 0.5em);
+  cursor: inherit;
+}
+
+/* Fieldset-disabled ancestors reach the input through the base class, so the
+   input's disabled state is the single source for dimming the whole control. */
+:host [part="label"]:has(input:disabled) {
+  cursor: default;
+  opacity: var(--yk-input-checkbox-disabled-opacity, 0.5);
+}
+
+/* The UA stylesheet sets the cursor on form controls directly, so the input
+   does not inherit the host's pointer and the box or switch track would show
+   the arrow while the rest of the label is clickable. A disabled input keeps
+   the UA default, which agrees with the label above it. */
+:host input:enabled {
+  cursor: pointer;
+}
+
+/* Positioning context for the mark overlay. */
+:host [part="label"] &gt; span {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+
+:host input {
+  box-sizing: border-box;
+  display: block;
+  width: var(--yk-input-checkbox-size, 1em);
+  height: var(--yk-input-checkbox-size, 1em);
+  margin: 0;
+  font: inherit;
+  appearance: none;
+  background-color: var(--yk-input-checkbox-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: var(--yk-input-checkbox-border-width, 1px) solid
+    var(
+      --yk-input-checkbox-border-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    );
+  border-radius: var(--yk-input-checkbox-radius, 0.25em);
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  print-color-adjust: exact;
+}
+
+:host input:checked,
+:host input:indeterminate {
+  background-color: var(
+    --yk-input-checkbox-checked-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  border-color: var(
+    --yk-input-checkbox-checked-border-color,
+    var(
+      --yk-input-checkbox-checked-bg,
+      var(--yk-color-primary, oklch(56% 0.228 260))
+    )
+  );
+}
+
+:host [part="mark"] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+:host [part="mark"]::before {
+  content: "";
+  box-sizing: border-box;
+}
+
+:host input:active,
+:host input:active ~ [part="mark"] {
+  filter: var(--yk-input-checkbox-active-filter, brightness(90%));
+}
+
+:host input:checked ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.25em;
+  border-block-end: 0.125em solid
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
+  border-inline-start: 0.125em solid
+    var(--yk-input-checkbox-checked-color, var(--yk-color-on-tone, #fff));
+  border-start-start-radius: 0.0625em;
+  border-end-end-radius: 0.0625em;
+  transform: rotate(-45deg) translateY(-0.0625em);
+}
+
+/* The dash wins when a box is both checked and indeterminate, matching
+   Bootstrap's source order. */
+:host input:indeterminate ~ [part="mark"]::before {
+  width: 0.5em;
+  height: 0.125em;
+  border: 0;
+  transform: none;
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
+}
+
+/* Switch face. The track is the input and the thumb is the mark's pseudo
+   element. The thumb is inset by a fraction of the size token and held at the
+   off end by padding; the checked transform advances it by the track width
+   minus the size token, which is exactly the distance the inset thumb may
+   travel for any track width. These rules come after the glyph rules and share
+   their specificity, so a checked switch replaces the check glyph with the
+   thumb by source order; the component suppresses the indeterminate flag on
+   the switch face, so the dash glyph never applies here. */
+:host([switch]) input {
+  width: var(
+    --yk-input-checkbox-switch-width,
+    calc(var(--yk-input-checkbox-size, 1em) * 2)
+  );
+  border-radius: calc(var(--yk-input-checkbox-size, 1em) / 2);
+}
+
+:host([switch]) input ~ [part="mark"] {
+  justify-content: flex-start;
+  padding: calc(var(--yk-input-checkbox-size, 1em) / 8);
+}
+
+:host([switch]) input ~ [part="mark"]::before {
+  width: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  height: calc(var(--yk-input-checkbox-size, 1em) * 3 / 4);
+  border: 0;
+  border-radius: 50%;
+  background-color: var(
+    --yk-input-checkbox-switch-thumb-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+  transform: translateX(0);
+  transition:
+    transform 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+:host([switch]) input:checked ~ [part="mark"]::before {
+  transform: translateX(
+    calc(
+      var(
+        --yk-input-checkbox-switch-width,
+        calc(var(--yk-input-checkbox-size, 1em) * 2)
+      ) -
+      var(--yk-input-checkbox-size, 1em)
+    )
+  );
+  background-color: var(
+    --yk-input-checkbox-checked-color,
+    var(--yk-color-on-tone, #fff)
+  );
+}
+
+:host input:focus {
+  border-color: var(
+    --yk-input-checkbox-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+:host input:user-invalid {
+  border-color: var(
+    --yk-input-checkbox-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host input:user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-checkbox-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;input type="checkbox" part="input"&gt;&lt;/template&gt;
+Subscribe
+&lt;/yk-input-checkbox&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-textarea</code></h2>
+<div data-demo="yk-textarea">
+<yk-textarea rows="4" placeholder="Write here">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+</style><textarea part="textarea"></textarea></template>
+
+</yk-textarea>
+</div>
+<pre><code>&lt;yk-textarea rows="4" placeholder="Write here"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;textarea part="textarea"&gt;&lt;/textarea&gt;&lt;/template&gt;
+
+&lt;/yk-textarea&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-select</code></h2>
+<div data-demo="yk-select">
+<yk-select required>
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+:host {
+  position: relative;
+}
+
+:host select {
+  padding-inline-end: calc(
+    var(--yk-input-padding-inline, 0.75rem) +
+    var(--yk-select-arrow-size, 1rem) +
+    var(--yk-select-arrow-gap, 0.5rem)
+  );
+  cursor: pointer;
+}
+
+[part="arrow"] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--yk-input-padding-inline, 0.75rem);
+  inline-size: var(--yk-select-arrow-size, 1rem);
+  block-size: var(--yk-select-arrow-size, 1rem);
+  translate: 0 -50%;
+  background-color: var(
+    --yk-select-arrow-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  pointer-events: none;
+}
+</style><select part="select"></select></template>
+<option value="noun" selected>noun</option><option value="verb">verb</option>
+</yk-select>
+</div>
+<pre><code>&lt;yk-select required&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+:host :is(input, textarea, select) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  appearance: none;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+:host :is(input, textarea)::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+:host :is(input, textarea, select):focus {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+/* A select always matches :read-only, so a muted read-only face would dim
+   every select; only the explicit disabled state mutes it. */
+:host :is(input, textarea):disabled,
+:host :is(input, textarea):read-only,
+:host select:disabled {
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+:host :is(input, textarea, select):user-invalid {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+:host :is(input, textarea, select):user-invalid:focus {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+:host {
+  position: relative;
+}
+
+:host select {
+  padding-inline-end: calc(
+    var(--yk-input-padding-inline, 0.75rem) +
+    var(--yk-select-arrow-size, 1rem) +
+    var(--yk-select-arrow-gap, 0.5rem)
+  );
+  cursor: pointer;
+}
+
+[part="arrow"] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--yk-input-padding-inline, 0.75rem);
+  inline-size: var(--yk-select-arrow-size, 1rem);
+  block-size: var(--yk-select-arrow-size, 1rem);
+  translate: 0 -50%;
+  background-color: var(
+    --yk-select-arrow-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  pointer-events: none;
+}
+&lt;/style&gt;&lt;select part="select"&gt;&lt;/select&gt;&lt;/template&gt;
+&lt;option value="noun" selected&gt;noun&lt;/option&gt;&lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-select&gt;</code></pre>
+</section>
+<section>
+<h2><code>yk-combobox</code></h2>
+<div data-demo="yk-combobox">
+<yk-combobox placeholder="Search…">
+<template shadowrootmode="open" shadowrootdelegatesfocus><style>
+:host {
+  display: block;
+}
+
+[part="field"] {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  inline-size: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  padding-inline-end: calc(
+    var(--yk-input-padding-inline, 0.75rem) +
+    var(--yk-combobox-arrow-size, 1rem) +
+    var(--yk-combobox-arrow-gap, 0.5rem)
+  );
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  cursor: text;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+[part="field"]:focus-within {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+[part="field"]:has(input:disabled) {
+  cursor: default;
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="field"]:has(input:user-invalid) {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+[part="field"]:has(input:user-invalid):focus-within {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+
+/* The chips precede the input visually but follow it in DOM order, so a label
+   click focuses the input rather than a remove button. */
+[part="chips"] {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+  margin: 0;
+  padding: 0;
+  max-block-size: var(--yk-combobox-chips-max-height, 4.5rem);
+  overflow-y: auto;
+  list-style: none;
+}
+
+/* An empty chip list must not add a gap before the input. */
+[part="chips"]:empty {
+  display: none;
+}
+
+/* The overflow affordance MongoDB-style: an inset shadow that hints the list
+   scrolls once the chips pass the visible rows. */
+[part="chips"][data-overflow] {
+  box-shadow: inset 0 -0.5rem 0.5rem -0.5rem
+    var(--yk-combobox-chip-overflow-shadow, oklch(0% 0 0 / 25%));
+}
+
+[part="chip"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-block: 0.125rem;
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  font-size: 0.875em;
+  color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+  background-color: var(
+    --yk-combobox-chip-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 15%,
+      var(--yk-color-surface, white)
+    )
+  );
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="chip-remove"] {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Expands the hit target around the small icon without growing the chip. */
+[part="chip-remove"]::after {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+}
+
+[part="chip-remove"]:focus-visible {
+  outline: 2px solid
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+  outline-offset: 1px;
+}
+
+/* The face lives on the field wrapper, so the input inside it is stripped of
+   the shared form-control border and background. */
+[part="input"] {
+  flex: 1 1 4rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  line-height: 1.5;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+[part="input"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+[part="input"]::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+[part="arrow"] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--yk-input-padding-inline, 0.75rem);
+  inline-size: var(--yk-combobox-arrow-size, 1rem);
+  block-size: var(--yk-combobox-arrow-size, 1rem);
+  translate: 0 -50%;
+  background-color: var(
+    --yk-combobox-arrow-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  pointer-events: none;
+}
+
+[part="popup"] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding-block: var(--yk-space-sm, 0.5rem);
+  max-block-size: var(--yk-combobox-list-max-height, 15rem);
+  overflow-y: auto;
+  color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-color-surface, #fff);
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-radius-md, 0.375rem);
+  box-shadow: var(
+    --yk-combobox-popup-shadow,
+    0 0.5rem 1rem oklch(0% 0 0 / 15%)
+  );
+}
+
+[part="listbox"] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[part="option"] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-block: var(
+    --yk-combobox-option-padding-block,
+    var(--yk-space-sm, 0.5rem)
+  );
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  cursor: pointer;
+}
+
+[part="option"][hidden] {
+  display: none;
+}
+
+[part="option"][data-active] {
+  background-color: var(
+    --yk-combobox-option-active-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="option"][aria-selected="true"] [part="option-label"] {
+  font-weight: 600;
+}
+
+[part="option"][aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+[part="option-description"] {
+  font-size: 0.875em;
+  color: var(
+    --yk-color-text-muted,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="empty"] {
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  color: var(
+    --yk-color-text-muted,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+</style><input type="text" part="input"></template>
+<option value="noun" selected>noun</option><option value="verb">verb</option>
+</yk-combobox>
+</div>
+<pre><code>&lt;yk-combobox placeholder="Search…"&gt;
+&lt;template shadowrootmode="open" shadowrootdelegatesfocus&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+[part="field"] {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  inline-size: 100%;
+  padding-block: var(--yk-input-padding-block, 0.375rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  padding-inline-end: calc(
+    var(--yk-input-padding-inline, 0.75rem) +
+    var(--yk-combobox-arrow-size, 1rem) +
+    var(--yk-combobox-arrow-gap, 0.5rem)
+  );
+  font: inherit;
+  line-height: 1.5;
+  color: var(--yk-input-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  cursor: text;
+  background-color: var(--yk-input-bg, var(--yk-color-surface, #fff));
+  background-clip: padding-box;
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-input-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+[part="field"]:focus-within {
+  border-color: var(
+    --yk-input-focus-border-color,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 55%,
+      var(--yk-color-surface, white)
+    )
+  );
+  outline: 0;
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-focus-ring-color,
+      var(
+        --yk-color-focus-ring,
+        color-mix(
+          in oklch,
+          var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+          transparent
+        )
+      )
+    );
+}
+
+[part="field"]:has(input:disabled) {
+  cursor: default;
+  background-color: var(
+    --yk-input-disabled-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="field"]:has(input:user-invalid) {
+  border-color: var(
+    --yk-input-invalid-border-color,
+    var(--yk-color-danger, oklch(57% 0.205 21.2))
+  );
+}
+
+[part="field"]:has(input:user-invalid):focus-within {
+  box-shadow: 0 0 0 calc(var(--yk-space-sm, 0.5rem) / 2)
+    var(
+      --yk-input-invalid-ring-color,
+      color-mix(
+        in oklch,
+        var(--yk-color-danger, oklch(57% 0.205 21.2)) 25%,
+        transparent
+      )
+    );
+}
+
+/* The chips precede the input visually but follow it in DOM order, so a label
+   click focuses the input rather than a remove button. */
+[part="chips"] {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+  margin: 0;
+  padding: 0;
+  max-block-size: var(--yk-combobox-chips-max-height, 4.5rem);
+  overflow-y: auto;
+  list-style: none;
+}
+
+/* An empty chip list must not add a gap before the input. */
+[part="chips"]:empty {
+  display: none;
+}
+
+/* The overflow affordance MongoDB-style: an inset shadow that hints the list
+   scrolls once the chips pass the visible rows. */
+[part="chips"][data-overflow] {
+  box-shadow: inset 0 -0.5rem 0.5rem -0.5rem
+    var(--yk-combobox-chip-overflow-shadow, oklch(0% 0 0 / 25%));
+}
+
+[part="chip"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-block: 0.125rem;
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  font-size: 0.875em;
+  color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+  background-color: var(
+    --yk-combobox-chip-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 15%,
+      var(--yk-color-surface, white)
+    )
+  );
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+[part="chip-remove"] {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Expands the hit target around the small icon without growing the chip. */
+[part="chip-remove"]::after {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+}
+
+[part="chip-remove"]:focus-visible {
+  outline: 2px solid
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+  outline-offset: 1px;
+}
+
+/* The face lives on the field wrapper, so the input inside it is stripped of
+   the shared form-control border and background. */
+[part="input"] {
+  flex: 1 1 4rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  line-height: 1.5;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+[part="input"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+[part="input"]::placeholder {
+  color: var(
+    --yk-input-placeholder-color,
+    var(
+      --yk-color-text-muted,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  opacity: 1;
+}
+
+[part="arrow"] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--yk-input-padding-inline, 0.75rem);
+  inline-size: var(--yk-combobox-arrow-size, 1rem);
+  block-size: var(--yk-combobox-arrow-size, 1rem);
+  translate: 0 -50%;
+  background-color: var(
+    --yk-combobox-arrow-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  pointer-events: none;
+}
+
+[part="popup"] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding-block: var(--yk-space-sm, 0.5rem);
+  max-block-size: var(--yk-combobox-list-max-height, 15rem);
+  overflow-y: auto;
+  color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+  background-color: var(--yk-color-surface, #fff);
+  border: 1px solid
+    var(
+      --yk-input-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-radius-md, 0.375rem);
+  box-shadow: var(
+    --yk-combobox-popup-shadow,
+    0 0.5rem 1rem oklch(0% 0 0 / 15%)
+  );
+}
+
+[part="listbox"] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[part="option"] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-block: var(
+    --yk-combobox-option-padding-block,
+    var(--yk-space-sm, 0.5rem)
+  );
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  cursor: pointer;
+}
+
+[part="option"][hidden] {
+  display: none;
+}
+
+[part="option"][data-active] {
+  background-color: var(
+    --yk-combobox-option-active-bg,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 12%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="option"][aria-selected="true"] [part="option-label"] {
+  font-weight: 600;
+}
+
+[part="option"][aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+[part="option-description"] {
+  font-size: 0.875em;
+  color: var(
+    --yk-color-text-muted,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+
+[part="empty"] {
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-input-padding-inline, 0.75rem);
+  color: var(
+    --yk-color-text-muted,
+    color-mix(
+      in oklch,
+      var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 70%,
+      var(--yk-color-surface, white)
+    )
+  );
+}
+&lt;/style&gt;&lt;input type="text" part="input"&gt;&lt;/template&gt;
+&lt;option value="noun" selected&gt;noun&lt;/option&gt;&lt;option value="verb"&gt;verb&lt;/option&gt;
+&lt;/yk-combobox&gt;</code></pre>
+</section>
+  </body>
+</html>
+

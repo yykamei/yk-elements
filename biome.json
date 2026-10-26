@@ -19,6 +19,20 @@
       "preset": "recommended"
     }
   },
+  "overrides": [
+    {
+      "includes": ["docs/dsd.html"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useAnchorContent": "off",
+            "useValidAnchor": "off",
+            "useMediaCaption": "off"
+          }
+        }
+      }
+    }
+  ],
   "javascript": {
     "formatter": {
       "quoteStyle": "single"

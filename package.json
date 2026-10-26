@@ -33,7 +33,8 @@
     "index.js",
     "tokens.css",
     "src",
-    "dist"
+    "dist",
+    "docs/dsd.html"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
