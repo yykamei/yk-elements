@@ -19,6 +19,7 @@
  * <yk-button variant="danger" disabled>Delete</yk-button>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import coreSheet from './button-core.css' with { type: 'css' };
 import sheet from './yk-button.css' with { type: 'css' };
 
@@ -36,12 +37,13 @@ class YKButton extends HTMLElement {
   constructor() {
     super();
     this.#internals = this.attachInternals();
-    const shadowRoot = this.attachShadow({
-      mode: 'open',
+    const shadowRoot = ensureShadow(this, {
       delegatesFocus: true,
+      styles: [coreSheet, sheet],
+      render: (root) => {
+        root.innerHTML = `<button part="button" type="button"><slot></slot></button>`;
+      },
     });
-    shadowRoot.adoptedStyleSheets = [coreSheet, sheet];
-    shadowRoot.innerHTML = `<button part="button" type="button"><slot></slot></button>`;
     this.#button = shadowRoot.querySelector('button');
     this.#button.addEventListener('click', () => this.#submitOwningForm());
     this.#capturePreUpgradeWrite('type');
