@@ -56,3 +56,17 @@ test('prefers the component-level gap token over the global one', () => {
 
   expect(getComputedStyle(host).gap).toBe('5px');
 });
+
+test('reuses a declarative shadow root instead of replacing it', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-grid><template shadowrootmode="open"><style>:host{--dsd:1px}</style><slot></slot></template><p>hi</p></yk-grid>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-grid');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('slot').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.querySelector('p').assignedSlot).not.toBeNull();
+});

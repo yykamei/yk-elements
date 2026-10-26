@@ -67,3 +67,17 @@ test('prefers component-level justify and gap tokens over the global one', () =>
   expect(style.alignItems).toBe('flex-start');
   expect(style.gap).toBe('5px');
 });
+
+test('reuses a declarative shadow root instead of replacing it', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-cluster><template shadowrootmode="open"><style>:host{--dsd:1px}</style><slot></slot></template><p>hi</p></yk-cluster>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-cluster');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('slot').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.querySelector('p').assignedSlot).not.toBeNull();
+});
