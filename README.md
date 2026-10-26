@@ -117,7 +117,6 @@ Light, and Dark); the names are not configurable, so a site that needs other
 wording should build its own control on `theme.js`.
 
 Two attributes adjust where the choice lives:
-
 - `theme="light|dark|system"` names the theme explicitly, taking precedence
   over the stored preference. Selecting an option updates the attribute, so a
   framework can render the value and read the applied theme back from the DOM.
