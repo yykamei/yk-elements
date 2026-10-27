@@ -76,7 +76,6 @@ A layout component specialized for vertical spacing control.
 ```javascript
 import sheet from './yk-vstack.css' with { type: 'css' };
 
-
 class YKVstack extends HTMLElement {
   constructor() {
     super();
@@ -85,7 +84,6 @@ class YKVstack extends HTMLElement {
     shadowRoot.innerHTML = `<slot></slot>`;
   }
 }
-
 
 if (!customElements.get('yk-vstack')) {
   customElements.define('yk-vstack', YKVstack);
@@ -109,9 +107,10 @@ A component that declares its own state to the browser and notifies the outside.
   border: 1px solid var(--yk-card-border, var(--yk-border-color, #e0e0e0));
   border-radius: var(--yk-card-radius, var(--yk-radius-md, 4px));
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
-
 
 :host(:state(active)) {
   border-color: var(--yk-color-primary, #0066cc);
@@ -124,7 +123,6 @@ A component that declares its own state to the browser and notifies the outside.
 ```javascript
 import sheet from './yk-toggle-card.css' with { type: 'css' };
 
-
 class YKToggleCard extends HTMLElement {
   constructor() {
     super();
@@ -134,11 +132,9 @@ class YKToggleCard extends HTMLElement {
     shadowRoot.innerHTML = `<slot></slot>`;
   }
 
-
   connectedCallback() {
     this.addEventListener('click', () => this.toggle());
   }
-
 
   toggle() {
     const isActive = this.internals.states.has('active');
@@ -148,15 +144,15 @@ class YKToggleCard extends HTMLElement {
       this.internals.states.add('active');
     }
 
-
-    this.dispatchEvent(new CustomEvent('yk-toggle', {
-      bubbles: true,
-      composed: true,
-      detail: { active: !isActive }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('yk-toggle', {
+        bubbles: true,
+        composed: true,
+        detail: { active: !isActive },
+      }),
+    );
   }
 }
-
 
 if (!customElements.get('yk-toggle-card')) {
   customElements.define('yk-toggle-card', YKToggleCard);
