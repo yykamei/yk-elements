@@ -283,3 +283,23 @@ test('follows a preference changed in another document', () => {
   expect(checkedOf(host)).toEqual(['light']);
   expect(document.documentElement.dataset.theme).toBe('light');
 });
+
+test('reuses a declarative shadow root and collects its radios', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-theme-switcher><template shadowrootmode="open"><style>:host{--dsd:1px}</style><div part="group" role="radiogroup" aria-label="Theme"><label part="option"><input type="radio" name="theme" value="system"><span class="label">System</span></label><label part="option"><input type="radio" name="theme" value="light"><span class="label">Light</span></label><label part="option"><input type="radio" name="theme" value="dark"><span class="label">Dark</span></label></div></template></yk-theme-switcher>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-theme-switcher');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('input').length).toBe(3);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(labelsOf(host)).toEqual(['System', 'Light', 'Dark']);
+  expect(checkedOf(host)).toEqual(['system']);
+
+  const dark = host.shadowRoot.querySelector('input[value="dark"]');
+  dark.checked = true;
+  dark.dispatchEvent(new Event('change', { bubbles: true }));
+  expect(host.getAttribute('theme')).toBe('dark');
+});

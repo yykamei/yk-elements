@@ -131,3 +131,20 @@ test('paints the filled portion through the fill token', () => {
   // (its rule is not retained in the Chromium CSSOM).
   expect(valueRule?.cssText).toContain('--yk-progress-fill-bg');
 });
+
+test('reuses a declarative shadow root and keeps the mirrored values', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-progress value="40" max="100" aria-label="Progress"><template shadowrootmode="open"><style>:host{--dsd:1px}</style><progress part="progress"></progress></template></yk-progress>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-progress');
+  const progress = host.shadowRoot.querySelector('progress');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('progress').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(progress.value).toBe(40);
+  expect(progress.max).toBe(100);
+  expect(progress.getAttribute('aria-label')).toBe('Progress');
+});

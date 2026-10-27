@@ -16,6 +16,7 @@
  * <yk-link href="https://example.com" target="_blank" rel="noopener">Docs</yk-link>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import coreSheet from './button-core.css' with { type: 'css' };
 import sheet from './yk-link.css' with { type: 'css' };
 
@@ -31,12 +32,13 @@ class YKLink extends HTMLElement {
 
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({
-      mode: 'open',
+    const shadowRoot = ensureShadow(this, {
       delegatesFocus: true,
+      styles: [coreSheet, sheet],
+      render: (root) => {
+        root.innerHTML = `<a part="link"><slot></slot></a>`;
+      },
     });
-    shadowRoot.adoptedStyleSheets = [coreSheet, sheet];
-    shadowRoot.innerHTML = `<a part="link"><slot></slot></a>`;
     this.#anchor = shadowRoot.querySelector('a');
     this.#capturePreUpgradeWrite('href');
     this.#capturePreUpgradeWrite('target');

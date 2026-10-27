@@ -118,3 +118,21 @@ test('restyles the face through the component tokens', () => {
   expect(style.borderTopLeftRadius).toBe('2px');
   expect(style.paddingTop).toBe('20px');
 });
+
+test('reuses a declarative shadow root and keeps naming the dismiss button', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-alert><template shadowrootmode="open"><style>:host{--dsd:1px}</style><div part="content"><slot></slot></div><button part="dismiss" type="button"></button><slot name="dismiss-label" hidden>Dismiss</slot></template>Something happened</yk-alert>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-alert');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('button').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(
+    host.shadowRoot
+      .querySelector('[part="dismiss"]')
+      .getAttribute('aria-label'),
+  ).toBe('Dismiss');
+});

@@ -127,3 +127,19 @@ test('applies an elevation through the shadow token', async () => {
 
   expect(getComputedStyle(host).boxShadow).toContain('rgb(1, 2, 3)');
 });
+
+test('reuses a declarative shadow root and keeps tracking presence', async () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-card><template shadowrootmode="open"><style>:host{--dsd:1px}</style><div part="header"><slot name="header"></slot></div><div part="body"><slot></slot></div><div part="footer"><slot name="footer"></slot></div></template><h2 slot="header">Title</h2><p>Body</p></yk-card>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-card');
+  await frame();
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('slot').length).toBe(3);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.hasAttribute('has-header')).toBe(true);
+  expect(host.hasAttribute('has-footer')).toBe(false);
+});

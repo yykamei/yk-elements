@@ -38,6 +38,7 @@
  * ```
  */
 
+import { ensureShadow } from '../dsd.js';
 import {
   applyTheme,
   configureTheme,
@@ -107,19 +108,22 @@ class YKThemeSwitcher extends HTMLElement {
 
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    // The template is built from trusted internal constants only; no attribute
-    // value is interpolated, so there is no injection path here.
-    shadowRoot.innerHTML = `<div part="group" role="radiogroup" aria-label="Theme">${THEMES.map(
-      (value) => `
+    const shadowRoot = ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        // The template is built from trusted internal constants only; no attribute
+        // value is interpolated, so there is no injection path here.
+        root.innerHTML = `<div part="group" role="radiogroup" aria-label="Theme">${THEMES.map(
+          (value) => `
         <label part="option">
           <input type="radio" name="theme" value="${value}">
           ${ICONS[value]}
           <span class="label">${LABELS[value]}</span>
         </label>`,
-    ).join('')}
+        ).join('')}
       </div>`;
+      },
+    });
 
     for (const input of shadowRoot.querySelectorAll('input')) {
       this.#radios.set(input.value, input);

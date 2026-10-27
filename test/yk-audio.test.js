@@ -296,3 +296,22 @@ test('restyles the button through the component tokens', () => {
   expect(style.backgroundColor).toBe('rgb(9, 8, 7)');
   expect(style.width).toBe('48px');
 });
+
+test('reuses a declarative shadow root and keeps the synced controls', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-audio><template shadowrootmode="open"><style>:host{--dsd:1px}</style><button part="play" type="button"></button><input part="timeline" type="range" min="0" max="0" value="0" step="any"><span part="time"></span><audio preload="metadata"></audio><slot name="play-label" hidden>Play</slot><slot name="pause-label" hidden>Pause</slot><slot name="seek-label" hidden>Seek</slot></template></yk-audio>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-audio');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.shadowRoot.querySelector('[part="time"]').textContent).toBe(
+    '0:00 / 0:00',
+  );
+  expect(
+    host.shadowRoot.querySelector('[part="play"]').getAttribute('aria-label'),
+  ).toBe('Play');
+  expect(host.shadowRoot.querySelector('[part="play"]').disabled).toBe(true);
+});
