@@ -25,11 +25,12 @@ test('creates a shadow root with rendered content when none exists', () => {
 test('reuses a declarative shadow root instead of replacing it', () => {
   const container = document.createElement('div');
   container.setHTMLUnsafe(
-    '<yk-vstack><template shadowrootmode="open"><slot></slot></template><p>hi</p></yk-vstack>',
+    '<yk-vstack><template shadowrootmode="open"><style>:host{--dsd:1px}</style><slot></slot></template><p>hi</p></yk-vstack>',
   );
   document.body.appendChild(container);
   const host = container.querySelector('yk-vstack');
 
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
   expect(host.shadowRoot.querySelectorAll('slot').length).toBe(1);
   expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
   expect(host.querySelector('p').assignedSlot).not.toBeNull();
@@ -38,7 +39,7 @@ test('reuses a declarative shadow root instead of replacing it', () => {
 test('hydrates a declarative button without duplicating it and keeps form behavior', () => {
   const container = document.createElement('div');
   container.setHTMLUnsafe(
-    '<form><yk-button type="submit"><template shadowrootmode="open" shadowrootdelegatesfocus><button part="button" type="button"><slot></slot></button></template>Save</yk-button></form>',
+    '<form><yk-button type="submit"><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><button part="button" type="button"><slot></slot></button></template>Save</yk-button></form>',
   );
   document.body.appendChild(container);
   const host = container.querySelector('yk-button');
@@ -51,6 +52,7 @@ test('hydrates a declarative button without duplicating it and keeps form behavi
 
   const buttons = host.shadowRoot.querySelectorAll('button');
   expect(buttons.length).toBe(1);
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
   expect(host.shadowRoot.delegatesFocus).toBe(true);
   expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
   expect(host.shadowRoot.querySelector('button').type).toBe('submit');

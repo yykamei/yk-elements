@@ -50,3 +50,17 @@ test('prefers the container-level tokens over the global one', () => {
   expect(style.maxInlineSize).toBe('10px');
   expect(style.paddingInline).toBe('5px');
 });
+
+test('reuses a declarative shadow root instead of replacing it', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-container><template shadowrootmode="open"><style>:host{--dsd:1px}</style><slot></slot></template><p>hi</p></yk-container>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-container');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('slot').length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.querySelector('p').assignedSlot).not.toBeNull();
+});

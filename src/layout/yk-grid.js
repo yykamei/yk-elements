@@ -15,14 +15,18 @@
  * </yk-grid>
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './yk-grid.css' with { type: 'css' };
 
 class YKGrid extends HTMLElement {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.adoptedStyleSheets = [sheet];
-    shadowRoot.innerHTML = `<slot></slot>`;
+    ensureShadow(this, {
+      styles: [sheet],
+      render: (root) => {
+        root.innerHTML = `<slot></slot>`;
+      },
+    });
   }
 }
 
