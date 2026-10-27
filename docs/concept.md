@@ -199,6 +199,12 @@ without bundling, so relative imports and `with { type: 'css' }` imports keep
 resolving. The build is internal to this package: the source files remain the
 authored, readable versions and are the ones served from npm.
 
+`fouc.css` is an optional companion stylesheet: it mirrors the layout
+primitives' host styles onto their undefined tags, reducing layout shift before
+the modules run. It is not a substitute for Declarative Shadow DOM, which
+remains the only way to paint a fully styled shadow root before script
+execution.
+
 ---
 
 ## References

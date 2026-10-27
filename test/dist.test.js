@@ -43,6 +43,12 @@ test('dist mirrors the source tree with minified CSS', async () => {
   expect(text).toContain('--yk-color-surface');
   expect(text).toContain('color-scheme');
 
+  const fouc = await fetch('/dist/fouc.css');
+  expect(fouc.ok).toBe(true);
+  const foucText = await fouc.text();
+  expect(foucText).toContain('yk-vstack:not(:defined)');
+  expect(foucText).toContain('yk-container:not(:defined)');
+
   const component = await fetch('/dist/src/layout/yk-vstack.js');
   expect(component.ok).toBe(true);
 

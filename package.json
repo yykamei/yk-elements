@@ -26,12 +26,14 @@
     ".": "./index.js",
     "./package.json": "./package.json",
     "./tokens.css": "./tokens.css",
+    "./fouc.css": "./fouc.css",
     "./layout/*": "./src/layout/*",
     "./components/*": "./src/components/*"
   },
   "files": [
     "index.js",
     "tokens.css",
+    "fouc.css",
     "src",
     "dist",
     "docs/dsd.html"

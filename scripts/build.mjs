@@ -24,7 +24,7 @@ function listSourceFiles() {
     }
   };
   walk('src');
-  files.push('index.js', 'tokens.css');
+  files.push('index.js', 'tokens.css', 'fouc.css');
   return files;
 }
 

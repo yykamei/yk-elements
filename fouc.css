@@ -1,0 +1,68 @@
+/*
+ * Pre-upgrade layout fallbacks for yk-elements layout primitives.
+ *
+ * Custom elements are unstyled until their module registers them. Link this
+ * stylesheet in <head> before the component module to keep the light-DOM
+ * layout close to the shadow layout during that window:
+ *
+ * ```html
+ * <link rel="stylesheet" href="path/to/yk-elements/fouc.css" />
+ * <script type="module" src="path/to/yk-elements/index.js"></script>
+ * ```
+ *
+ * Each rule matches only while its element is undefined, so the component's
+ * own :host styles take over at upgrade. Only host layout is mirrored; leaf
+ * components keep their light-DOM content rather than being hidden. For a
+ * completely styled first paint, use Declarative Shadow DOM (see README).
+ *
+ * Keep these declarations in sync with the :host rules in src/layout/*.css;
+ * test/fouc.test.js compares the fallback and defined computed styles.
+ */
+:where(yk-vstack:not(:defined)) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-vstack-gap, var(--yk-space-md, 1rem));
+}
+
+:where(yk-hstack:not(:defined)) {
+  display: flex;
+  align-items: var(--yk-hstack-align, stretch);
+  gap: var(--yk-hstack-gap, var(--yk-space-md, 1rem));
+}
+
+:where(yk-cluster:not(:defined)) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--yk-cluster-justify, center);
+  align-items: var(--yk-cluster-align, center);
+  gap: var(--yk-cluster-gap, var(--yk-space-md, 1rem));
+}
+
+:where(yk-grid:not(:defined)) {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(100%, var(--yk-grid-min, 20rem)), 1fr)
+    );
+  gap: var(--yk-grid-gap, var(--yk-space-md, 1rem));
+}
+
+:where(yk-pad:not(:defined)) {
+  display: block;
+  padding-block: var(
+    --yk-pad-padding-block,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+  padding-inline: var(
+    --yk-pad-padding-inline,
+    var(--yk-pad-padding, var(--yk-space-md, 1rem))
+  );
+}
+
+:where(yk-container:not(:defined)) {
+  display: block;
+  box-sizing: content-box;
+  margin-inline: auto;
+  max-inline-size: var(--yk-container-max, 64rem);
+  padding-inline: var(--yk-container-padding, var(--yk-space-md, 1rem));
+}
