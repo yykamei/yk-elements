@@ -90,7 +90,7 @@ function loadMobileIframe(path) {
 
 const tags = components.map(({ tag }) => tag);
 
-test('every catalog page references the library entry point, tokens, and shared chrome', async () => {
+test('every catalog page references the library entry point, stylesheets, and shared chrome', async () => {
   const pages = [
     '/catalog/index.html',
     ...tags.map((tag) => `/catalog/${tag}.html`),
@@ -103,6 +103,10 @@ test('every catalog page references the library entry point, tokens, and shared 
     ).not.toBeNull();
     expect(
       doc.querySelector('link[rel="stylesheet"][href="../tokens.css"]'),
+      path,
+    ).not.toBeNull();
+    expect(
+      doc.querySelector('link[rel="stylesheet"][href="../fouc.css"]'),
       path,
     ).not.toBeNull();
     expect(

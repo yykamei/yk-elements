@@ -41,6 +41,10 @@ Importing `index.js` self-registers every component. Components can also be
 imported individually, for example
 `import 'path/to/yk-elements/src/layout/yk-vstack.js'`.
 
+This simple form can flash before the module runs; see
+[Avoid FOUC](#avoid-fouc-with-declarative-shadow-dom) for the complete fix and
+[the lighter options](#reduce-fouc-without-server-rendered-templates).
+
 ### Avoid FOUC with Declarative Shadow DOM
 
 Components build their shadow DOM when the module loads, so the first paint
@@ -71,6 +75,44 @@ generated, keep `shadowrootdelegatesfocus` where shown, and give field
 templates the bare native control only — wrappers are built on upgrade.
 Browsers without Declarative Shadow DOM ignore the template and render on
 upgrade as before.
+
+### Reduce FOUC without server-rendered templates
+
+Declarative Shadow DOM is the only way to paint a fully styled shadow root
+before any script runs. When the markup cannot carry templates — for example,
+when it is created at runtime — two lighter options reduce the flash:
+- Put the entry point in `<head>` with `blocking="render"`, so the first paint
+  waits for the module graph and its stylesheets. Chromium 105+ and Safari
+  18.2+ honor the attribute; Firefox ignores it.
+- Link `fouc.css` in `<head>` before the module. It mirrors the layout
+  primitives' host styles onto their undefined tags, so `yk-vstack`,
+  `yk-hstack`, `yk-cluster`, `yk-grid`, `yk-pad`, and `yk-container` keep
+  their layout until upgrade.
+  Each rule stops matching once its element is defined, and nothing is
+  hidden, so the page stays readable without scripting.
+
+```html
+<link rel="stylesheet" href="path/to/yk-elements/tokens.css" />
+<link rel="stylesheet" href="path/to/yk-elements/fouc.css" />
+<script type="module" src="path/to/yk-elements/index.js" blocking="render"></script>
+```
+
+The npm export is `@yykamei/yk-elements/fouc.css`; CDN users load
+`dist/fouc.css`. `fouc.css` covers layout primitives only, so leaf components
+keep their light-DOM text until upgrade. To hide those too, scope the rule to
+the tags you use and gate it on scripting, rather than hiding the whole page:
+
+```css
+@media (scripting: enabled) {
+  yk-button:not(:defined),
+  yk-card:not(:defined) {
+    visibility: hidden;
+  }
+}
+```
+
+Do not use `body:has(:not(:defined)) { opacity: 0 }`: a failed module load or
+an unrelated undefined custom element leaves the page blank.
 
 ### Use from npm
 
