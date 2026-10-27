@@ -55,3 +55,21 @@ test('has no pattern constraint because a native textarea has none', () => {
   expect(host.validity.patternMismatch).toBe(false);
   expect(host.checkValidity()).toBe(true);
 });
+
+test('reuses a declarative shadow root and keeps the mirrored attributes', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-textarea rows="4" placeholder="Write here" required><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><textarea part="textarea"></textarea></template></yk-textarea>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-textarea');
+  const textarea = host.shadowRoot.querySelector('textarea');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('textarea').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(textarea.rows).toBe(4);
+  expect(textarea.placeholder).toBe('Write here');
+  expect(textarea.required).toBe(true);
+});

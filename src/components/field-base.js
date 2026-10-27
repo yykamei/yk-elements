@@ -33,6 +33,7 @@
  * }
  * ```
  */
+import { ensureShadow } from '../dsd.js';
 import sheet from './input-core.css' with { type: 'css' };
 
 // Input attributes whose IDL property name is not the attribute name itself.
@@ -87,14 +88,34 @@ export class YKFieldElement extends HTMLElement {
   constructor() {
     super();
     this.#internals = this.attachInternals();
-    const shadowRoot = this.attachShadow({
-      mode: 'open',
+    const shadowRoot = ensureShadow(this, {
       delegatesFocus: true,
+      styles: [this.constructor.coreStylesheet],
+      render: (root) => {
+        root.append(this.createControl());
+      },
     });
-    shadowRoot.adoptedStyleSheets = [this.constructor.coreStylesheet];
-    this.#input = this.createControl();
+    // On a declarative root the control comes from the parsed template;
+    // subclasses then wrap or enhance it exactly as on the fresh path.
+    // Templates must contain exactly the bare native control the subclass
+    // creates: wrappers are always built on upgrade, so a template that
+    // already includes them would render twice.
+    let input = shadowRoot.querySelector('input, select, textarea');
+    if (!input) {
+      input = this.createControl();
+      shadowRoot.append(input);
+    }
+    this.#input = input;
+    // A mismatched template control (e.g. type="text" for a password field)
+    // would silently change masking and validation, so the declared input
+    // type wins over the template's. Other attributes are mirrored below.
+    if (
+      this.#input instanceof HTMLInputElement &&
+      typeof this.constructor.inputType === 'string'
+    ) {
+      this.#input.type = this.constructor.inputType;
+    }
     this.#input.addEventListener('input', () => this.#syncFormState());
-    shadowRoot.append(this.#input);
     for (const name of this.#propertyNames()) {
       this.#capturePreUpgradeWrite(name);
     }

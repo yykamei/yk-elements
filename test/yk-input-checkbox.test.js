@@ -812,3 +812,47 @@ test('turns the switch thumb white through the checked color token', async () =>
     );
   });
 });
+
+test('reuses a declarative shadow root and keeps wrapping the hydrated input', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-input-checkbox checked indeterminate><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><input type="checkbox" part="input"></template>Subscribe</yk-input-checkbox>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-input-checkbox');
+  const input = host.shadowRoot.querySelector('input');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('input').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.shadowRoot.querySelectorAll('label[part="label"]').length).toBe(
+    1,
+  );
+  expect(input.checked).toBe(true);
+  expect(input.indeterminate).toBe(true);
+  expect(host.firstChild.assignedSlot).not.toBeNull();
+});
+
+test('keeps the declarative style and wrapper across a form reset', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<form><yk-input-checkbox checked indeterminate><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><input type="checkbox" part="input"></template>Subscribe</yk-input-checkbox></form>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-input-checkbox');
+  const form = container.querySelector('form');
+
+  host.shadowRoot.querySelector('input').checked = false;
+  host.shadowRoot.querySelector('input').indeterminate = false;
+  form.reset();
+  const input = host.shadowRoot.querySelector('input');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('input').length).toBe(1);
+  expect(
+    host.shadowRoot.querySelector('label[part="label"]').contains(input),
+  ).toBe(true);
+  expect(input.checked).toBe(true);
+  expect(input.indeterminate).toBe(true);
+});

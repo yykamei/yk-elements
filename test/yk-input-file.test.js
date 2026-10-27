@@ -734,3 +734,22 @@ test('the dragover face is styleable through a component token', async () => {
   );
   expect(getComputedStyle(zone).backgroundColor).toBe('rgb(7, 8, 9)');
 });
+
+test('reuses a declarative shadow root and keeps the mirrored attributes', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-input-file accept="image/png" required><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><input type="file" part="input"></template></yk-input-file>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-input-file');
+  const input = host.shadowRoot.querySelector('input');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('input').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
+  expect(host.shadowRoot.querySelectorAll('[part="dropzone"]').length).toBe(1);
+  expect(input.type).toBe('file');
+  expect(input.getAttribute('accept')).toBe('image/png');
+  expect(input.required).toBe(true);
+});

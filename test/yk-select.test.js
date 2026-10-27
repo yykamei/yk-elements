@@ -362,3 +362,25 @@ test('restyles the face through the component tokens', async () => {
   expect(style.backgroundColor).toBe('rgb(9, 8, 7)');
   expect(style.borderTopColor).toBe('rgb(3, 2, 1)');
 });
+
+test('reuses a declarative shadow root and mirrors the light options', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-select required><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><select part="select"></select></template><option value="noun" selected>noun</option><option value="verb">verb</option></yk-select>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-select');
+  const select = host.shadowRoot.querySelector('select');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('select').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
+  expect(host.shadowRoot.querySelectorAll('[part="arrow"]').length).toBe(1);
+  expect([...select.options].map((option) => option.value)).toEqual([
+    'noun',
+    'verb',
+  ]);
+  expect(host.value).toBe('noun');
+  expect(select.required).toBe(true);
+});

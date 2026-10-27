@@ -811,3 +811,21 @@ test('restyles the face through the component tokens', async () => {
   expect(style.backgroundColor).toBe('rgb(9, 8, 7)');
   expect(style.borderTopColor).toBe('rgb(3, 2, 1)');
 });
+
+test('reuses a declarative shadow root and mirrors the light options', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-combobox placeholder="Search…"><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><input type="text" part="input"></template><option value="noun" selected>noun</option><option value="verb">verb</option></yk-combobox>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-combobox');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('[part="input"]').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.shadowRoot.querySelectorAll('[part="field"]').length).toBe(1);
+  expect(inputOf(host).placeholder).toBe('Search…');
+  expect(rowsOf(host).length).toBe(2);
+  expect(host.value).toBe('noun');
+});

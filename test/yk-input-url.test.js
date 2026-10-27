@@ -64,3 +64,20 @@ test('flags a prefilled invalid URL as invalid without user interaction', () => 
   expect(host.validity.typeMismatch).toBe(true);
   expect(host.checkValidity()).toBe(false);
 });
+
+test('reuses a declarative shadow root and keeps the mirrored attributes', () => {
+  const container = document.createElement('div');
+  container.setHTMLUnsafe(
+    '<yk-input-url value="https://example.com" required><template shadowrootmode="open" shadowrootdelegatesfocus><style>:host{--dsd:1px}</style><input type="url" part="input"></template></yk-input-url>',
+  );
+  document.body.appendChild(container);
+  const host = container.querySelector('yk-input-url');
+  const input = host.shadowRoot.querySelector('input');
+
+  expect(host.shadowRoot.querySelector('style')).not.toBeNull();
+  expect(host.shadowRoot.querySelectorAll('input').length).toBe(1);
+  expect(host.shadowRoot.delegatesFocus).toBe(true);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(input.type).toBe('url');
+  expect(input.required).toBe(true);
+});
