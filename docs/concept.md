@@ -166,6 +166,8 @@ if (!customElements.get('yk-toggle-card')) {
 ```text
 yk-elements/
 ├── tokens.css                  # Site-wide design token definitions (:root)
+├── reset.css                   # Optional UA-default normalization
+├── fouc.css                    # Optional pre-upgrade layout fallbacks
 ├── src/
 │   ├── layout/
 │   │   ├── yk-vstack.css
@@ -204,6 +206,13 @@ primitives' host styles onto their undefined tags, reducing layout shift before
 the modules run. It is not a substitute for Declarative Shadow DOM, which
 remains the only way to paint a fully styled shadow root before script
 execution.
+
+`reset.css` is another optional companion stylesheet: it removes the body
+margin so the page gutter belongs to `yk-container`, and removes the user-agent
+block margins that would otherwise stack with the gap owned by the layout
+primitives. It is scoped to direct children of those primitives, so ordinary
+flow such as a `yk-card` body keeps its defaults. Typography, form controls,
+inline indentation, and box-sizing remain the consumer's responsibility.
 
 ---
 
