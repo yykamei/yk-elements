@@ -1,0 +1,81 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-field-list-gap, var(--yk-space-md, 1rem));
+}
+
+/* The host's flex display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+[part="items"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-field-list-gap, var(--yk-space-md, 1rem));
+}
+
+[part="add"] {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  inline-size: 100%;
+  padding-block: var(
+    --yk-field-list-add-padding-block,
+    var(--yk-space-sm, 0.5rem)
+  );
+  padding-inline: var(
+    --yk-field-list-add-padding-inline,
+    var(--yk-space-md, 1rem)
+  );
+  font: inherit;
+  line-height: 1.5;
+  color: var(
+    --yk-field-list-add-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  cursor: pointer;
+  background-color: var(--yk-field-list-add-bg, transparent);
+  border: 1px dashed
+    var(
+      --yk-field-list-add-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(--yk-field-list-add-radius, var(--yk-radius-md, 0.375rem));
+  transition:
+    color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+[part="add"]:hover:not(:disabled) {
+  color: var(--yk-color-primary, oklch(56% 0.228 260));
+  border-color: var(--yk-color-primary, oklch(56% 0.228 260));
+}
+
+[part="add"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 2px
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+
+[part="add"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
