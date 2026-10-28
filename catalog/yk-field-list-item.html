@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-field-list-item&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-field-list-item">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list-item>
+              <p>Example sentence content</p>
+            </yk-field-list-item>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list-item&gt;
+  &lt;p&gt;Example sentence content&lt;/p&gt;
+&lt;/yk-field-list-item&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>form fields</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list-item>
+              <yk-vstack>
+                <label for="catalog-item-text">Text</label>
+                <yk-input-text
+                  id="catalog-item-text"
+                  name="text"
+                  value="I will name your price."
+                ></yk-input-text>
+                <label for="catalog-item-translation">Translation</label>
+                <yk-input-text
+                  id="catalog-item-translation"
+                  name="translation"
+                  value="値段は私が決めます。"
+                ></yk-input-text>
+              </yk-vstack>
+            </yk-field-list-item>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list-item&gt;
+  &lt;yk-vstack&gt;
+    &lt;label for="catalog-item-text"&gt;Text&lt;/label&gt;
+    &lt;yk-input-text
+      id="catalog-item-text"
+      name="text"
+      value="I will name your price."
+    &gt;&lt;/yk-input-text&gt;
+    &lt;label for="catalog-item-translation"&gt;Translation&lt;/label&gt;
+    &lt;yk-input-text
+      id="catalog-item-translation"
+      name="translation"
+      value="値段は私が決めます。"
+    &gt;&lt;/yk-input-text&gt;
+  &lt;/yk-vstack&gt;
+&lt;/yk-field-list-item&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>remove-label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list-item remove-label="この例文を削除">
+              <p>The icon button is named by remove-label.</p>
+            </yk-field-list-item>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list-item remove-label="この例文を削除"&gt;
+  &lt;p&gt;The icon button is named by remove-label.&lt;/p&gt;
+&lt;/yk-field-list-item&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>surface tokens</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list-item
+              style="--yk-field-list-item-bg: var(--yk-color-bg); --yk-field-list-item-border-color: var(--yk-color-primary); --yk-field-list-item-radius: 1rem; --yk-field-list-item-padding: var(--yk-space-lg)"
+            >
+              <p>Restyle the surface through its custom properties.</p>
+            </yk-field-list-item>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list-item
+  style="--yk-field-list-item-bg: var(--yk-color-bg); --yk-field-list-item-border-color: var(--yk-color-primary); --yk-field-list-item-radius: 1rem; --yk-field-list-item-padding: var(--yk-space-lg)"
+&gt;
+  &lt;p&gt;Restyle the surface through its custom properties.&lt;/p&gt;
+&lt;/yk-field-list-item&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

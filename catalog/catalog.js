@@ -859,6 +859,43 @@ const dropzoneFaceProperties = [
   },
 ];
 
+/**
+ * CSS custom properties of the yk-field-list-item surface and remove button.
+ */
+const fieldListItemFaceProperties = [
+  {
+    name: '--yk-field-list-item-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the row surface.',
+  },
+  {
+    name: '--yk-field-list-item-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the row surface.',
+  },
+  {
+    name: '--yk-field-list-item-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Border color of the row surface.',
+  },
+  {
+    name: '--yk-field-list-item-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the row surface.',
+  },
+  {
+    name: '--yk-field-list-item-padding',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Inset from the row edges to its content and remove button.',
+  },
+  {
+    name: '--yk-field-list-item-remove-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Color of the remove button icon.',
+  },
+];
+
 export const components = [
   {
     tag: 'yk-vstack',
@@ -1164,6 +1201,26 @@ export const components = [
     },
     cssProperties: cardFaceProperties,
     attributes: [],
+  },
+  {
+    tag: 'yk-field-list-item',
+    category: 'Components',
+    description:
+      'Bordered row for a repeatable form group, with a trash-can remove button on the right that centers on short rows and top-aligns on taller rows; activating it emits a cancelable yk-field-list-item-remove event and removes the row unless the event is canceled.',
+    playground: {
+      content:
+        '  <label for="playground-field-list-item-text">Text</label>\n  <yk-input-text id="playground-field-list-item-text" name="text"></yk-input-text>\n  <label for="playground-field-list-item-translation">Translation</label>\n  <yk-input-text id="playground-field-list-item-translation" name="translation"></yk-input-text>',
+    },
+    cssProperties: fieldListItemFaceProperties,
+    attributes: [
+      {
+        name: 'remove-label',
+        control: 'text',
+        default: 'Remove item',
+        description:
+          "Accessible name of the remove button. The item's own remove-label wins; otherwise the closest yk-field-list's remove-label is used; otherwise the name is Remove item.",
+      },
+    ],
   },
   {
     tag: 'yk-alert',

@@ -51,6 +51,13 @@ const DEMOS = [
   { tag: 'yk-badge', sheets: 1, controls: 'slot', count: 1 },
   { tag: 'yk-card', sheets: 1, controls: 'slot', count: 3 },
   {
+    tag: 'yk-field-list-item',
+    sheets: 1,
+    controls: 'button[part="remove"]',
+    count: 1,
+    also: [['[part="content"] slot', 1]],
+  },
+  {
     tag: 'yk-alert',
     sheets: 1,
     controls: 'button[part="dismiss"]',
@@ -208,4 +215,13 @@ test('generated snippets carry working attribute mirrors', async () => {
 
   const progress = doc.querySelector('[data-demo="yk-progress"] yk-progress');
   expect(progress.shadowRoot.querySelector('progress').value).toBe(40);
+
+  const item = doc.querySelector(
+    '[data-demo="yk-field-list-item"] yk-field-list-item',
+  );
+  expect(
+    item.shadowRoot
+      .querySelector('button[part="remove"]')
+      .getAttribute('aria-label'),
+  ).toBe('Remove this row');
 });
