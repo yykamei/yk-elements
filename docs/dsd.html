@@ -783,6 +783,195 @@ Beta
 &lt;/yk-card&gt;</code></pre>
 </section>
 <section>
+<h2><code>yk-field-list-item</code></h2>
+<div data-demo="yk-field-list-item">
+<yk-field-list-item remove-label="Remove this row">
+<template shadowrootmode="open"><style>
+:host {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding: var(--yk-field-list-item-padding, var(--yk-space-md, 1rem));
+  color: var(
+    --yk-field-list-item-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  background-color: var(--yk-field-list-item-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-field-list-item-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(
+    --yk-field-list-item-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+}
+
+/* The host's grid display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+/* Tall rows keep the remove control near their labels. */
+:host([data-top-aligned]) {
+  align-items: start;
+}
+
+[part="content"] {
+  min-inline-size: 0;
+}
+
+[part="remove"] {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  margin: 0;
+  padding: 0;
+  color: var(
+    --yk-field-list-item-remove-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+[part="remove"]:hover {
+  color: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  background-color: color-mix(
+    in oklch,
+    var(--yk-color-danger, oklch(57% 0.205 21.2)) 12%,
+    transparent
+  );
+}
+
+[part="remove"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 2px
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+</style><div part="content"><slot></slot></div><button part="remove" type="button" aria-label="Remove item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2.75h4M3.25 4.5h9.5M4.5 4.5l.5 8.25a1 1 0 0 0 1 .75h4a1 1 0 0 0 1-.75l.5-8.25M6.75 7v4M9.25 7v4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" /></svg></button></template>
+<p>Example sentence content</p>
+</yk-field-list-item>
+</div>
+<pre><code>&lt;yk-field-list-item remove-label="Remove this row"&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding: var(--yk-field-list-item-padding, var(--yk-space-md, 1rem));
+  color: var(
+    --yk-field-list-item-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  background-color: var(--yk-field-list-item-bg, var(--yk-color-surface, #fff));
+  border: 1px solid
+    var(
+      --yk-field-list-item-border-color,
+      var(
+        --yk-color-border,
+        color-mix(
+          in oklch,
+          var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+          var(--yk-color-surface, white)
+        )
+      )
+    );
+  border-radius: var(
+    --yk-field-list-item-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+}
+
+/* The host's grid display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+/* Tall rows keep the remove control near their labels. */
+:host([data-top-aligned]) {
+  align-items: start;
+}
+
+[part="content"] {
+  min-inline-size: 0;
+}
+
+[part="remove"] {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  margin: 0;
+  padding: 0;
+  color: var(
+    --yk-field-list-item-remove-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+
+[part="remove"]:hover {
+  color: var(--yk-color-danger, oklch(57% 0.205 21.2));
+  background-color: color-mix(
+    in oklch,
+    var(--yk-color-danger, oklch(57% 0.205 21.2)) 12%,
+    transparent
+  );
+}
+
+[part="remove"]:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 2px
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+}
+&lt;/style&gt;&lt;div part="content"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;button part="remove" type="button" aria-label="Remove item"&gt;&lt;svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"&gt;&lt;path d="M6 2.75h4M3.25 4.5h9.5M4.5 4.5l.5 8.25a1 1 0 0 0 1 .75h4a1 1 0 0 0 1-.75l.5-8.25M6.75 7v4M9.25 7v4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/template&gt;
+&lt;p&gt;Example sentence content&lt;/p&gt;
+&lt;/yk-field-list-item&gt;</code></pre>
+</section>
+<section>
 <h2><code>yk-alert</code></h2>
 <div data-demo="yk-alert">
 <yk-alert variant="danger">
