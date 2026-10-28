@@ -49,6 +49,15 @@ test('dist mirrors the source tree with minified CSS', async () => {
   expect(foucText).toContain('yk-vstack:not(:defined)');
   expect(foucText).toContain('yk-container:not(:defined)');
 
+  const reset = await fetch('/dist/reset.css');
+  expect(reset.ok).toBe(true);
+  const resetText = await reset.text();
+  expect(resetText).toContain(':where(body)');
+  for (const tag of ['yk-vstack', 'yk-hstack', 'yk-cluster', 'yk-grid']) {
+    expect(resetText).toContain(tag);
+  }
+  expect(resetText).toContain('margin-block');
+
   const component = await fetch('/dist/src/layout/yk-vstack.js');
   expect(component.ok).toBe(true);
 

@@ -26,6 +26,7 @@
     ".": "./index.js",
     "./package.json": "./package.json",
     "./tokens.css": "./tokens.css",
+    "./reset.css": "./reset.css",
     "./fouc.css": "./fouc.css",
     "./layout/*": "./src/layout/*",
     "./components/*": "./src/components/*"
@@ -33,6 +34,7 @@
   "files": [
     "index.js",
     "tokens.css",
+    "reset.css",
     "fouc.css",
     "src",
     "dist",

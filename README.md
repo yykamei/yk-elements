@@ -114,6 +114,29 @@ the tags you use and gate it on scripting, rather than hiding the whole page:
 Do not use `body:has(:not(:defined)) { opacity: 0 }`: a failed module load or
 an unrelated undefined custom element leaves the page blank.
 
+### Normalize UA spacing
+
+Layout primitives space their children with `gap`, but the browser's default
+block margins sit in the light DOM and add to that gap. Link `reset.css` in the
+page head to remove the body margin and the block margins of direct children
+of `yk-vstack`, `yk-hstack`, `yk-cluster`, and `yk-grid`:
+
+```html
+<link rel="stylesheet" href="path/to/yk-elements/tokens.css" />
+<link rel="stylesheet" href="path/to/yk-elements/reset.css" />
+```
+
+The stylesheet is deliberately narrow: headings keep their UA font sizes,
+lists keep their markers, `figure` and `blockquote` keep their inline
+indentation, and content inside `yk-card` or another non-gap container keeps
+its default paragraph spacing. Every rule uses `:where()`, so an unlayered
+element selector overrides it. If your overrides live in a cascade layer, add
+them as unlayered rules: unlayered author styles outrank layered ones. Leave
+it out when your page already ships its own reset.
+
+The npm export is `@yykamei/yk-elements/reset.css`; CDN users load
+`dist/reset.css`.
+
 ### Use from npm
 
 Once the package is installed (`npm install @yykamei/yk-elements`), import the
