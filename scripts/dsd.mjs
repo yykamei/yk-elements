@@ -36,6 +36,8 @@ const alertSvg =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>';
 const trashSvg =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2.75h4M3.25 4.5h9.5M4.5 4.5l.5 8.25a1 1 0 0 0 1 .75h4a1 1 0 0 0 1-.75l.5-8.25M6.75 7v4M9.25 7v4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" /></svg>';
+const plusSvg =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.25v9.5M3.25 8h9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>';
 const playSvg =
   '<svg part="play-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l8 5-8 5z" fill="currentColor" /></svg>';
 const pauseSvg =
@@ -137,6 +139,16 @@ const entries = [
       `<button part="remove" type="button" aria-label="Remove item">${trashSvg}</button>`,
     attrs: 'remove-label="Remove this row"',
     light: '<p>Example sentence content</p>',
+  },
+  {
+    tag: 'yk-field-list',
+    stylesheets: ['src/components/yk-field-list.css'],
+    shadow:
+      '<div part="items"><slot></slot></div>' +
+      `<button part="add" type="button">${plusSvg}<span part="add-label">Add item</span></button>`,
+    attrs: 'add-label="Add row" remove-label="Remove row"',
+    light:
+      '<template><p>New row</p></template><yk-field-list-item><p>Existing row</p></yk-field-list-item>',
   },
   {
     tag: 'yk-alert',

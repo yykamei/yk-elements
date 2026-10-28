@@ -58,6 +58,16 @@ const DEMOS = [
     also: [['[part="content"] slot', 1]],
   },
   {
+    tag: 'yk-field-list',
+    sheets: 1,
+    controls: '[part="add"]',
+    count: 1,
+    also: [
+      ['[part="items"] slot', 1],
+      ['[part="add-label"]', 1],
+    ],
+  },
+  {
     tag: 'yk-alert',
     sheets: 1,
     controls: 'button[part="dismiss"]',
@@ -224,4 +234,15 @@ test('generated snippets carry working attribute mirrors', async () => {
       .querySelector('button[part="remove"]')
       .getAttribute('aria-label'),
   ).toBe('Remove this row');
+
+  const list = doc.querySelector('[data-demo="yk-field-list"] yk-field-list');
+  expect(list.shadowRoot.querySelector('[part="add-label"]').textContent).toBe(
+    'Add row',
+  );
+  expect(
+    list
+      .querySelector('yk-field-list-item')
+      .shadowRoot.querySelector('button[part="remove"]')
+      .getAttribute('aria-label'),
+  ).toBe('Remove row');
 });
