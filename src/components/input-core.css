@@ -2,6 +2,11 @@
   display: block;
 }
 
+/* Horizontal resize would let a textarea grow past the width it is given. */
+:host textarea {
+  resize: vertical;
+}
+
 :host :is(input, textarea, select) {
   box-sizing: border-box;
   display: block;

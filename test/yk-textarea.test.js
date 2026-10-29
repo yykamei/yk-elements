@@ -47,6 +47,15 @@ test('exposes a rows property backed by the internal textarea', () => {
   expect(host.shadowRoot.querySelector('textarea').rows).toBe(4);
 });
 
+test('resizes vertically only so the field cannot widen past its container', () => {
+  const host = document.createElement('yk-textarea');
+  document.body.appendChild(host);
+
+  const textarea = host.shadowRoot.querySelector('textarea');
+
+  expect(getComputedStyle(textarea).resize).toBe('vertical');
+});
+
 test('has no pattern constraint because a native textarea has none', () => {
   const host = document.createElement('yk-textarea');
   host.value = 'not a constrained value!';

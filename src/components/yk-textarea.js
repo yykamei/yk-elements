@@ -8,7 +8,9 @@
  * attribute as the default restored by form reset while the `value` property
  * holds the live value, supports disabled form/fieldset ancestors, and is
  * labelable. `rows` sets the visible height, and there is no `pattern`
- * attribute because a native textarea has no pattern constraint.
+ * attribute because a native textarea has no pattern constraint. The field
+ * resizes vertically only, so a drag cannot widen it past the width it is
+ * given.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
