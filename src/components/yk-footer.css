@@ -1,0 +1,100 @@
+:host {
+  --_footer-border-color: var(
+    --yk-footer-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  color: var(--yk-footer-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-footer-bg, var(--yk-color-surface, #fff));
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+[part="inner"] {
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+  max-inline-size: var(--yk-footer-max, 64rem);
+  margin-inline: auto;
+  padding-block: var(--yk-footer-padding-block, var(--yk-space-lg, 1.5rem));
+  padding-inline: var(--yk-footer-padding-inline, var(--yk-space-md, 1rem));
+}
+
+[part="header"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+/* A brand link keeps the footer's body typography instead of the smaller,
+   muted treatment of navigation links. */
+slot[name="brand"]::slotted(a) {
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: none;
+}
+
+slot[name="brand"]::slotted(a:hover) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+[part="main"] {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(100%, var(--yk-footer-column-min, 16rem)), 1fr)
+    );
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+[part="bottom"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block-start: var(--yk-space-md, 1rem);
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+[part="legal"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+}
+
+:host([empty-header]) [part="header"],
+:host([empty-main]) [part="main"],
+:host([empty-bottom]) [part="bottom"] {
+  display: none;
+}
+
+[part="copyright"] {
+  color: var(
+    --yk-footer-copyright-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+:host([empty-header][empty-main][empty-bottom]) {
+  display: none;
+}
