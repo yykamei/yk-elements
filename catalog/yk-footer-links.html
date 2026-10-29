@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-footer-links&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-footer-links">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer-links heading="Resources">
+              <a href="https://example.com/docs">Documentation</a>
+              <a href="https://example.com/support">Support</a>
+              <a href="https://example.com/status">Status</a>
+            </yk-footer-links>
+          </yk-pad>
+          <pre><code>&lt;yk-footer-links heading="Resources"&gt;
+  &lt;a href="https://example.com/docs"&gt;Documentation&lt;/a&gt;
+  &lt;a href="https://example.com/support"&gt;Support&lt;/a&gt;
+  &lt;a href="https://example.com/status"&gt;Status&lt;/a&gt;
+&lt;/yk-footer-links&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Without a heading</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer-links>
+              <a href="https://example.com/docs">Documentation</a>
+              <a href="https://example.com/support">Support</a>
+            </yk-footer-links>
+          </yk-pad>
+          <pre><code>&lt;yk-footer-links&gt;
+  &lt;a href="https://example.com/docs"&gt;Documentation&lt;/a&gt;
+  &lt;a href="https://example.com/support"&gt;Support&lt;/a&gt;
+&lt;/yk-footer-links&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Token overrides</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer-links
+              heading="Project"
+              style="--yk-footer-links-heading-color: var(--yk-color-primary); --yk-footer-link-color: var(--yk-color-primary); --yk-footer-links-gap: var(--yk-space-md)"
+            >
+              <a href="https://example.com/source">Source</a>
+              <a href="https://example.com/issues">Issues</a>
+            </yk-footer-links>
+          </yk-pad>
+          <pre><code>&lt;yk-footer-links
+  heading="Project"
+  style="--yk-footer-links-heading-color: var(--yk-color-primary); --yk-footer-link-color: var(--yk-color-primary); --yk-footer-links-gap: var(--yk-space-md)"
+&gt;
+  &lt;a href="https://example.com/source"&gt;Source&lt;/a&gt;
+  &lt;a href="https://example.com/issues"&gt;Issues&lt;/a&gt;
+&lt;/yk-footer-links&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

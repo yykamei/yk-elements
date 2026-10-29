@@ -27,7 +27,8 @@
           "a11y": {
             "useAnchorContent": "off",
             "useValidAnchor": "off",
-            "useMediaCaption": "off"
+            "useMediaCaption": "off",
+            "useHeadingContent": "off"
           }
         }
       }

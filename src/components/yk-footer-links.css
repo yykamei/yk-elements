@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-inline-size: 0;
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-footer-links-heading-gap, var(--yk-space-sm, 0.5rem));
+}
+
+[part="heading"] {
+  margin: 0;
+  font-size: var(--yk-footer-links-heading-size, 0.875rem);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(
+    --yk-footer-links-heading-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+}
+
+[part="links"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-footer-links-gap, var(--yk-space-sm, 0.5rem));
+}

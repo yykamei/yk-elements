@@ -19,6 +19,7 @@ const VARIATIONS = {
   'yk-link': 5,
   'yk-badge': 5,
   'yk-card': 4,
+  'yk-footer-links': 3,
   'yk-field-list-item': 4,
   'yk-field-list': 4,
   'yk-alert': 6,
@@ -1114,6 +1115,7 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-button')).toBeDefined();
   expect(customElements.get('yk-link')).toBeDefined();
   expect(customElements.get('yk-badge')).toBeDefined();
+  expect(customElements.get('yk-footer-links')).toBeDefined();
   expect(customElements.get('yk-soft-nav')).toBeDefined();
   expect(customElements.get('yk-input-text')).toBeDefined();
   expect(customElements.get('yk-input-email')).toBeDefined();
