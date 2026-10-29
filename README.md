@@ -285,10 +285,12 @@ npm run preview
 # open http://localhost:3000/catalog/
 ```
 
-Each component page opens with an interactive Playground: change the
+Most component pages open with an interactive Playground: change the
 component's attributes or CSS custom properties and the preview and
 generated markup update live. Copy the markup to start from the
-configuration you built in the browser.
+configuration you built in the browser. Components with no configurable
+surface, such as `<yk-soft-nav>`, document usage with hand-written
+examples instead.
 
 ## Development
 

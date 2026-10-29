@@ -15,11 +15,11 @@
  *   per category
  * - the header (title + description) on each component page, whose <body>
  *   carries data-component="yk-xxx"
- * - the Interface section on each component page, listing the component's
- *   configurable CSS custom properties
- * - the Playground section on each component page, whose [data-playground]
- *   container is filled with attribute and CSS custom property controls, a
- *   live preview, and the generated markup
+ * - the Interface section on component pages for components that declare
+ *   configurable attributes or CSS custom properties, listing them
+ * - the Playground section on component pages that host a [data-playground]
+ *   container, which is filled with attribute and CSS custom property
+ *   controls, a live preview, and the generated markup
  * - the design-token table on the landing page, which hosts a [data-tokens]
  *   container linking back from each component's property defaults
  *
@@ -32,7 +32,10 @@
  *
  * Adding a component means adding one entry here plus one HTML page that
  * lists its variations. The variations are hand-written; everything else
- * comes from this module.
+ * comes from this module. A component with nothing to preview or configure,
+ * such as yk-soft-nav, still declares an empty `playground.content` for
+ * schema uniformity but omits the Playground and Interface sections from its
+ * page.
  *
  * The catalog dogfoods the library: spacing between siblings is owned by
  * yk-vstack / yk-grid parents and demo insets by yk-pad. The sidebar nav
@@ -1700,6 +1703,17 @@ export const components = [
           'Boolean attribute that keeps the preference in memory for this page view only, without reading or writing the configured store. The page stays in memory while any connected switcher sets it; persistence returns when the last one disconnects.',
       },
     ],
+  },
+  {
+    tag: 'yk-soft-nav',
+    category: 'Components',
+    description:
+      'Declarative opt-in to cross-document view transitions: place it on every page so same-origin navigations fade instead of repainting; it renders nothing itself.',
+    playground: {
+      content: '',
+    },
+    cssProperties: [],
+    attributes: [],
   },
 ];
 
