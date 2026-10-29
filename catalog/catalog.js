@@ -896,6 +896,49 @@ const fieldListItemFaceProperties = [
   },
 ];
 
+/**
+ * CSS custom properties of the yk-field-list add button and row spacing.
+ */
+const fieldListFaceProperties = [
+  {
+    name: '--yk-field-list-gap',
+    default: 'var(--yk-space-md, 1rem)',
+    description:
+      'Spacing between rows and between the last row and the add button.',
+  },
+  {
+    name: '--yk-field-list-add-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text and icon color of the add button.',
+  },
+  {
+    name: '--yk-field-list-add-bg',
+    default: 'transparent',
+    description: 'Background of the add button.',
+  },
+  {
+    name: '--yk-field-list-add-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Border color of the dashed add button.',
+  },
+  {
+    name: '--yk-field-list-add-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the add button.',
+  },
+  {
+    name: '--yk-field-list-add-padding-block',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Vertical padding of the add button.',
+  },
+  {
+    name: '--yk-field-list-add-padding-inline',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Horizontal padding of the add button.',
+  },
+];
+
 export const components = [
   {
     tag: 'yk-vstack',
@@ -1219,6 +1262,32 @@ export const components = [
         default: 'Remove item',
         description:
           "Accessible name of the remove button. The item's own remove-label wins; otherwise the closest yk-field-list's remove-label is used; otherwise the name is Remove item.",
+      },
+    ],
+  },
+  {
+    tag: 'yk-field-list',
+    category: 'Components',
+    description:
+      'Repeatable form group that clones a template into bordered rows and renders a full-width dashed add button; clicking the button emits yk-field-list-add with the new row, and the button is disabled until a template exists.',
+    playground: {
+      content:
+        '  <template><label>Text<yk-input-text name="text"></yk-input-text></label></template>\n  <yk-field-list-item><label>Text<yk-input-text name="text" value="Existing row"></yk-input-text></label></yk-field-list-item>',
+    },
+    cssProperties: fieldListFaceProperties,
+    attributes: [
+      {
+        name: 'add-label',
+        control: 'text',
+        default: 'Add item',
+        description: 'Visible label of the add button.',
+      },
+      {
+        name: 'remove-label',
+        control: 'text',
+        default: 'Remove item',
+        description:
+          'Fallback accessible name for the remove buttons of items that do not declare their own remove-label. Changing it refreshes the existing items.',
       },
     ],
   },

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-field-list&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-field-list">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list>
+              <template>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is form-associated and labelable, and the template is cloned so for/id would duplicate -->
+                <label>
+                  Text
+                  <yk-input-text name="text"></yk-input-text>
+                </label>
+              </template>
+              <yk-field-list-item>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is a labelable custom element -->
+                <label>
+                  Text
+                  <yk-input-text name="text" value="I will name your price."></yk-input-text>
+                </label>
+              </yk-field-list-item>
+              <yk-field-list-item>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is a labelable custom element -->
+                <label>
+                  Text
+                  <yk-input-text name="text" value="You can name your price."></yk-input-text>
+                </label>
+              </yk-field-list-item>
+            </yk-field-list>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list&gt;
+  &lt;template&gt;
+    &lt;label&gt;
+      Text
+      &lt;yk-input-text name="text"&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/template&gt;
+  &lt;yk-field-list-item&gt;
+    &lt;label&gt;
+      Text
+      &lt;yk-input-text name="text" value="I will name your price."&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/yk-field-list-item&gt;
+  &lt;yk-field-list-item&gt;
+    &lt;label&gt;
+      Text
+      &lt;yk-input-text name="text" value="You can name your price."&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/yk-field-list-item&gt;
+&lt;/yk-field-list&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>add-label and remove-label</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list add-label="例文を追加" remove-label="この例文を削除" lang="ja">
+              <template>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is form-associated and labelable, and the template is cloned so for/id would duplicate -->
+                <label>
+                  本文
+                  <yk-input-text name="text"></yk-input-text>
+                </label>
+              </template>
+              <yk-field-list-item>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is a labelable custom element -->
+                <label>
+                  本文
+                  <yk-input-text name="text" value="値段は私が決めます。"></yk-input-text>
+                </label>
+              </yk-field-list-item>
+            </yk-field-list>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list add-label="例文を追加" remove-label="この例文を削除" lang="ja"&gt;
+  &lt;template&gt;
+    &lt;label&gt;
+      本文
+      &lt;yk-input-text name="text"&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/template&gt;
+  &lt;yk-field-list-item&gt;
+    &lt;label&gt;
+      本文
+      &lt;yk-input-text name="text" value="値段は私が決めます。"&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/yk-field-list-item&gt;
+&lt;/yk-field-list&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>form fields</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list add-label="Add example">
+              <template>
+                <yk-vstack>
+                  <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-textarea is form-associated and labelable, and the template is cloned so for/id would duplicate -->
+                  <label>
+                    Text
+                    <yk-textarea name="text" rows="2"></yk-textarea>
+                  </label>
+                  <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-textarea is form-associated and labelable, and the template is cloned so for/id would duplicate -->
+                  <label>
+                    Translation
+                    <yk-textarea name="translation" rows="2"></yk-textarea>
+                  </label>
+                </yk-vstack>
+              </template>
+              <yk-field-list-item>
+                <yk-vstack>
+                  <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-textarea is a labelable custom element -->
+                  <label>
+                    Text
+                    <yk-textarea name="text" rows="2" value="I will name your price."></yk-textarea>
+                  </label>
+                  <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-textarea is a labelable custom element -->
+                  <label>
+                    Translation
+                    <yk-textarea
+                      name="translation"
+                      rows="2"
+                      value="値段は私が決めます。"
+                      lang="ja"
+                    ></yk-textarea>
+                  </label>
+                </yk-vstack>
+              </yk-field-list-item>
+            </yk-field-list>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list add-label="Add example"&gt;
+  &lt;template&gt;
+    &lt;yk-vstack&gt;
+      &lt;label&gt;
+        Text
+        &lt;yk-textarea name="text" rows="2"&gt;&lt;/yk-textarea&gt;
+      &lt;/label&gt;
+      &lt;label&gt;
+        Translation
+        &lt;yk-textarea name="translation" rows="2"&gt;&lt;/yk-textarea&gt;
+      &lt;/label&gt;
+    &lt;/yk-vstack&gt;
+  &lt;/template&gt;
+  &lt;yk-field-list-item&gt;
+    &lt;yk-vstack&gt;
+      &lt;label&gt;
+        Text
+        &lt;yk-textarea name="text" rows="2" value="I will name your price."&gt;&lt;/yk-textarea&gt;
+      &lt;/label&gt;
+      &lt;label&gt;
+        Translation
+        &lt;yk-textarea name="translation" rows="2" value="値段は私が決めます。" lang="ja"&gt;&lt;/yk-textarea&gt;
+      &lt;/label&gt;
+    &lt;/yk-vstack&gt;
+  &lt;/yk-field-list-item&gt;
+&lt;/yk-field-list&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>no template (add button disabled)</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-field-list>
+              <yk-field-list-item>
+                <!-- biome-ignore lint/a11y/noLabelWithoutControl: yk-input-text is a labelable custom element -->
+                <label>
+                  Text
+                  <yk-input-text name="text" value="Add a template to enable the button."></yk-input-text>
+                </label>
+              </yk-field-list-item>
+            </yk-field-list>
+          </yk-pad>
+          <pre><code>&lt;yk-field-list&gt;
+  &lt;yk-field-list-item&gt;
+    &lt;label&gt;
+      Text
+      &lt;yk-input-text name="text" value="Add a template to enable the button."&gt;&lt;/yk-input-text&gt;
+    &lt;/label&gt;
+  &lt;/yk-field-list-item&gt;
+&lt;/yk-field-list&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
