@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-footer&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-footer">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer>
+              <a slot="brand" href="https://example.com">Example</a>
+              <yk-footer-links heading="Learn">
+                <a href="https://example.com/guide">Guide</a>
+                <a href="https://example.com/reference">Reference</a>
+              </yk-footer-links>
+              <yk-footer-links heading="Project">
+                <a href="https://example.com/source">Source</a>
+                <a href="https://example.com/issues">Issues</a>
+              </yk-footer-links>
+              <span slot="copyright">© 2026 Example</span>
+              <a slot="legal" href="https://example.com/terms">Terms</a>
+              <a slot="legal" href="https://example.com/privacy">Privacy</a>
+            </yk-footer>
+          </yk-pad>
+          <pre><code>&lt;yk-footer&gt;
+  &lt;a slot="brand" href="https://example.com"&gt;Example&lt;/a&gt;
+  &lt;yk-footer-links heading="Learn"&gt;
+    &lt;a href="https://example.com/guide"&gt;Guide&lt;/a&gt;
+    &lt;a href="https://example.com/reference"&gt;Reference&lt;/a&gt;
+  &lt;/yk-footer-links&gt;
+  &lt;yk-footer-links heading="Project"&gt;
+    &lt;a href="https://example.com/source"&gt;Source&lt;/a&gt;
+    &lt;a href="https://example.com/issues"&gt;Issues&lt;/a&gt;
+  &lt;/yk-footer-links&gt;
+  &lt;span slot="copyright"&gt;© 2026 Example&lt;/span&gt;
+  &lt;a slot="legal" href="https://example.com/terms"&gt;Terms&lt;/a&gt;
+  &lt;a slot="legal" href="https://example.com/privacy"&gt;Privacy&lt;/a&gt;
+&lt;/yk-footer&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Brand and secondary (empty regions collapse)</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer>
+              <a slot="brand" href="https://example.com">Example</a>
+              <span slot="secondary">Status: operational</span>
+            </yk-footer>
+          </yk-pad>
+          <pre><code>&lt;yk-footer&gt;
+  &lt;a slot="brand" href="https://example.com"&gt;Example&lt;/a&gt;
+  &lt;span slot="secondary"&gt;Status: operational&lt;/span&gt;
+&lt;/yk-footer&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Token overrides</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-footer
+              style="--yk-footer-bg: color-mix(in oklch, var(--yk-color-primary) 8%, var(--yk-color-surface)); --yk-footer-padding-block: var(--yk-space-md); --yk-footer-column-min: 12rem"
+            >
+              <yk-footer-links heading="Learn">
+                <a href="https://example.com/guide">Guide</a>
+                <a href="https://example.com/reference">Reference</a>
+              </yk-footer-links>
+              <yk-footer-links heading="Project">
+                <a href="https://example.com/source">Source</a>
+              </yk-footer-links>
+            </yk-footer>
+          </yk-pad>
+          <pre><code>&lt;yk-footer
+  style="--yk-footer-bg: color-mix(in oklch, var(--yk-color-primary) 8%, var(--yk-color-surface)); --yk-footer-padding-block: var(--yk-space-md); --yk-footer-column-min: 12rem"
+&gt;
+  &lt;yk-footer-links heading="Learn"&gt;
+    &lt;a href="https://example.com/guide"&gt;Guide&lt;/a&gt;
+    &lt;a href="https://example.com/reference"&gt;Reference&lt;/a&gt;
+  &lt;/yk-footer-links&gt;
+  &lt;yk-footer-links heading="Project"&gt;
+    &lt;a href="https://example.com/source"&gt;Source&lt;/a&gt;
+  &lt;/yk-footer-links&gt;
+&lt;/yk-footer&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

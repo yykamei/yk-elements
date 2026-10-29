@@ -332,6 +332,61 @@ const footerLinksColumnProperties = [
 ];
 
 /**
+ * CSS custom properties of the footer band and its content grid.
+ */
+const footerProperties = [
+  ...sharedFooterLinkProperties,
+  {
+    name: '--yk-footer-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the footer band.',
+  },
+  {
+    name: '--yk-footer-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the footer.',
+  },
+  {
+    name: '--yk-footer-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Color of the top border and the legal-bar separator.',
+  },
+  {
+    name: '--yk-footer-copyright-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Text color of the copyright slot.',
+  },
+  {
+    name: '--yk-footer-max',
+    default: '64rem',
+    description: 'Maximum width of the centered footer content.',
+  },
+  {
+    name: '--yk-footer-padding-block',
+    default: 'var(--yk-space-lg, 1.5rem)',
+    description: 'Vertical padding of the footer content.',
+  },
+  {
+    name: '--yk-footer-padding-inline',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Horizontal padding of the footer content.',
+  },
+  {
+    name: '--yk-footer-gap',
+    default: 'var(--yk-space-lg, 1.5rem)',
+    description:
+      'Gap between the header, link grid, and legal bar, and between elements inside the header and link grid.',
+  },
+  {
+    name: '--yk-footer-column-min',
+    default: '16rem',
+    description:
+      'Minimum width of a link column before the grid drops to fewer columns.',
+  },
+];
+
+/**
  * CSS custom properties of the alert face. The tone comes from the variant;
  * these tokens override the tint, text, and dismiss affordances.
  */
@@ -1315,6 +1370,18 @@ export const components = [
           'Visible heading and accessible name of the link column. Without it, no heading renders and the nav has no accessible name.',
       },
     ],
+  },
+  {
+    tag: 'yk-footer',
+    category: 'Components',
+    description:
+      "Page footer landmark with a header row for brand and secondary content, a responsive grid of link groups, and a legal bar; regions with no assigned content collapse. Brand anchors keep the footer's body typography, while legal links use the shared footer link tokens.",
+    playground: {
+      content:
+        '  <a slot="brand" href="https://example.com">Example</a>\n  <span slot="secondary">Status: operational</span>\n  <yk-footer-links heading="Learn">\n    <a href="https://example.com/guide">Guide</a>\n    <a href="https://example.com/reference">Reference</a>\n  </yk-footer-links>\n  <yk-footer-links heading="Project">\n    <a href="https://example.com/source">Source</a>\n    <a href="https://example.com/issues">Issues</a>\n  </yk-footer-links>\n  <span slot="copyright">© 2026 Example</span>\n  <a slot="legal" href="https://example.com/terms">Terms</a>',
+    },
+    cssProperties: footerProperties,
+    attributes: [],
   },
   {
     tag: 'yk-field-list-item',
