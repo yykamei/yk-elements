@@ -37,6 +37,7 @@ const VARIATIONS = {
   'yk-select': 6,
   'yk-combobox': 7,
   'yk-theme-switcher': 3,
+  'yk-soft-nav': 2,
 };
 
 afterEach(() => {
@@ -303,6 +304,12 @@ test('each component page declares its component and lists its variations', asyn
     expect(doc.querySelector('[data-component-header]')).not.toBeNull();
     expect(doc.querySelectorAll('figure').length).toBe(variations);
   }
+});
+
+test('the yk-soft-nav page omits the playground and interface sections', async () => {
+  const doc = await fetchHtml('/catalog/yk-soft-nav.html');
+  expect(doc.querySelector('[data-playground]')).toBeNull();
+  expect(doc.querySelector('[data-interface]')).toBeNull();
 });
 
 test('every component declares a known category', () => {
