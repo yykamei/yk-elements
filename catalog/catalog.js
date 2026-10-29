@@ -284,6 +284,54 @@ const cardFaceProperties = [
 ];
 
 /**
+ * CSS custom properties shared by the footer link styles.
+ */
+const sharedFooterLinkProperties = [
+  {
+    name: '--yk-footer-link-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Color of a footer link.',
+  },
+  {
+    name: '--yk-footer-link-hover-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Color of a footer link while hovered.',
+  },
+  {
+    name: '--yk-footer-link-font-size',
+    default: '0.875rem',
+    description: 'Font size of a footer link.',
+  },
+];
+
+/**
+ * CSS custom properties of the footer link column.
+ */
+const footerLinksColumnProperties = [
+  ...sharedFooterLinkProperties,
+  {
+    name: '--yk-footer-links-gap',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Gap between the links in a column.',
+  },
+  {
+    name: '--yk-footer-links-heading-gap',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Gap between the heading and the link list.',
+  },
+  {
+    name: '--yk-footer-links-heading-size',
+    default: '0.875rem',
+    description: 'Font size of the column heading.',
+  },
+  {
+    name: '--yk-footer-links-heading-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Color of the column heading.',
+  },
+];
+
+/**
  * CSS custom properties of the alert face. The tone comes from the variant;
  * these tokens override the tint, text, and dismiss affordances.
  */
@@ -1247,6 +1295,26 @@ export const components = [
     },
     cssProperties: cardFaceProperties,
     attributes: [],
+  },
+  {
+    tag: 'yk-footer-links',
+    category: 'Components',
+    description:
+      'Named column of footer links that renders its heading as an h2 and lays out direct anchors in a vertical list.',
+    playground: {
+      content:
+        '  <a href="https://example.com/docs">Documentation</a>\n  <a href="https://example.com/support">Support</a>\n  <a href="https://example.com/status">Status</a>',
+    },
+    cssProperties: footerLinksColumnProperties,
+    attributes: [
+      {
+        name: 'heading',
+        control: 'text',
+        default: 'unset',
+        description:
+          'Visible heading and accessible name of the link column. Without it, no heading renders and the nav has no accessible name.',
+      },
+    ],
   },
   {
     tag: 'yk-field-list-item',

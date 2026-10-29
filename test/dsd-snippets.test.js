@@ -51,6 +51,16 @@ const DEMOS = [
   { tag: 'yk-badge', sheets: 1, controls: 'slot', count: 1 },
   { tag: 'yk-card', sheets: 1, controls: 'slot', count: 3 },
   {
+    tag: 'yk-footer-links',
+    sheets: 2,
+    controls: 'slot',
+    count: 1,
+    also: [
+      ['nav', 1],
+      ['[part="heading"]', 1],
+    ],
+  },
+  {
     tag: 'yk-field-list-item',
     sheets: 1,
     controls: 'button[part="remove"]',
@@ -245,4 +255,14 @@ test('generated snippets carry working attribute mirrors', async () => {
       .shadowRoot.querySelector('button[part="remove"]')
       .getAttribute('aria-label'),
   ).toBe('Remove row');
+
+  const footerLinks = doc.querySelector(
+    '[data-demo="yk-footer-links"] yk-footer-links',
+  );
+  const footerHeading =
+    footerLinks.shadowRoot.querySelector('[part="heading"]');
+  expect(footerHeading.textContent).toBe('Resources');
+  expect(
+    footerLinks.shadowRoot.querySelector('nav').getAttribute('aria-labelledby'),
+  ).toBe(footerHeading.id);
 });

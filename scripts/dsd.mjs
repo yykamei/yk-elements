@@ -17,10 +17,10 @@
  * ```
  *
  * This rewrites `docs/dsd.html`. The file is generated; edit this script
- * instead and rerun it. Template skeletons gain href, text, and media from
- * host attributes and light DOM at upgrade, which lint's anchor/media a11y
- * rules cannot see — that is why biome.json overrides them off for the
- * generated page.
+ * instead and rerun it. Template skeletons gain href, text, media, and heading
+ * content from host attributes and light DOM at upgrade, which lint's
+ * anchor/media/heading a11y rules cannot see — that is why biome.json
+ * overrides them off for the generated page.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -130,6 +130,21 @@ const entries = [
       '<div part="footer"><slot name="footer"></slot></div>',
     light:
       '<h2 slot="header">Title</h2><p>Body</p><span slot="footer">Footer</span>',
+  },
+  {
+    tag: 'yk-footer-links',
+    stylesheets: [
+      'src/components/footer-core.css',
+      'src/components/yk-footer-links.css',
+    ],
+    shadow:
+      '<nav part="nav" aria-labelledby="heading">' +
+      '<h2 part="heading" id="heading"></h2>' +
+      '<div part="links"><slot></slot></div>' +
+      '</nav>',
+    attrs: 'heading="Resources"',
+    light:
+      '<a href="https://example.com/docs">Documentation</a><a href="https://example.com/support">Support</a>',
   },
   {
     tag: 'yk-field-list-item',
