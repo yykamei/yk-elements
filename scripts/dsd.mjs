@@ -147,6 +147,32 @@ const entries = [
       '<a href="https://example.com/docs">Documentation</a><a href="https://example.com/support">Support</a>',
   },
   {
+    tag: 'yk-footer',
+    stylesheets: [
+      'src/components/footer-core.css',
+      'src/components/yk-footer.css',
+    ],
+    shadow:
+      '<footer part="footer">' +
+      '<div part="inner">' +
+      '<div part="header">' +
+      '<div part="brand"><slot name="brand"></slot></div>' +
+      '<div part="secondary"><slot name="secondary"></slot></div>' +
+      '</div>' +
+      '<div part="main"><slot></slot></div>' +
+      '<div part="bottom">' +
+      '<div part="copyright"><slot name="copyright"></slot></div>' +
+      '<div part="legal"><slot name="legal"></slot></div>' +
+      '</div>' +
+      '</div>' +
+      '</footer>',
+    light:
+      '<a slot="brand" href="https://example.com">Example</a>' +
+      '<yk-footer-links heading="Learn"><a href="https://example.com/guide">Guide</a></yk-footer-links>' +
+      '<span slot="copyright">© 2026 Example</span>' +
+      '<a slot="legal" href="https://example.com/terms">Terms</a>',
+  },
+  {
     tag: 'yk-field-list-item',
     stylesheets: ['src/components/yk-field-list-item.css'],
     shadow:

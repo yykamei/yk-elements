@@ -61,6 +61,13 @@ const DEMOS = [
     ],
   },
   {
+    tag: 'yk-footer',
+    sheets: 2,
+    controls: 'slot',
+    count: 5,
+    also: [['footer[part="footer"]', 1]],
+  },
+  {
     tag: 'yk-field-list-item',
     sheets: 1,
     controls: 'button[part="remove"]',
@@ -265,4 +272,9 @@ test('generated snippets carry working attribute mirrors', async () => {
   expect(
     footerLinks.shadowRoot.querySelector('nav').getAttribute('aria-labelledby'),
   ).toBe(footerHeading.id);
+
+  const footer = doc.querySelector('[data-demo="yk-footer"] yk-footer');
+  expect(footer.hasAttribute('empty-header')).toBe(false);
+  expect(footer.hasAttribute('empty-main')).toBe(false);
+  expect(footer.hasAttribute('empty-bottom')).toBe(false);
 });

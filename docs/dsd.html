@@ -940,6 +940,299 @@ nav {
 &lt;/yk-footer-links&gt;</code></pre>
 </section>
 <section>
+<h2><code>yk-footer</code></h2>
+<div data-demo="yk-footer">
+<yk-footer>
+<template shadowrootmode="open"><style>
+::slotted(a) {
+  color: var(
+    --yk-footer-link-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: var(--yk-footer-link-font-size, 0.875rem);
+  line-height: 1.5;
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  transition: color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(
+    --yk-footer-link-hover-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  text-decoration: underline;
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+  outline-offset: 2px;
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+:host {
+  --_footer-border-color: var(
+    --yk-footer-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  color: var(--yk-footer-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-footer-bg, var(--yk-color-surface, #fff));
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+[part="inner"] {
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+  max-inline-size: var(--yk-footer-max, 64rem);
+  margin-inline: auto;
+  padding-block: var(--yk-footer-padding-block, var(--yk-space-lg, 1.5rem));
+  padding-inline: var(--yk-footer-padding-inline, var(--yk-space-md, 1rem));
+}
+
+[part="header"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+/* A brand link keeps the footer's body typography instead of the smaller,
+   muted treatment of navigation links. */
+slot[name="brand"]::slotted(a) {
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: none;
+}
+
+slot[name="brand"]::slotted(a:hover) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+[part="main"] {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(100%, var(--yk-footer-column-min, 16rem)), 1fr)
+    );
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+[part="bottom"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block-start: var(--yk-space-md, 1rem);
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+[part="legal"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+}
+
+:host([empty-header]) [part="header"],
+:host([empty-main]) [part="main"],
+:host([empty-bottom]) [part="bottom"] {
+  display: none;
+}
+
+[part="copyright"] {
+  color: var(
+    --yk-footer-copyright-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+:host([empty-header][empty-main][empty-bottom]) {
+  display: none;
+}
+</style><footer part="footer"><div part="inner"><div part="header"><div part="brand"><slot name="brand"></slot></div><div part="secondary"><slot name="secondary"></slot></div></div><div part="main"><slot></slot></div><div part="bottom"><div part="copyright"><slot name="copyright"></slot></div><div part="legal"><slot name="legal"></slot></div></div></div></footer></template>
+<a slot="brand" href="https://example.com">Example</a><yk-footer-links heading="Learn"><a href="https://example.com/guide">Guide</a></yk-footer-links><span slot="copyright">© 2026 Example</span><a slot="legal" href="https://example.com/terms">Terms</a>
+</yk-footer>
+</div>
+<pre><code>&lt;yk-footer&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+::slotted(a) {
+  color: var(
+    --yk-footer-link-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: var(--yk-footer-link-font-size, 0.875rem);
+  line-height: 1.5;
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  transition: color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(
+    --yk-footer-link-hover-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  text-decoration: underline;
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid
+    var(
+      --yk-color-focus-ring,
+      color-mix(
+        in oklch,
+        var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+        transparent
+      )
+    );
+  outline-offset: 2px;
+  border-radius: var(--yk-radius-md, 0.375rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+:host {
+  --_footer-border-color: var(
+    --yk-footer-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+
+  display: block;
+  color: var(--yk-footer-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
+  background-color: var(--yk-footer-bg, var(--yk-color-surface, #fff));
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+[part="inner"] {
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+  max-inline-size: var(--yk-footer-max, 64rem);
+  margin-inline: auto;
+  padding-block: var(--yk-footer-padding-block, var(--yk-space-lg, 1.5rem));
+  padding-inline: var(--yk-footer-padding-inline, var(--yk-space-md, 1rem));
+}
+
+[part="header"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+/* A brand link keeps the footer's body typography instead of the smaller,
+   muted treatment of navigation links. */
+slot[name="brand"]::slotted(a) {
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: none;
+}
+
+slot[name="brand"]::slotted(a:hover) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+[part="main"] {
+  display: grid;
+  grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(100%, var(--yk-footer-column-min, 16rem)), 1fr)
+    );
+  gap: var(--yk-footer-gap, var(--yk-space-lg, 1.5rem));
+}
+
+[part="bottom"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block-start: var(--yk-space-md, 1rem);
+  border-block-start: 1px solid var(--_footer-border-color);
+}
+
+[part="legal"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yk-space-sm, 0.5rem);
+}
+
+:host([empty-header]) [part="header"],
+:host([empty-main]) [part="main"],
+:host([empty-bottom]) [part="bottom"] {
+  display: none;
+}
+
+[part="copyright"] {
+  color: var(
+    --yk-footer-copyright-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+:host([empty-header][empty-main][empty-bottom]) {
+  display: none;
+}
+&lt;/style&gt;&lt;footer part="footer"&gt;&lt;div part="inner"&gt;&lt;div part="header"&gt;&lt;div part="brand"&gt;&lt;slot name="brand"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="secondary"&gt;&lt;slot name="secondary"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;div part="main"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="bottom"&gt;&lt;div part="copyright"&gt;&lt;slot name="copyright"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;div part="legal"&gt;&lt;slot name="legal"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/footer&gt;&lt;/template&gt;
+&lt;a slot="brand" href="https://example.com"&gt;Example&lt;/a&gt;&lt;yk-footer-links heading="Learn"&gt;&lt;a href="https://example.com/guide"&gt;Guide&lt;/a&gt;&lt;/yk-footer-links&gt;&lt;span slot="copyright"&gt;© 2026 Example&lt;/span&gt;&lt;a slot="legal" href="https://example.com/terms"&gt;Terms&lt;/a&gt;
+&lt;/yk-footer&gt;</code></pre>
+</section>
+<section>
 <h2><code>yk-field-list-item</code></h2>
 <div data-demo="yk-field-list-item">
 <yk-field-list-item remove-label="Remove this row">

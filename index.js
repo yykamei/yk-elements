@@ -19,6 +19,7 @@ import './src/components/yk-button.js';
 import './src/components/yk-link.js';
 import './src/components/yk-badge.js';
 import './src/components/yk-card.js';
+import './src/components/yk-footer.js';
 import './src/components/yk-footer-links.js';
 import './src/components/yk-field-list-item.js';
 import './src/components/yk-field-list.js';
