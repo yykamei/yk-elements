@@ -3,6 +3,7 @@ import { afterAll, beforeAll, expect, test } from 'vitest';
 // The `?raw` suffix asks Vite for the stylesheet text; a bare fetch would get
 // the dev server's JavaScript module wrapping it instead.
 import tokensCss from '../tokens.css?raw';
+import { channels, contrast } from './helpers/color.js';
 
 // Components import their own CSS, but tokens.css is a plain stylesheet the
 // consumer links site-wide, so the tokens are absent from this document until
@@ -11,53 +12,17 @@ import tokensCss from '../tokens.css?raw';
 // custom properties keep light-dark() unevaluated until a real property uses
 // them.
 let sheet;
-let context;
 
 beforeAll(() => {
   sheet = document.createElement('style');
   sheet.textContent = tokensCss;
   document.head.append(sheet);
-  context = document.createElement('canvas').getContext('2d');
 });
 
 afterAll(() => {
   sheet.remove();
   document.documentElement.removeAttribute('data-theme');
 });
-
-// Canvas parses any CSS color syntax (oklch included) and hands back sRGB,
-// so the contrast math does not depend on how getComputedStyle serializes a
-// given color space.
-function channels(expression) {
-  const probe = document.createElement('div');
-  probe.style.color = expression;
-  document.body.append(probe);
-  const color = getComputedStyle(probe).color;
-  probe.remove();
-
-  context.fillStyle = '#000000';
-  context.fillStyle = color;
-  context.fillRect(0, 0, 1, 1);
-  return [...context.getImageData(0, 0, 1, 1).data].slice(0, 3);
-}
-
-function luminance([r, g, b]) {
-  const linear = [r, g, b].map((value) => {
-    const channel = value / 255;
-    return channel <= 0.04045
-      ? channel / 12.92
-      : ((channel + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
-}
-
-function contrast(foreground, background) {
-  const values = [
-    luminance(channels(foreground)),
-    luminance(channels(background)),
-  ].sort((a, b) => b - a);
-  return (values[0] + 0.05) / (values[1] + 0.05);
-}
 
 const PREFIX = '--yk-color-';
 
@@ -115,4 +80,13 @@ test('switches the resolved text color between schemes', () => {
   setScheme('dark');
   const dark = channels(`var(${PREFIX}text)`);
   expect(light).not.toEqual(dark);
+});
+
+test('declares the status tones used by the alert', () => {
+  const styles = getComputedStyle(document.documentElement);
+  for (const name of ['--yk-color-info', '--yk-color-success']) {
+    const value = styles.getPropertyValue(name).trim();
+    expect(value, name).not.toBe('');
+    expect(CSS.supports('color', value), name).toBe(true);
+  }
 });

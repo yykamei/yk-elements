@@ -3,12 +3,13 @@
  * errors and other feedback next to the content it belongs to.
  *
  * `variant` picks the tone (danger, warning, success, or info; the default is
- * info), which tints the background and border while the text keeps the normal
- * body color for contrast in both schemes. Add `dismissible` for a close
- * button: activating it dispatches a cancelable `yk-alert-dismiss` event and,
- * unless the event is canceled, removes the element. The close button's
- * accessible name comes from the `dismiss-label` slot and defaults to
- * "Dismiss", so it localizes like the file field's labels.
+ * info), which tints the background, border, and text. The text mixes the tone
+ * with black in the light scheme and white in the dark scheme so it stays
+ * readable. Add `dismissible` for a close button: activating it dispatches a
+ * cancelable `yk-alert-dismiss` event and, unless the event is canceled,
+ * removes the element. The close button's accessible name comes from the
+ * `dismiss-label` slot and defaults to "Dismiss", so it localizes like the file
+ * field's labels.
  *
  * The component sets no ARIA role: add `role="alert"` on the host for a message
  * that must be announced immediately, or leave it off for passive messages.
