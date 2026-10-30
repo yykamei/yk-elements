@@ -394,19 +394,21 @@ const alertFaceProperties = [
   {
     name: '--yk-alert-bg',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 12%, var(--yk-color-surface, white))',
+      'light-dark(color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 20%, white), color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 36%, black))',
     description:
       'Background of the face. The value shown is the base (info) default; a variant replaces the tone it tints with.',
   },
   {
     name: '--yk-alert-color',
-    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
-    description: 'Text color of the face.',
+    default:
+      'light-dark(color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 60%, black), color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 80%, white))',
+    description:
+      'Text color of the face. The value shown is the base (info) default; a variant replaces the tone it blends with.',
   },
   {
     name: '--yk-alert-border-color',
     default:
-      'color-mix(in oklch, var(--yk-color-primary, oklch(56% 0.228 260)) 40%, var(--yk-color-surface, white))',
+      'light-dark(color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 60%, white), color-mix(in oklch, var(--yk-color-info, oklch(69% 0.22 220)) 84%, black))',
     description:
       'Border color of the face. The value shown is the base (info) default; a variant replaces the tone it blends with.',
   },
@@ -1433,7 +1435,7 @@ export const components = [
     tag: 'yk-alert',
     category: 'Components',
     description:
-      'Inline message that tints its face with a variant tone and can be dismissed; it sets no ARIA role, so add role=alert on the host for messages that must be announced.',
+      'Inline message that tints its face and text with a variant tone and can be dismissed; it sets no ARIA role, so add role=alert on the host for messages that must be announced.',
     playground: {
       content: 'Something happened',
     },
@@ -1928,13 +1930,18 @@ export const tokens = [
   },
   {
     name: '--yk-color-success',
-    value: 'oklch(58% 0.15 152)',
+    value: 'oklch(64% 0.19 160)',
     description: 'Positive accent color; success tones.',
   },
   {
     name: '--yk-color-warning',
     value: 'oklch(72% 0.16 75)',
     description: 'Cautionary accent color; warning tones.',
+  },
+  {
+    name: '--yk-color-info',
+    value: 'oklch(69% 0.22 220)',
+    description: 'Informational accent color; info tones.',
   },
   {
     name: '--yk-color-border',
