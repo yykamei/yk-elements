@@ -157,8 +157,8 @@ Load the minified entry point from a CDN such as unpkg or jsDelivr. Importing
 `dist/index.js` self-registers every component:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@yykamei/yk-elements@0.2.6/dist/tokens.css" />
-<script type="module" src="https://unpkg.com/@yykamei/yk-elements@0.2.6/dist/index.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@yykamei/yk-elements@0.2.7/dist/tokens.css" />
+<script type="module" src="https://unpkg.com/@yykamei/yk-elements@0.2.7/dist/index.js"></script>
 
 <yk-vstack>
   <h2>Title</h2>
