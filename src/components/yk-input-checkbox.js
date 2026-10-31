@@ -40,6 +40,7 @@
  * Clicks on links or buttons inside the label do not toggle the checkbox and
  * keep their own default behavior, like a native label.
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 import sheet from './yk-input-checkbox.css' with { type: 'css' };
 

@@ -25,6 +25,7 @@
  * </yk-select>
  * ```
  */
+import '../base.js';
 import { YKFieldElement } from './field-base.js';
 import sheet from './yk-select.css' with { type: 'css' };
 

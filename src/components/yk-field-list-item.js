@@ -22,6 +22,7 @@
  * </yk-field-list-item>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-field-list-item.css' with { type: 'css' };
 

@@ -19,6 +19,7 @@
  * <yk-input-url id="url" name="url" required placeholder="https://example.com"></yk-input-url>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputUrl extends YKInputElement {

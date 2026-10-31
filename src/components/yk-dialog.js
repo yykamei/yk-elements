@@ -44,6 +44,7 @@
  * </script>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-dialog.css' with { type: 'css' };
 

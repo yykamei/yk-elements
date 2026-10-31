@@ -18,6 +18,7 @@
  * <yk-textarea id="meaning" name="meaning" rows="4" placeholder="In English"></yk-textarea>
  * ```
  */
+import '../base.js';
 import { YKFieldElement } from './field-base.js';
 
 class YKTextarea extends YKFieldElement {

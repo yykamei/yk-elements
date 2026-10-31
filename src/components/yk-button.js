@@ -19,6 +19,7 @@
  * <yk-button variant="danger" disabled>Delete</yk-button>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import coreSheet from './button-core.css' with { type: 'css' };
 import sheet from './yk-button.css' with { type: 'css' };

@@ -17,6 +17,7 @@
  * flashes because tokens.css follows `prefers-color-scheme` on its own. Sites
  * that render `data-theme` on the server from a cookie do not need this module.
  */
+import '../base.js';
 import { applyTheme } from './theme.js';
 
 applyTheme();

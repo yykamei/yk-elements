@@ -19,6 +19,7 @@
  * <yk-input-tel id="phone" name="phone" pattern="[0-9\-]+" placeholder="090-1234-5678"></yk-input-tel>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputTel extends YKInputElement {

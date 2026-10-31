@@ -36,6 +36,7 @@
  * </yk-input-file>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 import fileSheet from './yk-input-file.css' with { type: 'css' };
 

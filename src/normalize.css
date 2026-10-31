@@ -1,0 +1,57 @@
+/*
+ * Page-level normalization installed with the yk-elements design tokens.
+ *
+ * `src/base.js` adopts this sheet on the document whenever a component module
+ * loads, so consumers do not link a reset stylesheet. It removes the body
+ * margin and the user-agent block margins that would stack with the `gap`
+ * owned by layout primitives, and gives the page the token typography, colors,
+ * and border-box sizing.
+ *
+ * The sheet lives in the low-priority `yk-elements.normalize` layer and uses
+ * :where(), so unlayered application CSS overrides it without specificity
+ * work. A consumer that uses cascade layers should declare
+ * `@layer yk-elements;` before its own layers. Layout primitive hosts are
+ * excluded from border-box: their :host box model is part of the primitive
+ * contract, and a document declaration would otherwise outrank the shadow
+ * rule. yk-container in particular relies on content-box to keep its gutters
+ * outside the max width.
+ */
+@layer yk-elements.normalize {
+  :where(body) {
+    margin: 0;
+    color: var(--yk-color-text, oklch(26.2% 0.009 248.2));
+    background-color: var(--yk-color-bg, oklch(98.4% 0.002 247.8));
+    font-family: var(--yk-font-family, system-ui, sans-serif);
+    font-size: var(--yk-font-size, 1rem);
+    line-height: var(--yk-line-height, 1.5);
+  }
+
+  :where(
+    *:not(yk-vstack, yk-hstack, yk-cluster, yk-grid, yk-pad, yk-container)
+  ),
+  :where(*)::before,
+  :where(*)::after {
+    box-sizing: border-box;
+  }
+
+  :where(
+    address,
+    blockquote,
+    dl,
+    figure,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    menu,
+    ol,
+    p,
+    pre,
+    ul
+  ) {
+    margin-block: 0;
+  }
+}

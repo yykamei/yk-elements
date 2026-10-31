@@ -62,6 +62,16 @@ test('dist mirrors the source tree with minified CSS', async () => {
   }
   expect(resetText).toContain('margin-block');
 
+  const base = await fetch('/dist/src/base.js');
+  expect(base.ok).toBe(true);
+
+  const normalize = await fetch('/dist/src/normalize.css');
+  expect(normalize.ok).toBe(true);
+  const normalizeText = await normalize.text();
+  expect(normalizeText).toContain('yk-container');
+  expect(normalizeText).toContain('box-sizing');
+  expect(normalizeText).toContain('margin-block');
+
   const component = await fetch('/dist/src/layout/yk-vstack.js');
   expect(component.ok).toBe(true);
 

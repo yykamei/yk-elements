@@ -38,6 +38,7 @@
  * ```
  */
 
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import {
   applyTheme,

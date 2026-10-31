@@ -25,6 +25,7 @@
  * </yk-alert>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-alert.css' with { type: 'css' };
 
