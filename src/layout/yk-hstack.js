@@ -14,6 +14,7 @@
  * </yk-hstack>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-hstack.css' with { type: 'css' };
 

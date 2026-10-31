@@ -16,6 +16,7 @@
  * <yk-link href="https://example.com" target="_blank" rel="noopener">Docs</yk-link>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import coreSheet from './button-core.css' with { type: 'css' };
 import sheet from './yk-link.css' with { type: 'css' };

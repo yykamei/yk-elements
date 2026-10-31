@@ -169,7 +169,7 @@ test('keeps brand anchors at the footer text style', async () => {
   const brandStyle = getComputedStyle(host.querySelector('a[slot="brand"]'));
   expect(brandStyle.color).toBe('rgb(6, 5, 4)');
   expect(brandStyle.fontSize).toBe('16px');
-  expect(brandStyle.lineHeight).toBe('normal');
+  expect(brandStyle.lineHeight).toBe(getComputedStyle(host).lineHeight);
 });
 
 test('restyles the copyright through its token', async () => {

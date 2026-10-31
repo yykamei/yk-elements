@@ -1,6 +1,7 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
 import '../src/components/yk-badge.js';
+import { channels } from './helpers/color.js';
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -54,7 +55,7 @@ test('renders a solid secondary face by default', async () => {
 
   const style = getComputedStyle(host);
   expect(style.backgroundColor).toBe('rgb(4, 5, 6)');
-  expect(style.color).toBe('rgb(255, 255, 255)');
+  expect(channels(style.color)).toEqual([255, 255, 255]);
 });
 
 test('tints the face per variant through the global color tokens', async () => {

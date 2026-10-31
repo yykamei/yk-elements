@@ -22,6 +22,7 @@
  * <yk-input-password id="secret" name="password" minlength="8" autocomplete="current-password" required></yk-input-password>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputPassword extends YKInputElement {

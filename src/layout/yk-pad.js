@@ -18,6 +18,7 @@
  * </yk-pad>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-pad.css' with { type: 'css' };
 

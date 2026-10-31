@@ -18,6 +18,7 @@
  * </yk-card>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-card.css' with { type: 'css' };
 

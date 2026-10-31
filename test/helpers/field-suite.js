@@ -1,5 +1,6 @@
 // @ts-check
 import { expect, test } from 'vitest';
+import { channels } from './color.js';
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -447,7 +448,7 @@ export function runFieldBehaviorSuite(
     expect(hostStyle.display).toBe('block');
     expect(style.display).toBe('block');
     expect(style.boxSizing).toBe('border-box');
-    expect(style.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(channels(style.backgroundColor)).toEqual([255, 255, 255]);
     expect(style.borderTopWidth).toBe('1px');
     expect(style.borderTopLeftRadius).toBe('6px');
     expect(style.paddingTop).toBe('6px');
@@ -463,7 +464,7 @@ export function runFieldBehaviorSuite(
 
       const style = getComputedStyle(controlOf(host));
       expect(style.display).toBe('block');
-      expect(style.backgroundColor).toBe('rgb(255, 255, 255)');
+      expect(channels(style.backgroundColor)).toEqual([255, 255, 255]);
       expect(style.borderTopWidth).toBe('1px');
       expect(style.paddingTop).toBe('6px');
     });
@@ -493,12 +494,12 @@ export function runFieldBehaviorSuite(
     document.body.append(disabled, readonly);
     await frame();
 
-    const white = 'rgb(255, 255, 255)';
-    expect(getComputedStyle(controlOf(disabled)).backgroundColor).not.toBe(
-      white,
-    );
-    expect(getComputedStyle(controlOf(readonly)).backgroundColor).not.toBe(
-      white,
-    );
+    const white = [255, 255, 255];
+    expect(
+      channels(getComputedStyle(controlOf(disabled)).backgroundColor),
+    ).not.toEqual(white);
+    expect(
+      channels(getComputedStyle(controlOf(readonly)).backgroundColor),
+    ).not.toEqual(white);
   });
 }

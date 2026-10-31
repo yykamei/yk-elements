@@ -14,6 +14,7 @@
  * </yk-vstack>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-vstack.css' with { type: 'css' };
 

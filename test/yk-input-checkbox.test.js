@@ -1,6 +1,7 @@
 // @ts-check
 import { afterEach, expect, test, vi } from 'vitest';
 import '../src/components/yk-input-checkbox.js';
+import { channels } from './helpers/color.js';
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -733,9 +734,9 @@ test('draws the switch thumb and keeps the unchecked track while indeterminate',
   expect(thumb.borderTopLeftRadius).toBe('50%');
   expect(thumb.transform).toBe('matrix(1, 0, 0, 1, 0, 0)');
   expect(thumb.backgroundColor).toBe('rgb(1, 2, 3)');
-  expect(getComputedStyle(inputOf(host)).backgroundColor).toBe(
-    'rgb(255, 255, 255)',
-  );
+  expect(channels(getComputedStyle(inputOf(host)).backgroundColor)).toEqual([
+    255, 255, 255,
+  ]);
 });
 
 test('lets the checked state decide the switch face while indeterminate is also set', async () => {

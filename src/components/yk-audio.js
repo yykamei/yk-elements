@@ -23,6 +23,7 @@
  * </yk-audio>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-audio.css' with { type: 'css' };
 

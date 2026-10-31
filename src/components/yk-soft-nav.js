@@ -21,6 +21,8 @@
  * <yk-soft-nav></yk-soft-nav>
  * ```
  */
+import '../base.js';
+
 // One shared stylesheet per realm, counted by placement.
 const optInSheet = new CSSStyleSheet();
 optInSheet.replaceSync(`

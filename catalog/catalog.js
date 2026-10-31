@@ -1870,6 +1870,21 @@ export const categories = [
 
 export const tokens = [
   {
+    name: '--yk-font-family',
+    value: 'system-ui, sans-serif',
+    description: 'Base page font family; inherited by components.',
+  },
+  {
+    name: '--yk-font-size',
+    value: '1rem',
+    description: 'Base page font size; inherited by components.',
+  },
+  {
+    name: '--yk-line-height',
+    value: '1.5',
+    description: 'Base page line height; inherited by components.',
+  },
+  {
     name: '--yk-space-sm',
     value: '0.5rem',
     description: 'Small spacing unit; used for tight gaps and insets.',

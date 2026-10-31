@@ -27,6 +27,7 @@
  * </yk-footer>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import coreSheet from './footer-core.css' with { type: 'css' };
 import sheet from './yk-footer.css' with { type: 'css' };

@@ -16,6 +16,7 @@
  * </yk-cluster>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-cluster.css' with { type: 'css' };
 

@@ -1,6 +1,7 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
 import '../src/components/yk-button.js';
+import { channels } from './helpers/color.js';
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
@@ -158,7 +159,7 @@ test('styles the default face as a light bordered button, distinct from secondar
   const secondaryStyle = getComputedStyle(
     secondary.shadowRoot.querySelector('button'),
   );
-  expect(defStyle.backgroundColor).toBe('rgb(255, 255, 255)');
+  expect(channels(defStyle.backgroundColor)).toEqual([255, 255, 255]);
   expect(defStyle.backgroundColor).not.toBe(secondaryStyle.backgroundColor);
   expect(defStyle.color).not.toBe(secondaryStyle.color);
 });

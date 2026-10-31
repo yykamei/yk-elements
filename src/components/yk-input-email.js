@@ -18,6 +18,7 @@
  * <yk-input-email id="mail" name="email" required placeholder="you@example.com"></yk-input-email>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputEmail extends YKInputElement {

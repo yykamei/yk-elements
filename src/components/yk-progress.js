@@ -16,6 +16,7 @@
  * <yk-progress aria-label="Loading"></yk-progress>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-progress.css' with { type: 'css' };
 

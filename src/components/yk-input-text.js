@@ -16,6 +16,7 @@
  * <yk-input-text id="handle" name="handle" minlength="3" placeholder="3+ characters"></yk-input-text>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputText extends YKInputElement {}

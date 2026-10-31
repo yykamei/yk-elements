@@ -68,7 +68,9 @@ export default defineConfig({
   test: {
     browser: {
       enabled: true,
-      provider: playwright(),
+      // The suite asserts light-scheme token values; pin the emulated
+      // preference so a Playwright default change cannot flip light-dark().
+      provider: playwright({ contextOptions: { colorScheme: 'light' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
     },

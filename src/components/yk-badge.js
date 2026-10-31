@@ -14,6 +14,7 @@
  * <yk-badge variant="danger" pill>99+</yk-badge>
  * ```
  */
+import '../base.js';
 import { ensureShadow } from '../dsd.js';
 import sheet from './yk-badge.css' with { type: 'css' };
 

@@ -1,6 +1,7 @@
 // @ts-check
 import { afterEach, expect, test } from 'vitest';
 import '../src/components/yk-select.js';
+import { channels } from './helpers/color.js';
 
 afterEach(() => {
   document.body.replaceChildren();
@@ -346,7 +347,7 @@ test('styles the face like the Bootstrap form control', async () => {
   const style = getComputedStyle(selectOf(host));
   expect(style.display).toBe('block');
   expect(style.boxSizing).toBe('border-box');
-  expect(style.backgroundColor).toBe('rgb(255, 255, 255)');
+  expect(channels(style.backgroundColor)).toEqual([255, 255, 255]);
   expect(style.borderTopWidth).toBe('1px');
   expect(style.borderTopLeftRadius).toBe('6px');
   expect(style.paddingTop).toBe('6px');

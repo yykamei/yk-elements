@@ -20,6 +20,7 @@
  * <yk-input-search id="query" name="q" placeholder="Search articles..."></yk-input-search>
  * ```
  */
+import '../base.js';
 import { YKInputElement } from './input-base.js';
 
 class YKInputSearch extends YKInputElement {
