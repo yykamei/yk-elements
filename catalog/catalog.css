@@ -2,8 +2,10 @@
  * Styles for the yk-elements component catalog.
  *
  * The catalog is a set of hand-written static pages (catalog/*.html) that
- * load the library as-is via ../index.js, ../tokens.css, and ../fouc.css. A
- * shared module (catalog/catalog.js) renders the sidebar navigation, the
+ * load the library as-is via ../index.js and ../fouc.css. The catalog keeps a
+ * ../tokens.css link only so token colors paint before the module runs; the
+ * module installs the same tokens automatically. A shared module
+ * (catalog/catalog.js) renders the sidebar navigation, the
  * landing-page cards, and each component page's header from a single component
  * list. Adding a component means adding a page with its variations and one
  * entry in that list. No build step is involved.
@@ -94,7 +96,7 @@ html {
 
   /* Headings, paragraphs, figures, and code blocks sit in yk-vstack / yk-grid
    * containers whose gap owns all spacing, so strip their default margins;
-   * :where() keeps the reset trivially overridable. */
+   * :where() keeps this margin reset trivially overridable. */
   :where(h1, h2, p, figure, pre) {
     margin: 0;
   }

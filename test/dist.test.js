@@ -53,15 +53,6 @@ test('dist mirrors the source tree with minified CSS', async () => {
   expect(foucText).toContain('yk-vstack:not(:defined)');
   expect(foucText).toContain('yk-container:not(:defined)');
 
-  const reset = await fetch('/dist/reset.css');
-  expect(reset.ok).toBe(true);
-  const resetText = await reset.text();
-  expect(resetText).toContain(':where(body)');
-  for (const tag of ['yk-vstack', 'yk-hstack', 'yk-cluster', 'yk-grid']) {
-    expect(resetText).toContain(tag);
-  }
-  expect(resetText).toContain('margin-block');
-
   const base = await fetch('/dist/src/base.js');
   expect(base.ok).toBe(true);
 
@@ -77,4 +68,12 @@ test('dist mirrors the source tree with minified CSS', async () => {
 
   const theme = await fetch('/dist/src/components/yk-theme-init.js');
   expect(theme.ok).toBe(true);
+});
+
+test('the package stops exporting the retired reset stylesheet', async () => {
+  const response = await fetch('/package.json');
+  expect(response.ok).toBe(true);
+  const pkg = await response.json();
+  expect(pkg.exports['./reset.css']).toBeUndefined();
+  expect(pkg.files).not.toContain('reset.css');
 });

@@ -5,12 +5,11 @@ import { afterAll, beforeAll, expect, test } from 'vitest';
 import tokensCss from '../tokens.css?raw';
 import { channels, contrast } from './helpers/color.js';
 
-// Components import their own CSS, but tokens.css is a plain stylesheet the
-// consumer links site-wide, so the tokens are absent from this document until
-// the test injects them. Resolving them through real elements (rather than
-// reading the custom properties back) is what proves they reach a used value:
-// custom properties keep light-dark() unevaluated until a real property uses
-// them.
+// The base module installs tokens.css when a component loads, but this test
+// injects the stylesheet directly so the palette can be verified in isolation.
+// Resolving the tokens through real elements (rather than reading the custom
+// properties back) is what proves they reach a used value: custom properties
+// keep light-dark() unevaluated until a real property uses them.
 let sheet;
 
 beforeAll(() => {

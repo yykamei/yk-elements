@@ -3,6 +3,7 @@
 ## 1. Core Philosophy
 
 - **Zero Config, Just Put** — no class names or complex scripting required; structured, self-organizing layout and UI emerge just by placing HTML tags.
+- **One Load, Whole Look** — importing the entry point (or any single component) installs the design tokens and page-level normalization on the document. Consumers do not assemble optional stylesheets; the page adopts the yk-elements baseline for spacing, typography, colors, and box-sizing, and overrides it with ordinary CSS when needed.
 - **Lean & Native-First** — use Web standard APIs (Custom Elements v1, Shadow DOM v1, CSS Module Scripts, ElementInternals) directly and reject unnecessary framework dependencies. Abstraction is earned, not anticipated: while identical behavior lives in a single component it is left alone, and once it repeats across components it is extracted into a shared core (e.g. `input-core.css` and the `YKFieldElement`/`YKInputElement` base classes behind the form fields) instead of being copied further.
 - **Clear File Separation** — keep JavaScript and CSS clearly separated into distinct files to maximize the benefits of editor syntax highlighting, code completion, linters, and formatters.
 - **Self-Registering** — self-contained modules that automatically call `customElements.define` as soon as the module is loaded.
@@ -52,9 +53,19 @@ To avoid excessive JavaScript geometry computation (forced synchronous layout / 
    - Internal content can be freely injected from the call site via `<slot>`.
    - Elements that need localized style overrides from outside are given `part="..."`, allowing safe customization via `::part()`.
 
+4. **Automatic page-level base styles**
+   - `src/base.js` imports `tokens.css` and `src/normalize.css` as CSS Module Scripts and adopts both on `document.adoptedStyleSheets` exactly once per document.
+   - Every component module imports the shared `src/base.js` as `'../base.js'`, so the entry point and selective imports install the same baseline. `index.js` imports it first.
+   - Normalization removes the body margin and the user-agent block margins, applies the token typography and colors, and uses `box-sizing: border-box` for ordinary content. Layout primitive hosts keep their own box model so `yk-container` can keep its content-box gutters.
+   - The normalization sheet uses `:where()`. Both sheets live in the low-priority `yk-elements` cascade layer family, so unlayered application CSS overrides them without specificity work; a layered application declares `@layer yk-elements;` before its own layers.
+   - `tokens.css` remains a published standalone file for CSS-only first-paint token colors, but it is not a required consumer link.
+
 ---
 
 ## 4. Implementation Templates
+
+Every component module starts with `import '../base.js';`, so importing a
+single component installs the page-level base styles too.
 
 ### A. Layout Primitive implementation example (`<yk-vstack>`)
 
@@ -74,6 +85,7 @@ A layout component specialized for vertical spacing control.
 #### `src/layout/yk-vstack.js`
 
 ```javascript
+import '../base.js';
 import sheet from './yk-vstack.css' with { type: 'css' };
 
 class YKVstack extends HTMLElement {
@@ -121,6 +133,7 @@ A component that declares its own state to the browser and notifies the outside.
 #### `src/components/yk-toggle-card.js`
 
 ```javascript
+import '../base.js';
 import sheet from './yk-toggle-card.css' with { type: 'css' };
 
 class YKToggleCard extends HTMLElement {
@@ -165,10 +178,11 @@ if (!customElements.get('yk-toggle-card')) {
 
 ```text
 yk-elements/
-├── tokens.css                  # Site-wide design token definitions (:root)
-├── reset.css                   # Optional UA-default normalization
+├── tokens.css                  # Design tokens; auto-installed, exported for CSS-only paint
 ├── fouc.css                    # Optional pre-upgrade layout fallbacks
 ├── src/
+│   ├── base.js                 # Installs tokens + normalization once per document
+│   ├── normalize.css           # Page-level UA normalization
 │   ├── layout/
 │   │   ├── yk-vstack.css
 │   │   ├── yk-vstack.js        # Vertical stack
@@ -207,12 +221,20 @@ the modules run. It is not a substitute for Declarative Shadow DOM, which
 remains the only way to paint a fully styled shadow root before script
 execution.
 
-`reset.css` is another optional companion stylesheet: it removes the body
-margin so the page gutter belongs to `yk-container`, and removes the user-agent
-block margins that would otherwise stack with the gap owned by the layout
-primitives. It is scoped to direct children of those primitives, so ordinary
-flow such as a `yk-card` body keeps its defaults. Typography, form controls,
-inline indentation, and box-sizing remain the consumer's responsibility.
+`src/base.js` is the single entry for page-level styles. Importing it (which
+every component module does) adopts `tokens.css` and `src/normalize.css` on the
+document once, so consumers do not link a reset stylesheet. The normalization
+removes the body margin and user-agent block margins, applies the token
+typography and colors, and sets border-box for ordinary content while layout
+primitive hosts keep their own box model. Both sheets sit in the low-priority
+`yk-elements` cascade layer family, so unlayered application CSS overrides
+them; a layered application declares `@layer yk-elements;` before its own
+layers.
+
+`tokens.css` remains a published stylesheet for CSS-only first-paint token
+colors and preloading, but it is not a required link. `fouc.css` remains an
+optional pre-upgrade fallback for layout; neither stylesheet is a substitute
+for Declarative Shadow DOM.
 
 ---
 
