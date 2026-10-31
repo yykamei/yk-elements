@@ -13,6 +13,26 @@ const layoutTags = Object.keys(import.meta.glob('../src/layout/yk-*.js'))
   .map((path) => path.split('/').at(-1).replace(/\.js$/, ''))
   .sort();
 
+// Kept in sync with the block-margin list in normalize.css.
+const BLOCK_ELEMENTS = [
+  'address',
+  'blockquote',
+  'dl',
+  'figure',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'hr',
+  'menu',
+  'ol',
+  'p',
+  'pre',
+  'ul',
+].sort();
+
 const componentModules = import.meta.glob(
   '../src/{components,layout}/yk-*.js',
   {
@@ -41,6 +61,14 @@ function append(tag, html = '') {
   element.innerHTML = html;
   document.body.append(element);
   return element;
+}
+
+function contentFor(tag) {
+  if (tag === 'ul' || tag === 'ol' || tag === 'menu') return '<li>Item</li>';
+  if (tag === 'dl') return '<dt>Term</dt>';
+  if (tag === 'figure') return '<figcaption>Caption</figcaption>';
+  if (tag === 'hr') return '';
+  return 'Content';
 }
 
 function blockMargins(element) {
@@ -120,27 +148,13 @@ test('lets application tokens restyle the base typography', () => {
 });
 
 test('removes block margins throughout the page, including inside yk-card', () => {
-  const card = append('yk-card', '<div><p>Body</p></div>');
-  const outside = append('p', 'Outside');
-  const heading = append('h1', 'Title');
-  const list = append('ul', '<li>Item</li>');
-  const figure = append('figure', '<figcaption>Caption</figcaption>');
-  const quote = append('blockquote', 'Quote');
-  const pre = append('pre', 'Code');
-  const hr = append('hr');
-
-  for (const element of [
-    card.querySelector('p'),
-    outside,
-    heading,
-    list,
-    figure,
-    quote,
-    pre,
-    hr,
-  ]) {
-    expect(blockMargins(element), element.tagName).toEqual(['0px', '0px']);
+  for (const tag of BLOCK_ELEMENTS) {
+    const element = append(tag, contentFor(tag));
+    expect(blockMargins(element), tag).toEqual(['0px', '0px']);
   }
+
+  const card = append('yk-card', '<div><p>Body</p></div>');
+  expect(blockMargins(card.querySelector('p'))).toEqual(['0px', '0px']);
 });
 
 test('keeps inline indentation, list markers, and the heading scale', () => {
@@ -179,6 +193,21 @@ test('keeps every layout primitive out of the global border-box rule', () => {
     .map((tag) => tag.trim())
     .sort();
   expect(excluded).toEqual(layoutTags);
+});
+
+test('keeps the block-margin list in sync with the runtime coverage', () => {
+  const declaration = normalizeCss.indexOf('margin-block: 0;');
+  const blockStart = normalizeCss.lastIndexOf(':where(', declaration);
+  const blockEnd = normalizeCss.indexOf(')', blockStart);
+  if (declaration < 0 || blockStart < 0 || blockEnd < 0) {
+    throw new Error('normalize.css has no block-margin list');
+  }
+  const normalized = normalizeCss
+    .slice(blockStart + ':where('.length, blockEnd)
+    .split(',')
+    .map((tag) => tag.trim())
+    .sort();
+  expect(normalized).toEqual(BLOCK_ELEMENTS);
 });
 
 test('lets unlayered application CSS override the base styles', () => {
