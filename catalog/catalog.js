@@ -1005,6 +1005,135 @@ const fieldListItemFaceProperties = [
 ];
 
 /**
+ * CSS custom properties shared by the header bar and the menu, listed on both
+ * catalog pages because both components adopt header-core.css.
+ */
+const sharedHeaderLinkProperties = [
+  {
+    name: '--yk-header-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description:
+      'Color of the header bottom border, the mobile row separators, the toggle outlines, and the menu panel border.',
+  },
+  {
+    name: '--yk-header-link-color',
+    default:
+      'var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)))',
+    description:
+      'Color of navigation links, panel links, and the menu summary button.',
+  },
+  {
+    name: '--yk-header-link-hover-bg',
+    default:
+      'color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)',
+    description: 'Background of a link or button while hovered.',
+  },
+  {
+    name: '--yk-header-link-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of links, the menu button, and the hamburger.',
+  },
+];
+
+/**
+ * CSS custom properties of the yk-header bar, navigation links, brand, and
+ * hamburger.
+ */
+const headerProperties = [
+  {
+    name: '--yk-header-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the header band.',
+  },
+  {
+    name: '--yk-header-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the header.',
+  },
+  {
+    name: '--yk-header-max',
+    default: '64rem',
+    description: 'Maximum inline size of the centered header content.',
+  },
+  {
+    name: '--yk-header-padding-block',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Vertical padding of the bar.',
+  },
+  {
+    name: '--yk-header-padding-inline',
+    default: 'var(--yk-space-md, 1rem)',
+    description: 'Horizontal padding of the bar.',
+  },
+  {
+    name: '--yk-header-gap',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Spacing between the brand, the navigation, and the actions.',
+  },
+  {
+    name: '--yk-header-brand-height',
+    default: '2rem',
+    description: 'Maximum block size of a slotted brand image or SVG.',
+  },
+  ...sharedHeaderLinkProperties,
+  {
+    name: '--yk-header-toggle-size',
+    default: '2.5rem',
+    description: 'Size of the hamburger button.',
+  },
+  {
+    name: '--yk-header-z-index',
+    default: '10',
+    description: 'Stacking level of the bar while sticky.',
+  },
+];
+
+/**
+ * CSS custom properties of the yk-header-menu floating panel and its items.
+ */
+const headerMenuFaceProperties = [
+  ...sharedHeaderLinkProperties,
+  {
+    name: '--yk-header-menu-panel-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of the floating panel.',
+  },
+  {
+    name: '--yk-header-menu-panel-border-color',
+    default:
+      'var(--yk-header-border-color, var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white))))',
+    description: 'Border color of the floating panel.',
+  },
+  {
+    name: '--yk-header-menu-panel-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the floating panel.',
+  },
+  {
+    name: '--yk-header-menu-panel-shadow',
+    default: '0 0.5rem 1rem oklch(0% 0 0 / 15%)',
+    description: 'Shadow of the floating panel.',
+  },
+  {
+    name: '--yk-header-menu-panel-padding',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Padding inside the floating panel.',
+  },
+  {
+    name: '--yk-header-menu-item-hover-bg',
+    default:
+      'var(--yk-header-link-hover-bg, color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent))',
+    description: 'Background of a panel link while hovered.',
+  },
+  {
+    name: '--yk-header-menu-chevron-size',
+    default: '1rem',
+    description: 'Size of the chevron indicator.',
+  },
+];
+
+/**
  * CSS custom properties of the yk-field-list add button and row spacing.
  */
 const fieldListFaceProperties = [
@@ -1352,6 +1481,66 @@ export const components = [
     },
     cssProperties: cardFaceProperties,
     attributes: [],
+  },
+  {
+    tag: 'yk-header',
+    category: 'Components',
+    description:
+      'Page header landmark that wraps a slotted logo in the home link named by brand-href, shows primary links and trailing actions in one bar, and collapses the links behind a hamburger below 48rem of its own width.',
+    playground: {
+      content:
+        '  <svg slot="brand" viewBox="0 0 24 24" width="24" height="24"><title>Example</title><circle cx="12" cy="12" r="10" fill="currentColor" /></svg>\n  <a href="https://example.com/docs">Docs</a>\n  <a href="https://example.com/pricing">Pricing</a>\n  <yk-header-menu>\n    <span slot="summary">Products</span>\n    <a href="https://example.com/cloud">Cloud</a>\n    <a href="https://example.com/edge">Edge</a>\n  </yk-header-menu>\n  <yk-theme-switcher slot="actions"></yk-theme-switcher>',
+    },
+    cssProperties: headerProperties,
+    attributes: [
+      {
+        name: 'sticky',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that pins the bar to the top of the scroll container.',
+      },
+      {
+        name: 'nav-label',
+        control: 'text',
+        default: 'Main navigation',
+        description:
+          'Accessible name of the navigation landmark. An empty value falls back to the default.',
+      },
+      {
+        name: 'brand-href',
+        control: 'text',
+        default: 'unset',
+        description:
+          'URL of the brand home link. Without it the brand is not a link; unsafe schemes are not applied.',
+      },
+      {
+        name: 'open',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that opens the collapsed navigation panel on narrow headers.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-header-menu',
+    category: 'Components',
+    description:
+      'Disclosure for subnavigation that renders a summary button and a panel of native links; the panel floats under the button in a wide header and unfolds inline inside the collapsed mobile navigation.',
+    playground: {
+      content:
+        '  <span slot="summary">Products</span>\n  <a href="https://example.com/cloud">Cloud</a>\n  <a href="https://example.com/edge">Edge</a>',
+    },
+    cssProperties: headerMenuFaceProperties,
+    attributes: [
+      {
+        name: 'open',
+        control: 'boolean',
+        default: 'unset',
+        description: 'Boolean attribute that expands the panel.',
+      },
+    ],
   },
   {
     tag: 'yk-footer-links',
@@ -2435,6 +2624,26 @@ function renderPlayground() {
   // truthful and the next control interaction does not reopen the dialog.
   const openControl = panel.querySelector('[data-playground-attribute="open"]');
   if (openControl) {
+    // A header hamburger or menu summary changes `open` from inside the
+    // preview; mirror it so the generated code stays truthful and the next
+    // control interaction does not undo it. The checkbox comparison also stops
+    // the attribute writes made by sync() from looping back here.
+    new MutationObserver((records) => {
+      const target = current();
+      if (!target) return;
+      const changed = records.some(
+        (record) => record.target === target && record.attributeName === 'open',
+      );
+      if (!changed) return;
+      const open = target.hasAttribute('open');
+      if (openControl.checked === open) return;
+      openControl.checked = open;
+      sync();
+    }).observe(preview, {
+      attributes: true,
+      attributeFilter: ['open'],
+      subtree: true,
+    });
     preview.addEventListener('yk-dialog-close', (event) => {
       // A nested dialog's close must not clear this dialog's control.
       if (event.target !== current()) return;

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-header-menu&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-header-menu">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+          <figure>
+            <figcaption>Default</figcaption>
+            <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+              <div style="min-block-size: 12rem">
+                <yk-header-menu>
+                  <span slot="summary">Products</span>
+                  <a href="https://example.com/cloud">Cloud</a>
+                  <a href="https://example.com/edge">Edge</a>
+                </yk-header-menu>
+              </div>
+            </yk-pad>
+            <pre><code>&lt;yk-header-menu&gt;
+  &lt;span slot="summary"&gt;Products&lt;/span&gt;
+  &lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;
+  &lt;a href="https://example.com/edge"&gt;Edge&lt;/a&gt;
+&lt;/yk-header-menu&gt;</code></pre>
+          </figure>
+
+          <figure>
+            <figcaption>Open panel</figcaption>
+            <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+              <div style="min-block-size: 12rem">
+                <yk-header-menu open>
+                  <span slot="summary">Products</span>
+                  <a href="https://example.com/cloud">Cloud</a>
+                  <a href="https://example.com/edge">Edge</a>
+                </yk-header-menu>
+              </div>
+            </yk-pad>
+            <pre><code>&lt;yk-header-menu open&gt;
+  &lt;span slot="summary"&gt;Products&lt;/span&gt;
+  &lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;
+  &lt;a href="https://example.com/edge"&gt;Edge&lt;/a&gt;
+&lt;/yk-header-menu&gt;</code></pre>
+          </figure>
+
+          <figure>
+            <figcaption>Inside a wide header</figcaption>
+            <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+              <div>
+                <div style="min-block-size: 13rem; overflow-x: auto">
+                  <yk-header
+                    brand-href="https://example.com"
+                    style="min-inline-size: 48rem"
+                  >
+                    <svg
+                      slot="brand"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                    >
+                      <title>Example</title>
+                      <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    </svg>
+                    <a href="https://example.com/docs">Docs</a>
+                    <yk-header-menu open>
+                      <span slot="summary">Products</span>
+                      <a href="https://example.com/cloud">Cloud</a>
+                      <a href="https://example.com/edge">Edge</a>
+                    </yk-header-menu>
+                  </yk-header>
+                </div>
+              </div>
+            </yk-pad>
+            <pre><code>&lt;yk-header brand-href="https://example.com"&gt;
+  &lt;svg slot="brand" viewBox="0 0 24 24" width="24" height="24"&gt;...&lt;/svg&gt;
+  &lt;a href="https://example.com/docs"&gt;Docs&lt;/a&gt;
+  &lt;yk-header-menu open&gt;
+    &lt;span slot="summary"&gt;Products&lt;/span&gt;
+    &lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;
+    &lt;a href="https://example.com/edge"&gt;Edge&lt;/a&gt;
+  &lt;/yk-header-menu&gt;
+&lt;/yk-header&gt;</code></pre>
+          </figure>
+
+          <figure>
+            <figcaption>Inside a collapsed narrow header</figcaption>
+            <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+              <yk-header
+                brand-href="https://example.com"
+                open
+                style="inline-size: 24rem; max-inline-size: 100%"
+              >
+                <svg
+                  slot="brand"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                >
+                  <title>Example</title>
+                  <circle cx="12" cy="12" r="10" fill="currentColor" />
+                </svg>
+                <a href="https://example.com/docs">Docs</a>
+                <yk-header-menu open>
+                  <span slot="summary">Products</span>
+                  <a href="https://example.com/cloud">Cloud</a>
+                  <a href="https://example.com/edge">Edge</a>
+                </yk-header-menu>
+              </yk-header>
+            </yk-pad>
+            <pre><code>&lt;yk-header brand-href="https://example.com" open style="inline-size: 24rem"&gt;
+  &lt;svg slot="brand" viewBox="0 0 24 24" width="24" height="24"&gt;...&lt;/svg&gt;
+  &lt;a href="https://example.com/docs"&gt;Docs&lt;/a&gt;
+  &lt;yk-header-menu open&gt;
+    &lt;span slot="summary"&gt;Products&lt;/span&gt;
+    &lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;
+    &lt;a href="https://example.com/edge"&gt;Edge&lt;/a&gt;
+  &lt;/yk-header-menu&gt;
+&lt;/yk-header&gt;</code></pre>
+          </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

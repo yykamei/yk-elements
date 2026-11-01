@@ -19,6 +19,8 @@ const VARIATIONS = {
   'yk-link': 5,
   'yk-badge': 5,
   'yk-card': 4,
+  'yk-header': 5,
+  'yk-header-menu': 4,
   'yk-footer-links': 3,
   'yk-footer': 3,
   'yk-field-list-item': 4,
@@ -606,6 +608,27 @@ test('playground follows a dialog that closes itself', async () => {
   // The next control interaction must not reopen the dialog.
   setControl(section, 'closedby', 'none');
   expect(dialog.open).toBe(false);
+});
+
+test('playground follows a header toggle that changes open', async () => {
+  const { iframe, section } = await loadPlayground('yk-header');
+  const openControl = section.querySelector(
+    '[data-playground-attribute="open"]',
+  );
+  const host = section.querySelector('[data-playground-preview] yk-header');
+  expect(openControl.checked).toBe(false);
+
+  host.shadowRoot.querySelector('[part="toggle"]').click();
+  await new Promise((resolve) =>
+    iframe.contentWindow.requestAnimationFrame(resolve),
+  );
+
+  expect(openControl.checked).toBe(true);
+  expect(parseCode(codeOf(section)).hasAttribute('open')).toBe(true);
+
+  // The next control interaction must keep the state the preview set.
+  setControl(section, 'nav-label', 'Primary');
+  expect(host.hasAttribute('open')).toBe(true);
 });
 
 test('mobile playground shows the preview first and keeps it sticky', async () => {
