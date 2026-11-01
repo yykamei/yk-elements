@@ -1,3 +1,9 @@
+/*
+ * The host is its own size container: the bar collapses from the header's
+ * width, not the viewport, so the same markup works in a full-width page and
+ * in a narrow app shell. The 48rem breakpoint cannot be a custom property
+ * because container conditions do not accept var().
+ */
 :host {
   --_header-border: var(
     --yk-header-border-color,
@@ -31,6 +37,7 @@
     var(--yk-radius-md, 0.375rem)
   );
 
+  container-type: inline-size;
   display: block;
   color: var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   background-color: var(--yk-header-bg, var(--yk-color-surface, #fff));
@@ -126,10 +133,88 @@ slot:not([name])::slotted(a:focus-visible) {
   margin-inline-start: auto;
 }
 
+[part="toggle"] {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--yk-header-toggle-size, 2.5rem);
+  block-size: var(--yk-header-toggle-size, 2.5rem);
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border: 1px solid var(--_header-border);
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="toggle"] svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+@container (inline-size < 48rem) {
+  /* Brand, actions, and the toggle share the first row; the navigation takes
+     a full-width second row and stays hidden until the toggle opens it. */
+  [part="brand"] {
+    order: 1;
+  }
+
+  [part="actions"] {
+    order: 2;
+  }
+
+  [part="toggle"] {
+    order: 3;
+    display: inline-flex;
+  }
+
+  [part="nav"] {
+    order: 4;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  :host([open]:not([empty-nav])) [part="nav"] {
+    display: flex;
+  }
+
+  slot:not([name])::slotted(a) {
+    display: block;
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+  }
+}
+
 :host([empty-brand]) [part="brand"],
 :host([empty-nav]) [part="nav"],
 :host([empty-actions]) [part="actions"] {
   display: none;
+}
+
+:host([empty-nav]) [part="toggle"] {
+  display: none;
+}
+
+/* With no actions, the toggle is the only trailing item and takes over the
+   push to the inline end. */
+:host([empty-actions]) [part="toggle"] {
+  margin-inline-start: auto;
 }
 
 /* An all-empty header keeps neither the band nor an empty banner landmark in
@@ -139,7 +224,8 @@ slot:not([name])::slotted(a:focus-visible) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  slot:not([name])::slotted(a) {
+  slot:not([name])::slotted(a),
+  [part="toggle"] {
     transition: none;
   }
 }

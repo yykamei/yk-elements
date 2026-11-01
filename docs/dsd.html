@@ -787,6 +787,12 @@ Beta
 <div data-demo="yk-header">
 <yk-header sticky brand-href="https://example.com">
 <template shadowrootmode="open"><style>
+/*
+ * The host is its own size container: the bar collapses from the header's
+ * width, not the viewport, so the same markup works in a full-width page and
+ * in a narrow app shell. The 48rem breakpoint cannot be a custom property
+ * because container conditions do not accept var().
+ */
 :host {
   --_header-border: var(
     --yk-header-border-color,
@@ -820,6 +826,7 @@ Beta
     var(--yk-radius-md, 0.375rem)
   );
 
+  container-type: inline-size;
   display: block;
   color: var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   background-color: var(--yk-header-bg, var(--yk-color-surface, #fff));
@@ -915,10 +922,88 @@ slot:not([name])::slotted(a:focus-visible) {
   margin-inline-start: auto;
 }
 
+[part="toggle"] {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--yk-header-toggle-size, 2.5rem);
+  block-size: var(--yk-header-toggle-size, 2.5rem);
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border: 1px solid var(--_header-border);
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="toggle"] svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+@container (inline-size < 48rem) {
+  /* Brand, actions, and the toggle share the first row; the navigation takes
+     a full-width second row and stays hidden until the toggle opens it. */
+  [part="brand"] {
+    order: 1;
+  }
+
+  [part="actions"] {
+    order: 2;
+  }
+
+  [part="toggle"] {
+    order: 3;
+    display: inline-flex;
+  }
+
+  [part="nav"] {
+    order: 4;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  :host([open]:not([empty-nav])) [part="nav"] {
+    display: flex;
+  }
+
+  slot:not([name])::slotted(a) {
+    display: block;
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+  }
+}
+
 :host([empty-brand]) [part="brand"],
 :host([empty-nav]) [part="nav"],
 :host([empty-actions]) [part="actions"] {
   display: none;
+}
+
+:host([empty-nav]) [part="toggle"] {
+  display: none;
+}
+
+/* With no actions, the toggle is the only trailing item and takes over the
+   push to the inline end. */
+:host([empty-actions]) [part="toggle"] {
+  margin-inline-start: auto;
 }
 
 /* An all-empty header keeps neither the band nor an empty banner landmark in
@@ -928,16 +1013,23 @@ slot:not([name])::slotted(a:focus-visible) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  slot:not([name])::slotted(a) {
+  slot:not([name])::slotted(a),
+  [part="toggle"] {
     transition: none;
   }
 }
-</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><nav part="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions"><slot name="actions"></slot></div></div></header></template>
+</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg></button><slot name="menu-label" hidden>Menu</slot><nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions"><slot name="actions"></slot></div></div></header></template>
 <svg slot="brand" viewBox="0 0 24 24" width="24" height="24"><title>Example</title><circle cx="12" cy="12" r="10" fill="currentColor" /></svg><a href="https://example.com/docs">Docs</a><a href="https://example.com/pricing">Pricing</a><yk-button slot="actions">Sign in</yk-button>
 </yk-header>
 </div>
 <pre><code>&lt;yk-header sticky brand-href="https://example.com"&gt;
 &lt;template shadowrootmode="open"&gt;&lt;style&gt;
+/*
+ * The host is its own size container: the bar collapses from the header's
+ * width, not the viewport, so the same markup works in a full-width page and
+ * in a narrow app shell. The 48rem breakpoint cannot be a custom property
+ * because container conditions do not accept var().
+ */
 :host {
   --_header-border: var(
     --yk-header-border-color,
@@ -971,6 +1063,7 @@ slot:not([name])::slotted(a:focus-visible) {
     var(--yk-radius-md, 0.375rem)
   );
 
+  container-type: inline-size;
   display: block;
   color: var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   background-color: var(--yk-header-bg, var(--yk-color-surface, #fff));
@@ -1066,10 +1159,88 @@ slot:not([name])::slotted(a:focus-visible) {
   margin-inline-start: auto;
 }
 
+[part="toggle"] {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--yk-header-toggle-size, 2.5rem);
+  block-size: var(--yk-header-toggle-size, 2.5rem);
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border: 1px solid var(--_header-border);
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="toggle"] svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+@container (inline-size &lt; 48rem) {
+  /* Brand, actions, and the toggle share the first row; the navigation takes
+     a full-width second row and stays hidden until the toggle opens it. */
+  [part="brand"] {
+    order: 1;
+  }
+
+  [part="actions"] {
+    order: 2;
+  }
+
+  [part="toggle"] {
+    order: 3;
+    display: inline-flex;
+  }
+
+  [part="nav"] {
+    order: 4;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  :host([open]:not([empty-nav])) [part="nav"] {
+    display: flex;
+  }
+
+  slot:not([name])::slotted(a) {
+    display: block;
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+  }
+}
+
 :host([empty-brand]) [part="brand"],
 :host([empty-nav]) [part="nav"],
 :host([empty-actions]) [part="actions"] {
   display: none;
+}
+
+:host([empty-nav]) [part="toggle"] {
+  display: none;
+}
+
+/* With no actions, the toggle is the only trailing item and takes over the
+   push to the inline end. */
+:host([empty-actions]) [part="toggle"] {
+  margin-inline-start: auto;
 }
 
 /* An all-empty header keeps neither the band nor an empty banner landmark in
@@ -1079,11 +1250,12 @@ slot:not([name])::slotted(a:focus-visible) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  slot:not([name])::slotted(a) {
+  slot:not([name])::slotted(a),
+  [part="toggle"] {
     transition: none;
   }
 }
-&lt;/style&gt;&lt;header part="header"&gt;&lt;div part="bar"&gt;&lt;div part="brand"&gt;&lt;a part="brand-link"&gt;&lt;slot name="brand"&gt;&lt;/slot&gt;&lt;/a&gt;&lt;/div&gt;&lt;nav part="nav" aria-label="Main navigation"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/nav&gt;&lt;div part="actions"&gt;&lt;slot name="actions"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;&lt;/template&gt;
+&lt;/style&gt;&lt;header part="header"&gt;&lt;div part="bar"&gt;&lt;div part="brand"&gt;&lt;a part="brand-link"&gt;&lt;slot name="brand"&gt;&lt;/slot&gt;&lt;/a&gt;&lt;/div&gt;&lt;button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"&gt;&lt;svg viewBox="0 0 20 20" aria-hidden="true"&gt;&lt;path d="M3 5h14M3 10h14M3 15h14" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;slot name="menu-label" hidden&gt;Menu&lt;/slot&gt;&lt;nav part="nav" id="nav" aria-label="Main navigation"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/nav&gt;&lt;div part="actions"&gt;&lt;slot name="actions"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;&lt;/template&gt;
 &lt;svg slot="brand" viewBox="0 0 24 24" width="24" height="24"&gt;&lt;title&gt;Example&lt;/title&gt;&lt;circle cx="12" cy="12" r="10" fill="currentColor" /&gt;&lt;/svg&gt;&lt;a href="https://example.com/docs"&gt;Docs&lt;/a&gt;&lt;a href="https://example.com/pricing"&gt;Pricing&lt;/a&gt;&lt;yk-button slot="actions"&gt;Sign in&lt;/yk-button&gt;
 &lt;/yk-header&gt;</code></pre>
 </section>

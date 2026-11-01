@@ -54,8 +54,9 @@ const DEMOS = [
     tag: 'yk-header',
     sheets: 1,
     controls: 'slot',
-    count: 3,
+    count: 4,
     also: [
+      ['button[part="toggle"]', 1],
       ['nav', 1],
       ['[part="brand-link"]', 1],
     ],
@@ -287,6 +288,11 @@ test('generated snippets carry working attribute mirrors', async () => {
   expect(
     header.shadowRoot.querySelector('nav').getAttribute('aria-label'),
   ).toBe('Main navigation');
+  expect(
+    header.shadowRoot
+      .querySelector('button[part="toggle"]')
+      .getAttribute('aria-label'),
+  ).toBe('Menu');
   expect(
     header.shadowRoot.querySelector('[part="brand-link"]').getAttribute('href'),
   ).toBe('https://example.com');
