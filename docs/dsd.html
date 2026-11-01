@@ -1458,6 +1458,44 @@ slot:not([name])::slotted(a) {
   );
 }
 
+/* The threshold matches yk-header.css so both components switch modes
+   together; test/yk-header-menu.test.js asserts they stay equal. */
+@container (inline-size < 48rem) {
+  /* Inside a narrow header the menu joins the stacked navigation: the button
+     becomes a full-width row and the panel unfolds in flow instead of
+     floating over the page. */
+  :host {
+    display: block;
+  }
+
+  [part="disclosure"] {
+    display: block;
+  }
+
+  [part="toggle"] {
+    display: flex;
+    justify-content: space-between;
+    inline-size: 100%;
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+  }
+
+  [part="panel"] {
+    position: static;
+    min-inline-size: 0;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  ::slotted(a) {
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+    padding-inline-start: var(--yk-space-lg, 1.5rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [part="toggle"],
   [part="chevron"] {
@@ -1626,6 +1664,44 @@ slot:not([name])::slotted(a) {
     --yk-header-menu-item-hover-bg,
     var(--_header-hover-bg)
   );
+}
+
+/* The threshold matches yk-header.css so both components switch modes
+   together; test/yk-header-menu.test.js asserts they stay equal. */
+@container (inline-size &lt; 48rem) {
+  /* Inside a narrow header the menu joins the stacked navigation: the button
+     becomes a full-width row and the panel unfolds in flow instead of
+     floating over the page. */
+  :host {
+    display: block;
+  }
+
+  [part="disclosure"] {
+    display: block;
+  }
+
+  [part="toggle"] {
+    display: flex;
+    justify-content: space-between;
+    inline-size: 100%;
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+  }
+
+  [part="panel"] {
+    position: static;
+    min-inline-size: 0;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  ::slotted(a) {
+    border-block-start: 1px solid var(--_header-border);
+    border-radius: 0;
+    padding-inline-start: var(--yk-space-lg, 1.5rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

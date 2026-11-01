@@ -9,8 +9,9 @@
  * given menuitem roles.
  *
  * Place it in `yk-header`'s default slot. The panel floats under the button in
- * the bar; Escape closes it and returns focus to the button, an outside
- * pointerdown closes it, and selecting a link closes it too.
+ * the wide bar; because the header is a size container, it unfolds inline
+ * inside the collapsed mobile panel. Escape closes it and returns focus to the
+ * button, an outside pointerdown closes it, and selecting a link closes it too.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
