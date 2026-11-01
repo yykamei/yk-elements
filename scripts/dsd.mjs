@@ -48,6 +48,8 @@ const lightSvg =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" /><path d="M8 1.5v1.25M8 13.25v1.25M2.575 3.575l.875.875M12.55 12.55l.875.875M1.5 8h1.25M13.25 8h1.25M3.575 12.55l.875-.875M12.55 3.575l-.875.875" /></svg>';
 const darkSvg =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 10.6A5.5 5.5 0 015.4 2.8 6.5 6.5 0 1013.2 10.6z" /></svg>';
+const menuSvg =
+  '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg>';
 
 // tag: the custom element name.
 // stylesheets: component CSS files in adoption order, read from disk.
@@ -138,7 +140,11 @@ const entries = [
       '<header part="header">' +
       '<div part="bar">' +
       '<div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div>' +
-      '<nav part="nav" aria-label="Main navigation"><slot></slot></nav>' +
+      '<button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">' +
+      menuSvg +
+      '</button>' +
+      '<slot name="menu-label" hidden>Menu</slot>' +
+      '<nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav>' +
       '<div part="actions"><slot name="actions"></slot></div>' +
       '</div>' +
       '</header>',

@@ -12,6 +12,12 @@
  * matching `yk-link`, so a dynamically bound value cannot become a script
  * vector.
  *
+ * The bar follows its own width through a container query: above 48rem it is
+ * a single row, and below it the links move into an inline panel under the bar
+ * that the hamburger opens. `open` reflects that panel, so a server or
+ * framework can render it, and the `menu-label` slot localizes the hamburger's
+ * accessible name.
+ *
  * Empty regions collapse, and the bar is capped at 64rem and centered while
  * its background spans the host, so placing the element outside a page
  * container yields a full-width band.
@@ -23,6 +29,7 @@
  *   <a href="/docs">Docs</a>
  *   <a href="/pricing">Pricing</a>
  *   <yk-theme-switcher slot="actions"></yk-theme-switcher>
+ *   <span slot="menu-label">メニュー</span>
  * </yk-header>
  * ```
  */
@@ -47,11 +54,13 @@ function isSafeHref(value) {
 }
 
 class YKHeader extends HTMLElement {
-  static observedAttributes = ['nav-label', 'brand-href'];
+  static observedAttributes = ['open', 'nav-label', 'brand-href'];
 
   #regions = [];
 
   #brandLink;
+
+  #toggle;
 
   #nav;
 
@@ -60,13 +69,23 @@ class YKHeader extends HTMLElement {
     const shadowRoot = ensureShadow(this, {
       styles: [sheet],
       render: (root) => {
+        // The toggle precedes the navigation so Tab from the toggle enters the
+        // panel it just opened; CSS order restores the visual placement.
         root.innerHTML = `
       <header part="header">
         <div part="bar">
           <div part="brand">
             <a part="brand-link"><slot name="brand"></slot></a>
           </div>
-          <nav part="nav" aria-label="Main navigation"><slot></slot></nav>
+          <button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 5h14M3 10h14M3 15h14" />
+            </svg>
+          </button>
+          <slot name="menu-label" hidden>Menu</slot>
+          <nav part="nav" id="nav" aria-label="Main navigation">
+            <slot></slot>
+          </nav>
           <div part="actions"><slot name="actions"></slot></div>
         </div>
       </header>
@@ -75,31 +94,88 @@ class YKHeader extends HTMLElement {
     });
     this.#brandLink = shadowRoot.querySelector('[part="brand-link"]');
     this.#nav = shadowRoot.querySelector('[part="nav"]');
+    this.#toggle = shadowRoot.querySelector('[part="toggle"]');
     // Sync the attribute-driven state before wiring slots, so a hand-written
     // declarative template with an unexpected shape cannot leave the mirrored
     // href unsanitized behind a thrown error.
     this.#syncNavLabel();
     this.#syncBrandHref();
+    this.#syncOpen();
     this.#trackEmptiness('brand', 'slot[name="brand"]');
     this.#trackEmptiness('nav', 'slot:not([name])');
     this.#trackEmptiness('actions', 'slot[name="actions"]');
+    this.#toggle?.addEventListener('click', () => this.toggleAttribute('open'));
+    const labelSlot = shadowRoot.querySelector('slot[name="menu-label"]');
+    labelSlot?.addEventListener('slotchange', () => this.#nameToggle());
+    this.#nameToggle();
+    this.addEventListener('keydown', (event) => this.#onKeydown(event));
+    this.addEventListener('click', (event) => this.#onClick(event));
   }
 
   connectedCallback() {
     // The light DOM that decides the empty-* state is already present at
     // upgrade, so apply it before the first slot assignment settles. Attribute
-    // reactions cover nav-label and brand-href on upgrade and on later writes.
+    // reactions cover the observed attributes on upgrade and on later writes.
     for (const { region, slot } of this.#regions) {
       this.#syncEmptiness(region, slot);
     }
+    this.#nameToggle();
+    this.#syncOpen();
   }
 
   attributeChangedCallback(name) {
-    if (name === 'nav-label') {
+    if (name === 'open') {
+      this.#syncOpen();
+    } else if (name === 'nav-label') {
       this.#syncNavLabel();
     } else if (name === 'brand-href') {
       this.#syncBrandHref();
     }
+  }
+
+  #syncOpen() {
+    if (!this.#toggle) return;
+    this.#toggle.setAttribute(
+      'aria-expanded',
+      String(this.hasAttribute('open')),
+    );
+  }
+
+  #nameToggle() {
+    const slot = this.shadowRoot.querySelector('slot[name="menu-label"]');
+    if (!this.#toggle || !slot) return;
+    const assigned = slot
+      .assignedNodes()
+      .find((node) => (node.textContent ?? '').trim() !== '');
+    this.#toggle.setAttribute(
+      'aria-label',
+      (assigned?.textContent ?? slot.textContent).trim(),
+    );
+  }
+
+  #onKeydown(event) {
+    if (event.key !== 'Escape' || event.defaultPrevented) return;
+    if (!this.hasAttribute('open')) return;
+    // Focus returns to the toggle only when it was inside the disclosed
+    // panel; an Escape from an action control must not move focus. The
+    // composed path reaches the slotted links, which are not DOM descendants
+    // of the shadow nav.
+    const insidePanel = event.composedPath().includes(this.#nav);
+    this.removeAttribute('open');
+    // The toggle is display:none in the wide layout, so focus() is a no-op
+    // there and the focus stays wherever the user left it.
+    if (insidePanel) this.#toggle?.focus();
+  }
+
+  // Selecting a link closes the collapsed panel. The check walks the composed
+  // path so a yk-link's internal anchor, which is not the event target here,
+  // closes it too.
+  #onClick(event) {
+    if (!this.hasAttribute('open')) return;
+    const onLink = event
+      .composedPath()
+      .some((node) => node instanceof HTMLAnchorElement);
+    if (onLink) this.removeAttribute('open');
   }
 
   #syncNavLabel() {
