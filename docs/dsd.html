@@ -788,10 +788,12 @@ Beta
 <yk-header sticky brand-href="https://example.com">
 <template shadowrootmode="open"><style>
 /*
- * The host is its own size container: the bar collapses from the header's
- * width, not the viewport, so the same markup works in a full-width page and
- * in a narrow app shell. The 48rem breakpoint cannot be a custom property
- * because container conditions do not accept var().
+ * Visual skin and token fallbacks shared by yk-header and yk-header-menu.
+ *
+ * Both components adopt this sheet so a navigation link and a panel link
+ * read the same. The internal --_header-* properties are declared once here;
+ * consumers override the public --yk-header-* tokens, which inherit through
+ * the shadow boundary.
  */
 :host {
   --_header-border: var(
@@ -825,7 +827,40 @@ Beta
     --yk-header-link-radius,
     var(--yk-radius-md, 0.375rem)
   );
+}
 
+::slotted(a) {
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  text-decoration: none;
+  border-radius: var(--_header-link-radius);
+  transition: background-color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(--_header-link-color);
+  background-color: var(--_header-hover-bg);
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+/*
+ * The host is its own size container: the bar collapses from the header's
+ * width, not the viewport, so the same markup works in a full-width page and
+ * in a narrow app shell. The 48rem breakpoint cannot be a custom property
+ * because container conditions do not accept var(). The shared link skin and
+ * its --_header-* token fallbacks live in header-core.css.
+ */
+:host {
   container-type: inline-size;
   display: block;
   color: var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
@@ -897,22 +932,6 @@ slot:not([name])::slotted(a) {
   align-items: center;
   padding-block: var(--yk-space-sm, 0.5rem);
   padding-inline: var(--yk-space-sm, 0.5rem);
-  color: var(--_header-link-color);
-  font: inherit;
-  line-height: var(--yk-line-height, 1.5);
-  text-decoration: none;
-  border-radius: var(--_header-link-radius);
-  transition: background-color 0.15s ease-in-out;
-}
-
-slot:not([name])::slotted(a:hover) {
-  color: var(--_header-link-color);
-  background-color: var(--_header-hover-bg);
-}
-
-slot:not([name])::slotted(a:focus-visible) {
-  outline: 2px solid var(--_header-focus);
-  outline-offset: 2px;
 }
 
 [part="actions"] {
@@ -1013,7 +1032,6 @@ slot:not([name])::slotted(a:focus-visible) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  slot:not([name])::slotted(a),
   [part="toggle"] {
     transition: none;
   }
@@ -1025,10 +1043,12 @@ slot:not([name])::slotted(a:focus-visible) {
 <pre><code>&lt;yk-header sticky brand-href="https://example.com"&gt;
 &lt;template shadowrootmode="open"&gt;&lt;style&gt;
 /*
- * The host is its own size container: the bar collapses from the header's
- * width, not the viewport, so the same markup works in a full-width page and
- * in a narrow app shell. The 48rem breakpoint cannot be a custom property
- * because container conditions do not accept var().
+ * Visual skin and token fallbacks shared by yk-header and yk-header-menu.
+ *
+ * Both components adopt this sheet so a navigation link and a panel link
+ * read the same. The internal --_header-* properties are declared once here;
+ * consumers override the public --yk-header-* tokens, which inherit through
+ * the shadow boundary.
  */
 :host {
   --_header-border: var(
@@ -1062,7 +1082,40 @@ slot:not([name])::slotted(a:focus-visible) {
     --yk-header-link-radius,
     var(--yk-radius-md, 0.375rem)
   );
+}
 
+::slotted(a) {
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  text-decoration: none;
+  border-radius: var(--_header-link-radius);
+  transition: background-color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(--_header-link-color);
+  background-color: var(--_header-hover-bg);
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+/*
+ * The host is its own size container: the bar collapses from the header's
+ * width, not the viewport, so the same markup works in a full-width page and
+ * in a narrow app shell. The 48rem breakpoint cannot be a custom property
+ * because container conditions do not accept var(). The shared link skin and
+ * its --_header-* token fallbacks live in header-core.css.
+ */
+:host {
   container-type: inline-size;
   display: block;
   color: var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
@@ -1134,22 +1187,6 @@ slot:not([name])::slotted(a) {
   align-items: center;
   padding-block: var(--yk-space-sm, 0.5rem);
   padding-inline: var(--yk-space-sm, 0.5rem);
-  color: var(--_header-link-color);
-  font: inherit;
-  line-height: var(--yk-line-height, 1.5);
-  text-decoration: none;
-  border-radius: var(--_header-link-radius);
-  transition: background-color 0.15s ease-in-out;
-}
-
-slot:not([name])::slotted(a:hover) {
-  color: var(--_header-link-color);
-  background-color: var(--_header-hover-bg);
-}
-
-slot:not([name])::slotted(a:focus-visible) {
-  outline: 2px solid var(--_header-focus);
-  outline-offset: 2px;
 }
 
 [part="actions"] {
@@ -1250,7 +1287,6 @@ slot:not([name])::slotted(a:focus-visible) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  slot:not([name])::slotted(a),
   [part="toggle"] {
     transition: none;
   }

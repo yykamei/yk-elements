@@ -1,0 +1,66 @@
+/*
+ * Visual skin and token fallbacks shared by yk-header and yk-header-menu.
+ *
+ * Both components adopt this sheet so a navigation link and a panel link
+ * read the same. The internal --_header-* properties are declared once here;
+ * consumers override the public --yk-header-* tokens, which inherit through
+ * the shadow boundary.
+ */
+:host {
+  --_header-border: var(
+    --yk-header-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_header-focus: var(
+    --yk-color-focus-ring,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+      transparent
+    )
+  );
+  --_header-link-color: var(
+    --yk-header-link-color,
+    var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)))
+  );
+  --_header-hover-bg: var(
+    --yk-header-link-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+  --_header-link-radius: var(
+    --yk-header-link-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+}
+
+::slotted(a) {
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  text-decoration: none;
+  border-radius: var(--_header-link-radius);
+  transition: background-color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(--_header-link-color);
+  background-color: var(--_header-hover-bg);
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}

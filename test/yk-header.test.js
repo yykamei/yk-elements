@@ -43,11 +43,13 @@ test('self-registers in the custom element registry', () => {
   expect(customElements.get('yk-header')).toBeDefined();
 });
 
-test('adopts the component stylesheet', () => {
+test('adopts the shared and component stylesheets', () => {
   const host = makeHeader();
 
-  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
-  expect(host.shadowRoot.adoptedStyleSheets[0]).toBeInstanceOf(CSSStyleSheet);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
+  for (const sheet of host.shadowRoot.adoptedStyleSheets) {
+    expect(sheet).toBeInstanceOf(CSSStyleSheet);
+  }
 });
 
 test('renders the header landmark with four slot regions', () => {
@@ -418,7 +420,7 @@ test('reuses a declarative shadow root and wires the toggle', async () => {
   await frame();
 
   expect(host.shadowRoot.querySelector('style')).not.toBeNull();
-  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(1);
+  expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
   expect(host.hasAttribute('empty-brand')).toBe(false);
   expect(host.hasAttribute('empty-nav')).toBe(false);
   expect(host.hasAttribute('empty-actions')).toBe(false);

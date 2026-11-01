@@ -135,7 +135,10 @@ const entries = [
   },
   {
     tag: 'yk-header',
-    stylesheets: ['src/components/yk-header.css'],
+    stylesheets: [
+      'src/components/header-core.css',
+      'src/components/yk-header.css',
+    ],
     shadow:
       '<header part="header">' +
       '<div part="bar">' +
