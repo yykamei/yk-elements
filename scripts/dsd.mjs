@@ -132,6 +132,24 @@ const entries = [
       '<h2 slot="header">Title</h2><p>Body</p><span slot="footer">Footer</span>',
   },
   {
+    tag: 'yk-header',
+    stylesheets: ['src/components/yk-header.css'],
+    shadow:
+      '<header part="header">' +
+      '<div part="bar">' +
+      '<div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div>' +
+      '<nav part="nav" aria-label="Main navigation"><slot></slot></nav>' +
+      '<div part="actions"><slot name="actions"></slot></div>' +
+      '</div>' +
+      '</header>',
+    attrs: 'sticky brand-href="https://example.com"',
+    light:
+      '<svg slot="brand" viewBox="0 0 24 24" width="24" height="24"><title>Example</title><circle cx="12" cy="12" r="10" fill="currentColor" /></svg>' +
+      '<a href="https://example.com/docs">Docs</a>' +
+      '<a href="https://example.com/pricing">Pricing</a>' +
+      '<yk-button slot="actions">Sign in</yk-button>',
+  },
+  {
     tag: 'yk-footer-links',
     stylesheets: [
       'src/components/footer-core.css',

@@ -1123,6 +1123,7 @@ test('library entry point and tokens load successfully', async () => {
   expect(customElements.get('yk-button')).toBeDefined();
   expect(customElements.get('yk-link')).toBeDefined();
   expect(customElements.get('yk-badge')).toBeDefined();
+  expect(customElements.get('yk-header')).toBeDefined();
   expect(customElements.get('yk-footer')).toBeDefined();
   expect(customElements.get('yk-footer-links')).toBeDefined();
   expect(customElements.get('yk-soft-nav')).toBeDefined();

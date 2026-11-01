@@ -51,6 +51,16 @@ const DEMOS = [
   { tag: 'yk-badge', sheets: 1, controls: 'slot', count: 1 },
   { tag: 'yk-card', sheets: 1, controls: 'slot', count: 3 },
   {
+    tag: 'yk-header',
+    sheets: 1,
+    controls: 'slot',
+    count: 3,
+    also: [
+      ['nav', 1],
+      ['[part="brand-link"]', 1],
+    ],
+  },
+  {
     tag: 'yk-footer-links',
     sheets: 2,
     controls: 'slot',
@@ -272,6 +282,16 @@ test('generated snippets carry working attribute mirrors', async () => {
   expect(
     footerLinks.shadowRoot.querySelector('nav').getAttribute('aria-labelledby'),
   ).toBe(footerHeading.id);
+
+  const header = doc.querySelector('[data-demo="yk-header"] yk-header');
+  expect(
+    header.shadowRoot.querySelector('nav').getAttribute('aria-label'),
+  ).toBe('Main navigation');
+  expect(
+    header.shadowRoot.querySelector('[part="brand-link"]').getAttribute('href'),
+  ).toBe('https://example.com');
+  expect(header.hasAttribute('empty-nav')).toBe(false);
+  expect(header.hasAttribute('empty-actions')).toBe(false);
 
   const footer = doc.querySelector('[data-demo="yk-footer"] yk-footer');
   expect(footer.hasAttribute('empty-header')).toBe(false);
