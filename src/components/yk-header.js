@@ -35,6 +35,7 @@
  */
 import '../base.js';
 import { ensureShadow } from '../dsd.js';
+import coreSheet from './header-core.css' with { type: 'css' };
 import sheet from './yk-header.css' with { type: 'css' };
 
 // Mirrors yk-link's deny-list so a brand link cannot run script either. Only
@@ -67,7 +68,7 @@ class YKHeader extends HTMLElement {
   constructor() {
     super();
     const shadowRoot = ensureShadow(this, {
-      styles: [sheet],
+      styles: [coreSheet, sheet],
       render: (root) => {
         // The toggle precedes the navigation so Tab from the toggle enters the
         // panel it just opened; CSS order restores the visual placement.

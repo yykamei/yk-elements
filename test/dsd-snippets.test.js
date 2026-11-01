@@ -52,7 +52,7 @@ const DEMOS = [
   { tag: 'yk-card', sheets: 1, controls: 'slot', count: 3 },
   {
     tag: 'yk-header',
-    sheets: 1,
+    sheets: 2,
     controls: 'slot',
     count: 4,
     also: [
