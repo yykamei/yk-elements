@@ -1,0 +1,98 @@
+:host {
+  display: inline-flex;
+}
+
+[part="disclosure"] {
+  position: relative;
+  display: inline-flex;
+}
+
+[part="toggle"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="chevron"] {
+  /* A long summary must not squeeze the indicator. */
+  flex: none;
+  inline-size: var(--yk-header-menu-chevron-size, 1rem);
+  block-size: var(--yk-header-menu-chevron-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease-in-out;
+}
+
+:host([open]) [part="chevron"] {
+  transform: rotate(180deg);
+}
+
+[part="panel"] {
+  position: absolute;
+  inset-block-start: calc(100% + var(--yk-space-sm, 0.5rem));
+  inset-inline-start: 0;
+  z-index: 1;
+  display: none;
+  min-inline-size: 100%;
+  padding: var(--yk-header-menu-panel-padding, var(--yk-space-sm, 0.5rem));
+  background-color: var(
+    --yk-header-menu-panel-bg,
+    var(--yk-color-surface, #fff)
+  );
+  border: 1px solid
+    var(--yk-header-menu-panel-border-color, var(--_header-border));
+  border-radius: var(
+    --yk-header-menu-panel-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+  box-shadow: var(
+    --yk-header-menu-panel-shadow,
+    0 0.5rem 1rem oklch(0% 0 0 / 15%)
+  );
+}
+
+:host([open]) [part="panel"] {
+  display: block;
+}
+
+::slotted(a) {
+  display: block;
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+}
+
+::slotted(a:hover) {
+  background-color: var(
+    --yk-header-menu-item-hover-bg,
+    var(--_header-hover-bg)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="toggle"],
+  [part="chevron"] {
+    transition: none;
+  }
+}

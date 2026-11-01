@@ -1296,6 +1296,349 @@ slot:not([name])::slotted(a) {
 &lt;/yk-header&gt;</code></pre>
 </section>
 <section>
+<h2><code>yk-header-menu</code></h2>
+<div data-demo="yk-header-menu">
+<yk-header-menu open>
+<template shadowrootmode="open"><style>
+/*
+ * Visual skin and token fallbacks shared by yk-header and yk-header-menu.
+ *
+ * Both components adopt this sheet so a navigation link and a panel link
+ * read the same. The internal --_header-* properties are declared once here;
+ * consumers override the public --yk-header-* tokens, which inherit through
+ * the shadow boundary.
+ */
+:host {
+  --_header-border: var(
+    --yk-header-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_header-focus: var(
+    --yk-color-focus-ring,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+      transparent
+    )
+  );
+  --_header-link-color: var(
+    --yk-header-link-color,
+    var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)))
+  );
+  --_header-hover-bg: var(
+    --yk-header-link-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+  --_header-link-radius: var(
+    --yk-header-link-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+}
+
+::slotted(a) {
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  text-decoration: none;
+  border-radius: var(--_header-link-radius);
+  transition: background-color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(--_header-link-color);
+  background-color: var(--_header-hover-bg);
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+:host {
+  display: inline-flex;
+}
+
+[part="disclosure"] {
+  position: relative;
+  display: inline-flex;
+}
+
+[part="toggle"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="chevron"] {
+  /* A long summary must not squeeze the indicator. */
+  flex: none;
+  inline-size: var(--yk-header-menu-chevron-size, 1rem);
+  block-size: var(--yk-header-menu-chevron-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease-in-out;
+}
+
+:host([open]) [part="chevron"] {
+  transform: rotate(180deg);
+}
+
+[part="panel"] {
+  position: absolute;
+  inset-block-start: calc(100% + var(--yk-space-sm, 0.5rem));
+  inset-inline-start: 0;
+  z-index: 1;
+  display: none;
+  min-inline-size: 100%;
+  padding: var(--yk-header-menu-panel-padding, var(--yk-space-sm, 0.5rem));
+  background-color: var(
+    --yk-header-menu-panel-bg,
+    var(--yk-color-surface, #fff)
+  );
+  border: 1px solid
+    var(--yk-header-menu-panel-border-color, var(--_header-border));
+  border-radius: var(
+    --yk-header-menu-panel-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+  box-shadow: var(
+    --yk-header-menu-panel-shadow,
+    0 0.5rem 1rem oklch(0% 0 0 / 15%)
+  );
+}
+
+:host([open]) [part="panel"] {
+  display: block;
+}
+
+::slotted(a) {
+  display: block;
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+}
+
+::slotted(a:hover) {
+  background-color: var(
+    --yk-header-menu-item-hover-bg,
+    var(--_header-hover-bg)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="toggle"],
+  [part="chevron"] {
+    transition: none;
+  }
+}
+</style><div part="disclosure"><button part="toggle" type="button" aria-expanded="false" aria-controls="panel"><slot name="summary">Menu</slot><svg part="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg></button><div part="panel" id="panel"><slot></slot></div></div></template>
+<span slot="summary">Products</span><a href="https://example.com/cloud">Cloud</a><a href="https://example.com/edge">Edge</a>
+</yk-header-menu>
+</div>
+<pre><code>&lt;yk-header-menu open&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+/*
+ * Visual skin and token fallbacks shared by yk-header and yk-header-menu.
+ *
+ * Both components adopt this sheet so a navigation link and a panel link
+ * read the same. The internal --_header-* properties are declared once here;
+ * consumers override the public --yk-header-* tokens, which inherit through
+ * the shadow boundary.
+ */
+:host {
+  --_header-border: var(
+    --yk-header-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_header-focus: var(
+    --yk-color-focus-ring,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+      transparent
+    )
+  );
+  --_header-link-color: var(
+    --yk-header-link-color,
+    var(--yk-header-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)))
+  );
+  --_header-hover-bg: var(
+    --yk-header-link-hover-bg,
+    color-mix(in oklch, var(--yk-color-shade, black) 8%, transparent)
+  );
+  --_header-link-radius: var(
+    --yk-header-link-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+}
+
+::slotted(a) {
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  text-decoration: none;
+  border-radius: var(--_header-link-radius);
+  transition: background-color 0.15s ease-in-out;
+}
+
+::slotted(a:hover) {
+  color: var(--_header-link-color);
+  background-color: var(--_header-hover-bg);
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+:host {
+  display: inline-flex;
+}
+
+[part="disclosure"] {
+  position: relative;
+  display: inline-flex;
+}
+
+[part="toggle"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yk-space-sm, 0.5rem);
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  color: var(--_header-link-color);
+  font: inherit;
+  line-height: var(--yk-line-height, 1.5);
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--_header-link-radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+[part="toggle"]:hover {
+  background-color: var(--_header-hover-bg);
+}
+
+[part="toggle"]:focus-visible {
+  outline: 2px solid var(--_header-focus);
+  outline-offset: 2px;
+}
+
+[part="chevron"] {
+  /* A long summary must not squeeze the indicator. */
+  flex: none;
+  inline-size: var(--yk-header-menu-chevron-size, 1rem);
+  block-size: var(--yk-header-menu-chevron-size, 1rem);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease-in-out;
+}
+
+:host([open]) [part="chevron"] {
+  transform: rotate(180deg);
+}
+
+[part="panel"] {
+  position: absolute;
+  inset-block-start: calc(100% + var(--yk-space-sm, 0.5rem));
+  inset-inline-start: 0;
+  z-index: 1;
+  display: none;
+  min-inline-size: 100%;
+  padding: var(--yk-header-menu-panel-padding, var(--yk-space-sm, 0.5rem));
+  background-color: var(
+    --yk-header-menu-panel-bg,
+    var(--yk-color-surface, #fff)
+  );
+  border: 1px solid
+    var(--yk-header-menu-panel-border-color, var(--_header-border));
+  border-radius: var(
+    --yk-header-menu-panel-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+  box-shadow: var(
+    --yk-header-menu-panel-shadow,
+    0 0.5rem 1rem oklch(0% 0 0 / 15%)
+  );
+}
+
+:host([open]) [part="panel"] {
+  display: block;
+}
+
+::slotted(a) {
+  display: block;
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+}
+
+::slotted(a:hover) {
+  background-color: var(
+    --yk-header-menu-item-hover-bg,
+    var(--_header-hover-bg)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [part="toggle"],
+  [part="chevron"] {
+    transition: none;
+  }
+}
+&lt;/style&gt;&lt;div part="disclosure"&gt;&lt;button part="toggle" type="button" aria-expanded="false" aria-controls="panel"&gt;&lt;slot name="summary"&gt;Menu&lt;/slot&gt;&lt;svg part="chevron" viewBox="0 0 16 16" aria-hidden="true"&gt;&lt;path d="M4 6l4 4 4-4" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;div part="panel" id="panel"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;span slot="summary"&gt;Products&lt;/span&gt;&lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;&lt;a href="https://example.com/edge"&gt;Edge&lt;/a&gt;
+&lt;/yk-header-menu&gt;</code></pre>
+</section>
+<section>
 <h2><code>yk-footer-links</code></h2>
 <div data-demo="yk-footer-links">
 <yk-footer-links heading="Resources">
