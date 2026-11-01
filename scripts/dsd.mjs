@@ -50,6 +50,8 @@ const darkSvg =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 10.6A5.5 5.5 0 015.4 2.8 6.5 6.5 0 1013.2 10.6z" /></svg>';
 const menuSvg =
   '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg>';
+const chevronSvg =
+  '<svg part="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>';
 
 // tag: the custom element name.
 // stylesheets: component CSS files in adoption order, read from disk.
@@ -157,6 +159,26 @@ const entries = [
       '<a href="https://example.com/docs">Docs</a>' +
       '<a href="https://example.com/pricing">Pricing</a>' +
       '<yk-button slot="actions">Sign in</yk-button>',
+  },
+  {
+    tag: 'yk-header-menu',
+    stylesheets: [
+      'src/components/header-core.css',
+      'src/components/yk-header-menu.css',
+    ],
+    shadow:
+      '<div part="disclosure">' +
+      '<button part="toggle" type="button" aria-expanded="false" aria-controls="panel">' +
+      '<slot name="summary">Menu</slot>' +
+      chevronSvg +
+      '</button>' +
+      '<div part="panel" id="panel"><slot></slot></div>' +
+      '</div>',
+    attrs: 'open',
+    light:
+      '<span slot="summary">Products</span>' +
+      '<a href="https://example.com/cloud">Cloud</a>' +
+      '<a href="https://example.com/edge">Edge</a>',
   },
   {
     tag: 'yk-footer-links',

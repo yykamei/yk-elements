@@ -62,6 +62,17 @@ const DEMOS = [
     ],
   },
   {
+    tag: 'yk-header-menu',
+    sheets: 2,
+    controls: 'slot',
+    count: 2,
+    also: [
+      ['button[part="toggle"]', 1],
+      ['[part="chevron"]', 1],
+      ['[part="panel"]', 1],
+    ],
+  },
+  {
     tag: 'yk-footer-links',
     sheets: 2,
     controls: 'slot',
@@ -298,6 +309,13 @@ test('generated snippets carry working attribute mirrors', async () => {
   ).toBe('https://example.com');
   expect(header.hasAttribute('empty-nav')).toBe(false);
   expect(header.hasAttribute('empty-actions')).toBe(false);
+
+  const menu = doc.querySelector('[data-demo="yk-header-menu"] yk-header-menu');
+  expect(
+    menu.shadowRoot
+      .querySelector('button[part="toggle"]')
+      .getAttribute('aria-expanded'),
+  ).toBe('true');
 
   const footer = doc.querySelector('[data-demo="yk-footer"] yk-footer');
   expect(footer.hasAttribute('empty-header')).toBe(false);
