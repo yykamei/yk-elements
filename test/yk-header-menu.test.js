@@ -4,6 +4,10 @@ import { userEvent } from 'vitest/browser';
 import '../src/components/yk-header.js';
 import '../src/components/yk-header-menu.js';
 import '../src/components/yk-link.js';
+import headerSheet from '../src/components/yk-header.css' with { type: 'css' };
+import menuSheet from '../src/components/yk-header-menu.css' with {
+  type: 'css',
+};
 
 afterEach(() => {
   document.body.replaceChildren();
@@ -214,6 +218,22 @@ test('uses a floating panel when no container bounds the menu', async () => {
   expect(getComputedStyle(panel).display).toBe('block');
 });
 
+test('expands inline inside a narrow header', async () => {
+  const header = makeHeaderWithMenu();
+  await frame();
+  const menu = header.querySelector('yk-header-menu');
+  const panel = partOf(menu, 'panel');
+
+  expect(getComputedStyle(panel).position).toBe('static');
+
+  header.setAttribute('open', '');
+  partOf(menu, 'toggle').click();
+  await frame();
+
+  expect(menu.hasAttribute('open')).toBe(true);
+  expect(getComputedStyle(panel).display).toBe('block');
+});
+
 test('keeps the panel floating inside a wide header', async () => {
   const header = makeHeaderWithMenu('800px');
   await frame();
@@ -263,6 +283,15 @@ test('lets Escape reach the header when the menu is closed', async () => {
 
   expect(menu.hasAttribute('open')).toBe(false);
   expect(header.hasAttribute('open')).toBe(false);
+});
+
+test('keeps the accordion breakpoint aligned with the header collapse', () => {
+  const conditions = (sheet) =>
+    [...sheet.cssRules]
+      .filter((rule) => rule instanceof CSSContainerRule)
+      .map((rule) => rule.conditionText);
+
+  expect(conditions(menuSheet)).toEqual(conditions(headerSheet));
 });
 
 test('restyles the panel and chevron through component tokens', async () => {
