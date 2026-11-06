@@ -136,6 +136,17 @@ const entries = [
       '<h2 slot="header">Title</h2><p>Body</p><span slot="footer">Footer</span>',
   },
   {
+    tag: 'yk-stat',
+    stylesheets: ['src/components/yk-stat.css'],
+    shadow:
+      '<dl part="stat">' +
+      '<dt part="label"><slot name="label"></slot></dt>' +
+      '<dd part="value"><slot name="value"></slot></dd>' +
+      '</dl>',
+    light:
+      '<span slot="label">Learning targets</span><span slot="value">128</span>',
+  },
+  {
     tag: 'yk-header',
     stylesheets: [
       'src/components/header-core.css',

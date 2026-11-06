@@ -51,6 +51,17 @@ const DEMOS = [
   { tag: 'yk-badge', sheets: 1, controls: 'slot', count: 1 },
   { tag: 'yk-card', sheets: 1, controls: 'slot', count: 3 },
   {
+    tag: 'yk-stat',
+    sheets: 1,
+    controls: 'slot',
+    count: 2,
+    also: [
+      ['dl[part="stat"]', 1],
+      ['dt[part="label"]', 1],
+      ['dd[part="value"]', 1],
+    ],
+  },
+  {
     tag: 'yk-header',
     sheets: 2,
     controls: 'slot',

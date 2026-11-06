@@ -284,6 +284,42 @@ const cardFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the labeled statistic.
+ */
+const statFaceProperties = [
+  {
+    name: '--yk-stat-gap',
+    default: '0.25rem',
+    description: 'Spacing between the label and the value.',
+  },
+  {
+    name: '--yk-stat-label-font-size',
+    default: '0.875rem',
+    description: 'Font size of the label.',
+  },
+  {
+    name: '--yk-stat-label-color',
+    default: 'var(--yk-color-text-muted, oklch(48% 0.02 247))',
+    description: 'Text color of the label.',
+  },
+  {
+    name: '--yk-stat-value-font-size',
+    default: '1.75rem',
+    description: 'Font size of the value.',
+  },
+  {
+    name: '--yk-stat-value-font-weight',
+    default: '700',
+    description: 'Font weight of the value.',
+  },
+  {
+    name: '--yk-stat-value-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of the value.',
+  },
+];
+
+/**
  * CSS custom properties shared by the footer link styles.
  */
 const sharedFooterLinkProperties = [
@@ -1480,6 +1516,18 @@ export const components = [
         '  <h2 slot="header">Header</h2>\n  <p>Body content</p>\n  <span slot="footer">Footer</span>',
     },
     cssProperties: cardFaceProperties,
+    attributes: [],
+  },
+  {
+    tag: 'yk-stat',
+    category: 'Components',
+    description:
+      'Labeled statistic that pairs a small label with a prominent value for summary panels and dashboards.',
+    playground: {
+      content:
+        '  <span slot="label">Learning targets</span>\n  <span slot="value">128</span>',
+    },
+    cssProperties: statFaceProperties,
     attributes: [],
   },
   {

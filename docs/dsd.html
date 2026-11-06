@@ -783,6 +783,87 @@ Beta
 &lt;/yk-card&gt;</code></pre>
 </section>
 <section>
+<h2><code>yk-stat</code></h2>
+<div data-demo="yk-stat">
+<yk-stat>
+<template shadowrootmode="open"><style>
+:host {
+  display: block;
+}
+
+dl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-stat-gap, 0.25rem);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+dt {
+  margin: 0;
+  font-size: var(--yk-stat-label-font-size, 0.875rem);
+  line-height: 1.4;
+  color: var(
+    --yk-stat-label-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+}
+
+dd {
+  margin: 0;
+  font-size: var(--yk-stat-value-font-size, 1.75rem);
+  font-weight: var(--yk-stat-value-font-weight, 700);
+  line-height: 1.2;
+  color: var(
+    --yk-stat-value-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  font-variant-numeric: tabular-nums;
+}
+</style><dl part="stat"><dt part="label"><slot name="label"></slot></dt><dd part="value"><slot name="value"></slot></dd></dl></template>
+<span slot="label">Learning targets</span><span slot="value">128</span>
+</yk-stat>
+</div>
+<pre><code>&lt;yk-stat&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  display: block;
+}
+
+dl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-stat-gap, 0.25rem);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+dt {
+  margin: 0;
+  font-size: var(--yk-stat-label-font-size, 0.875rem);
+  line-height: 1.4;
+  color: var(
+    --yk-stat-label-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+}
+
+dd {
+  margin: 0;
+  font-size: var(--yk-stat-value-font-size, 1.75rem);
+  font-weight: var(--yk-stat-value-font-weight, 700);
+  line-height: 1.2;
+  color: var(
+    --yk-stat-value-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  font-variant-numeric: tabular-nums;
+}
+&lt;/style&gt;&lt;dl part="stat"&gt;&lt;dt part="label"&gt;&lt;slot name="label"&gt;&lt;/slot&gt;&lt;/dt&gt;&lt;dd part="value"&gt;&lt;slot name="value"&gt;&lt;/slot&gt;&lt;/dd&gt;&lt;/dl&gt;&lt;/template&gt;
+&lt;span slot="label"&gt;Learning targets&lt;/span&gt;&lt;span slot="value"&gt;128&lt;/span&gt;
+&lt;/yk-stat&gt;</code></pre>
+</section>
+<section>
 <h2><code>yk-header</code></h2>
 <div data-demo="yk-header">
 <yk-header sticky brand-href="https://example.com">

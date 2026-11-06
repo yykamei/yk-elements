@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+dl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yk-stat-gap, 0.25rem);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+dt {
+  margin: 0;
+  font-size: var(--yk-stat-label-font-size, 0.875rem);
+  line-height: 1.4;
+  color: var(
+    --yk-stat-label-color,
+    var(--yk-color-text-muted, oklch(48% 0.02 247))
+  );
+}
+
+dd {
+  margin: 0;
+  font-size: var(--yk-stat-value-font-size, 1.75rem);
+  font-weight: var(--yk-stat-value-font-weight, 700);
+  line-height: 1.2;
+  color: var(
+    --yk-stat-value-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  font-variant-numeric: tabular-nums;
+}
