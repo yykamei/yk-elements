@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-stat&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-stat">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Default</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-stat>
+              <span slot="label">Learning targets</span>
+              <span slot="value">128</span>
+            </yk-stat>
+          </yk-pad>
+          <pre><code>&lt;yk-stat&gt;
+  &lt;span slot="label"&gt;Learning targets&lt;/span&gt;
+  &lt;span slot="value"&gt;128&lt;/span&gt;
+&lt;/yk-stat&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>long value with a smaller value font</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-stat style="--yk-stat-value-font-size: 1.125rem">
+              <span slot="label">Last studied</span>
+              <span slot="value">2026-11-06 14:00</span>
+            </yk-stat>
+          </yk-pad>
+          <pre><code>&lt;yk-stat style="--yk-stat-value-font-size: 1.125rem"&gt;
+  &lt;span slot="label"&gt;Last studied&lt;/span&gt;
+  &lt;span slot="value"&gt;2026-11-06 14:00&lt;/span&gt;
+&lt;/yk-stat&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>grouped in a grid</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-grid style="--yk-grid-min: 10rem">
+              <yk-stat>
+                <span slot="label">Learning targets</span>
+                <span slot="value">128</span>
+              </yk-stat>
+              <yk-stat>
+                <span slot="label">Studied</span>
+                <span slot="value">96</span>
+              </yk-stat>
+              <yk-stat>
+                <span slot="label">Last studied</span>
+                <span slot="value">2026-11-06</span>
+              </yk-stat>
+            </yk-grid>
+          </yk-pad>
+          <pre><code>&lt;yk-grid style="--yk-grid-min: 10rem"&gt;
+  &lt;yk-stat&gt;
+    &lt;span slot="label"&gt;Learning targets&lt;/span&gt;
+    &lt;span slot="value"&gt;128&lt;/span&gt;
+  &lt;/yk-stat&gt;
+  &lt;yk-stat&gt;
+    &lt;span slot="label"&gt;Studied&lt;/span&gt;
+    &lt;span slot="value"&gt;96&lt;/span&gt;
+  &lt;/yk-stat&gt;
+  &lt;yk-stat&gt;
+    &lt;span slot="label"&gt;Last studied&lt;/span&gt;
+    &lt;span slot="value"&gt;2026-11-06&lt;/span&gt;
+  &lt;/yk-stat&gt;
+&lt;/yk-grid&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>

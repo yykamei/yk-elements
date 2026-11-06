@@ -19,6 +19,7 @@ const VARIATIONS = {
   'yk-link': 5,
   'yk-badge': 5,
   'yk-card': 4,
+  'yk-stat': 3,
   'yk-header': 5,
   'yk-header-menu': 4,
   'yk-footer-links': 3,

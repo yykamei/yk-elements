@@ -22,6 +22,7 @@ import './src/components/yk-button.js';
 import './src/components/yk-link.js';
 import './src/components/yk-badge.js';
 import './src/components/yk-card.js';
+import './src/components/yk-stat.js';
 import './src/components/yk-header.js';
 import './src/components/yk-header-menu.js';
 import './src/components/yk-footer.js';
