@@ -32,6 +32,7 @@ import './src/components/yk-field-list.js';
 import './src/components/yk-alert.js';
 import './src/components/yk-dialog.js';
 import './src/components/yk-progress.js';
+import './src/components/yk-pagination.js';
 import './src/components/yk-audio.js';
 import './src/components/yk-soft-nav.js';
 import './src/components/yk-input-email.js';

@@ -138,6 +138,13 @@ const DEMOS = [
     count: 1,
   },
   {
+    tag: 'yk-pagination',
+    sheets: 1,
+    controls: 'slot',
+    count: 1,
+    also: [['nav[part="nav"]', 1]],
+  },
+  {
     tag: 'yk-audio',
     sheets: 1,
     controls: 'audio',
@@ -275,6 +282,13 @@ test('generated snippets carry working attribute mirrors', async () => {
 
   const progress = doc.querySelector('[data-demo="yk-progress"] yk-progress');
   expect(progress.shadowRoot.querySelector('progress').value).toBe(40);
+
+  const pagination = doc.querySelector(
+    '[data-demo="yk-pagination"] yk-pagination',
+  );
+  expect(
+    pagination.shadowRoot.querySelector('nav').getAttribute('aria-label'),
+  ).toBe('Pagination');
 
   const item = doc.querySelector(
     '[data-demo="yk-field-list-item"] yk-field-list-item',

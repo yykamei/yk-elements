@@ -3193,6 +3193,273 @@ progress::-moz-progress-bar {
 &lt;/yk-progress&gt;</code></pre>
 </section>
 <section>
+<h2><code>yk-pagination</code></h2>
+<div data-demo="yk-pagination">
+<yk-pagination aria-label="Pagination">
+<template shadowrootmode="open"><style>
+:host {
+  --_pagination-gap: var(--yk-pagination-gap, var(--yk-space-sm, 0.5rem));
+  --_pagination-radius: var(
+    --yk-pagination-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+  --_pagination-face: var(--yk-pagination-bg, var(--yk-color-surface, #fff));
+  --_pagination-ink: var(
+    --yk-pagination-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  --_pagination-edge: var(
+    --yk-pagination-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_pagination-current-face: var(
+    --yk-pagination-current-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  --_pagination-current-ink: var(
+    --yk-pagination-current-color,
+    var(--yk-color-on-tone, #fff)
+  );
+  --_pagination-focus: var(
+    --yk-color-focus-ring,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+      transparent
+    )
+  );
+
+  display: block;
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_pagination-gap);
+}
+
+::slotted(a),
+::slotted([aria-current="page"]),
+::slotted([aria-disabled="true"]) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--yk-pagination-item-min-size, 2.5rem);
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--_pagination-ink);
+  text-decoration: none;
+  background-color: var(--_pagination-face);
+  border: 1px solid var(--_pagination-edge);
+  border-radius: var(--_pagination-radius);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+::slotted(a:not([aria-current="page"]):not([aria-disabled="true"]):hover) {
+  background-color: color-mix(
+    in oklch,
+    var(--_pagination-face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--_pagination-edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+::slotted(a:not([aria-current="page"]):not([aria-disabled="true"]):active) {
+  background-color: color-mix(
+    in oklch,
+    var(--_pagination-face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--_pagination-edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_pagination-focus);
+  outline-offset: 2px;
+}
+
+::slotted([aria-current="page"]) {
+  color: var(--_pagination-current-ink);
+  background-color: var(--_pagination-current-face);
+  border-color: var(--_pagination-current-face);
+  cursor: default;
+}
+
+::slotted([aria-disabled="true"]) {
+  opacity: var(--yk-pagination-disabled-opacity, 0.55);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+</style><nav part="nav"><slot></slot></nav></template>
+<a href="?page=1">1</a><span aria-current="page">2</span><a href="?page=3">3</a>
+</yk-pagination>
+</div>
+<pre><code>&lt;yk-pagination aria-label="Pagination"&gt;
+&lt;template shadowrootmode="open"&gt;&lt;style&gt;
+:host {
+  --_pagination-gap: var(--yk-pagination-gap, var(--yk-space-sm, 0.5rem));
+  --_pagination-radius: var(
+    --yk-pagination-radius,
+    var(--yk-radius-md, 0.375rem)
+  );
+  --_pagination-face: var(--yk-pagination-bg, var(--yk-color-surface, #fff));
+  --_pagination-ink: var(
+    --yk-pagination-color,
+    var(--yk-color-text, oklch(26.2% 0.009 248.2))
+  );
+  --_pagination-edge: var(
+    --yk-pagination-border-color,
+    var(
+      --yk-color-border,
+      color-mix(
+        in oklch,
+        var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%,
+        var(--yk-color-surface, white)
+      )
+    )
+  );
+  --_pagination-current-face: var(
+    --yk-pagination-current-bg,
+    var(--yk-color-primary, oklch(56% 0.228 260))
+  );
+  --_pagination-current-ink: var(
+    --yk-pagination-current-color,
+    var(--yk-color-on-tone, #fff)
+  );
+  --_pagination-focus: var(
+    --yk-color-focus-ring,
+    color-mix(
+      in oklch,
+      var(--yk-color-primary, oklch(56% 0.228 260)) 25%,
+      transparent
+    )
+  );
+
+  display: block;
+}
+
+/* The host's block display would otherwise beat the UA [hidden] rule. */
+:host([hidden]) {
+  display: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_pagination-gap);
+}
+
+::slotted(a),
+::slotted([aria-current="page"]),
+::slotted([aria-disabled="true"]) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--yk-pagination-item-min-size, 2.5rem);
+  padding-block: var(--yk-space-sm, 0.5rem);
+  padding-inline: var(--yk-space-sm, 0.5rem);
+  font: inherit;
+  line-height: 1.5;
+  color: var(--_pagination-ink);
+  text-decoration: none;
+  background-color: var(--_pagination-face);
+  border: 1px solid var(--_pagination-edge);
+  border-radius: var(--_pagination-radius);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+::slotted(a:not([aria-current="page"]):not([aria-disabled="true"]):hover) {
+  background-color: color-mix(
+    in oklch,
+    var(--_pagination-face) 95%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--_pagination-edge) 95%,
+    var(--yk-color-shade, black)
+  );
+}
+
+::slotted(a:not([aria-current="page"]):not([aria-disabled="true"]):active) {
+  background-color: color-mix(
+    in oklch,
+    var(--_pagination-face) 90%,
+    var(--yk-color-shade, black)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--_pagination-edge) 90%,
+    var(--yk-color-shade, black)
+  );
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--_pagination-focus);
+  outline-offset: 2px;
+}
+
+::slotted([aria-current="page"]) {
+  color: var(--_pagination-current-ink);
+  background-color: var(--_pagination-current-face);
+  border-color: var(--_pagination-current-face);
+  cursor: default;
+}
+
+::slotted([aria-disabled="true"]) {
+  opacity: var(--yk-pagination-disabled-opacity, 0.55);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(a) {
+    transition: none;
+  }
+}
+&lt;/style&gt;&lt;nav part="nav"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/nav&gt;&lt;/template&gt;
+&lt;a href="?page=1"&gt;1&lt;/a&gt;&lt;span aria-current="page"&gt;2&lt;/span&gt;&lt;a href="?page=3"&gt;3&lt;/a&gt;
+&lt;/yk-pagination&gt;</code></pre>
+</section>
+<section>
 <h2><code>yk-audio</code></h2>
 <div data-demo="yk-audio">
 <yk-audio>

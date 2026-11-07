@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>&lt;yk-pagination&gt; — yk-elements</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="../fouc.css" />
+    <link rel="stylesheet" href="./catalog.css" />
+    <script type="module" src="../src/components/yk-theme-init.js" blocking="render"></script>
+    <script type="module" src="../index.js" blocking="render"></script>
+    <script type="module" src="./catalog.js" blocking="render"></script>
+  </head>
+  <body data-component="yk-pagination">
+    <yk-soft-nav></yk-soft-nav>
+    <div class="catalog">
+      <aside data-sidebar></aside>
+
+      <main>
+        <yk-vstack style="--yk-vstack-gap: var(--yk-space-lg)">
+          <header data-component-header></header>
+
+          <section data-playground></section>
+
+          <section data-interface></section>
+
+        <figure>
+          <figcaption>Current page</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-pagination aria-label="Pagination">
+              <a href="#page-1">Previous</a>
+              <a href="#page-1">1</a>
+              <span aria-current="page">2</span>
+              <a href="#page-3">3</a>
+              <a href="#page-3">Next</a>
+            </yk-pagination>
+          </yk-pad>
+          <pre><code>&lt;yk-pagination aria-label="Pagination"&gt;
+  &lt;a href="?page=1"&gt;Previous&lt;/a&gt;
+  &lt;a href="?page=1"&gt;1&lt;/a&gt;
+  &lt;span aria-current="page"&gt;2&lt;/span&gt;
+  &lt;a href="?page=3"&gt;3&lt;/a&gt;
+  &lt;a href="?page=3"&gt;Next&lt;/a&gt;
+&lt;/yk-pagination&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>Ellipsis</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-pagination aria-label="Pagination">
+              <a href="#page-9">Previous</a>
+              <a href="#page-1">1</a>
+              <span aria-hidden="true">…</span>
+              <a href="#page-9">9</a>
+              <span aria-current="page">10</span>
+              <a href="#page-11">11</a>
+              <span aria-hidden="true">…</span>
+              <a href="#page-20">20</a>
+              <a href="#page-11">Next</a>
+            </yk-pagination>
+          </yk-pad>
+          <pre><code>&lt;yk-pagination aria-label="Pagination"&gt;
+  &lt;a href="?page=9"&gt;Previous&lt;/a&gt;
+  &lt;a href="?page=1"&gt;1&lt;/a&gt;
+  &lt;span aria-hidden="true"&gt;…&lt;/span&gt;
+  &lt;a href="?page=9"&gt;9&lt;/a&gt;
+  &lt;span aria-current="page"&gt;10&lt;/span&gt;
+  &lt;a href="?page=11"&gt;11&lt;/a&gt;
+  &lt;span aria-hidden="true"&gt;…&lt;/span&gt;
+  &lt;a href="?page=20"&gt;20&lt;/a&gt;
+  &lt;a href="?page=11"&gt;Next&lt;/a&gt;
+&lt;/yk-pagination&gt;</code></pre>
+        </figure>
+
+        <figure>
+          <figcaption>First page with a disabled previous control</figcaption>
+          <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
+            <yk-pagination aria-label="Pagination">
+              <span aria-disabled="true" aria-hidden="true">Previous</span>
+              <span aria-current="page">1</span>
+              <a href="#page-2">2</a>
+              <a href="#page-3">3</a>
+              <a href="#page-2">Next</a>
+            </yk-pagination>
+          </yk-pad>
+          <pre><code>&lt;yk-pagination aria-label="Pagination"&gt;
+  &lt;span aria-disabled="true" aria-hidden="true"&gt;Previous&lt;/span&gt;
+  &lt;span aria-current="page"&gt;1&lt;/span&gt;
+  &lt;a href="?page=2"&gt;2&lt;/a&gt;
+  &lt;a href="?page=3"&gt;3&lt;/a&gt;
+  &lt;a href="?page=2"&gt;Next&lt;/a&gt;
+&lt;/yk-pagination&gt;</code></pre>
+        </figure>
+        </yk-vstack>
+      </main>
+
+      <footer>
+        <a href="https://github.com/yykamei/yk-elements">github.com/yykamei/yk-elements</a>
+      </footer>
+    </div>
+  </body>
+</html>
