@@ -29,6 +29,7 @@ const VARIATIONS = {
   'yk-alert': 6,
   'yk-dialog': 4,
   'yk-progress': 4,
+  'yk-pagination': 3,
   'yk-audio': 5,
   'yk-input-text': 9,
   'yk-input-email': 10,

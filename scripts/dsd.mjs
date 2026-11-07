@@ -281,6 +281,14 @@ const entries = [
     attrs: 'value="40" max="100" aria-label="Progress"',
   },
   {
+    tag: 'yk-pagination',
+    stylesheets: ['src/components/yk-pagination.css'],
+    shadow: '<nav part="nav"><slot></slot></nav>',
+    attrs: 'aria-label="Pagination"',
+    light:
+      '<a href="?page=1">1</a><span aria-current="page">2</span><a href="?page=3">3</a>',
+  },
+  {
     tag: 'yk-audio',
     stylesheets: ['src/components/yk-audio.css'],
     shadow:

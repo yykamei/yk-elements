@@ -553,6 +553,58 @@ const progressFaceProperties = [
 ];
 
 /**
+ * CSS custom properties of the pagination navigation.
+ */
+const paginationFaceProperties = [
+  {
+    name: '--yk-pagination-gap',
+    default: 'var(--yk-space-sm, 0.5rem)',
+    description: 'Spacing between the page links.',
+  },
+  {
+    name: '--yk-pagination-item-min-size',
+    default: '2.5rem',
+    description: 'Minimum inline size of a page link or gap marker.',
+  },
+  {
+    name: '--yk-pagination-radius',
+    default: 'var(--yk-radius-md, 0.375rem)',
+    description: 'Corner radius of the page links.',
+  },
+  {
+    name: '--yk-pagination-bg',
+    default: 'var(--yk-color-surface, #fff)',
+    description: 'Background of a page link.',
+  },
+  {
+    name: '--yk-pagination-color',
+    default: 'var(--yk-color-text, oklch(26.2% 0.009 248.2))',
+    description: 'Text color of a page link.',
+  },
+  {
+    name: '--yk-pagination-border-color',
+    default:
+      'var(--yk-color-border, color-mix(in oklch, var(--yk-color-secondary, oklch(55.8% 0.016 244.9)) 40%, var(--yk-color-surface, white)))',
+    description: 'Border color of a page link.',
+  },
+  {
+    name: '--yk-pagination-current-bg',
+    default: 'var(--yk-color-primary, oklch(56% 0.228 260))',
+    description: 'Background of the current page.',
+  },
+  {
+    name: '--yk-pagination-current-color',
+    default: 'var(--yk-color-on-tone, #fff)',
+    description: 'Text color of the current page.',
+  },
+  {
+    name: '--yk-pagination-disabled-opacity',
+    default: '0.55',
+    description: 'Opacity of a disabled previous or next control.',
+  },
+];
+
+/**
  * CSS custom properties of the audio player.
  */
 const audioFaceProperties = [
@@ -1746,6 +1798,26 @@ export const components = [
         default: 'unset',
         description:
           'Amount that completes the bar, mirrored onto the internal progress; the native default is 1.',
+      },
+    ],
+  },
+  {
+    tag: 'yk-pagination',
+    category: 'Components',
+    description:
+      'Pagination navigation that groups slotted page links under a navigation landmark, styles the current page from aria-current, and dims a boundary control marked with aria-disabled.',
+    playground: {
+      content:
+        '  <a href="#page-1">Previous</a>\n  <a href="#page-1">1</a>\n  <span aria-current="page">2</span>\n  <a href="#page-3">3</a>\n  <a href="#page-3">Next</a>',
+    },
+    cssProperties: paginationFaceProperties,
+    attributes: [
+      {
+        name: 'aria-label',
+        control: 'text',
+        default: 'Pagination',
+        description:
+          'Accessible name of the navigation landmark; without it the landmark is named Pagination.',
       },
     ],
   },

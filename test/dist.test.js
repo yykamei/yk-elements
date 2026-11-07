@@ -19,6 +19,7 @@ test('minified dist entry point self-registers components', async () => {
   expect(customElements.get('yk-alert')).toBeDefined();
   expect(customElements.get('yk-dialog')).toBeDefined();
   expect(customElements.get('yk-progress')).toBeDefined();
+  expect(customElements.get('yk-pagination')).toBeDefined();
   expect(customElements.get('yk-audio')).toBeDefined();
   expect(customElements.get('yk-header')).toBeDefined();
   expect(customElements.get('yk-header-menu')).toBeDefined();
