@@ -70,6 +70,7 @@ const DEMOS = [
       ['button[part="toggle"]', 1],
       ['nav', 1],
       ['[part="brand-link"]', 1],
+      ['[part="actions"]', 1],
     ],
   },
   {
@@ -324,11 +325,16 @@ test('generated snippets carry working attribute mirrors', async () => {
   expect(
     header.shadowRoot.querySelector('nav').getAttribute('aria-label'),
   ).toBe('Main navigation');
-  expect(
-    header.shadowRoot
-      .querySelector('button[part="toggle"]')
-      .getAttribute('aria-label'),
-  ).toBe('Menu');
+  const headerToggle = header.shadowRoot.querySelector('button[part="toggle"]');
+  expect(headerToggle.getAttribute('aria-label')).toBe('Menu');
+  const controls = headerToggle.getAttribute('aria-controls').split(/\s+/);
+  expect(controls).toEqual(['nav', 'actions']);
+  for (const id of controls) {
+    expect(header.shadowRoot.getElementById(id), id).not.toBeNull();
+  }
+  expect(header.shadowRoot.querySelector('[part="actions"]').id).toBe(
+    'actions',
+  );
   expect(
     header.shadowRoot.querySelector('[part="brand-link"]').getAttribute('href'),
   ).toBe('https://example.com');

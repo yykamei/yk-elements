@@ -13,10 +13,12 @@
  * vector.
  *
  * The bar follows its own width through a container query: above 48rem it is
- * a single row, and below it the links move into an inline panel under the bar
- * that the hamburger opens. `open` reflects that panel, so a server or
- * framework can render it, and the `menu-label` slot localizes the hamburger's
- * accessible name.
+ * a single row, and below it the primary links and trailing actions move into
+ * an inline panel under the bar that the hamburger opens. The actions follow
+ * the links, so utilities such as a sign-out button become full-width rows in
+ * the panel; without navigation, actions stay in the bar and the toggle is
+ * hidden. `open` reflects that panel, so a server or framework can render it,
+ * and the `menu-label` slot localizes the hamburger's accessible name.
  *
  * Empty regions collapse, and the bar is capped at 64rem and centered while
  * its background spans the host, so placing the element outside a page
@@ -65,6 +67,8 @@ class YKHeader extends HTMLElement {
 
   #nav;
 
+  #actions;
+
   constructor() {
     super();
     const shadowRoot = ensureShadow(this, {
@@ -78,7 +82,7 @@ class YKHeader extends HTMLElement {
           <div part="brand">
             <a part="brand-link"><slot name="brand"></slot></a>
           </div>
-          <button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+          <button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav actions">
             <svg viewBox="0 0 20 20" aria-hidden="true">
               <path d="M3 5h14M3 10h14M3 15h14" />
             </svg>
@@ -87,7 +91,7 @@ class YKHeader extends HTMLElement {
           <nav part="nav" id="nav" aria-label="Main navigation">
             <slot></slot>
           </nav>
-          <div part="actions"><slot name="actions"></slot></div>
+          <div part="actions" id="actions"><slot name="actions"></slot></div>
         </div>
       </header>
     `;
@@ -96,6 +100,7 @@ class YKHeader extends HTMLElement {
     this.#brandLink = shadowRoot.querySelector('[part="brand-link"]');
     this.#nav = shadowRoot.querySelector('[part="nav"]');
     this.#toggle = shadowRoot.querySelector('[part="toggle"]');
+    this.#actions = shadowRoot.querySelector('[part="actions"]');
     // Sync the attribute-driven state before wiring slots, so a hand-written
     // declarative template with an unexpected shape cannot leave the mirrored
     // href unsanitized behind a thrown error.
@@ -158,14 +163,17 @@ class YKHeader extends HTMLElement {
     if (event.key !== 'Escape' || event.defaultPrevented) return;
     if (!this.hasAttribute('open')) return;
     // Focus returns to the toggle only when it was inside the disclosed
-    // panel; an Escape from an action control must not move focus. The
-    // composed path reaches the slotted links, which are not DOM descendants
-    // of the shadow nav.
-    const insidePanel = event.composedPath().includes(this.#nav);
+    // panel. The toggle is hidden on wide headers and in the no-navigation
+    // fallback, so the guard below keeps focus on the current control there.
+    const path = event.composedPath();
+    const insidePanel =
+      path.includes(this.#nav) || path.includes(this.#actions);
     this.removeAttribute('open');
-    // The toggle is display:none in the wide layout, so focus() is a no-op
-    // there and the focus stays wherever the user left it.
-    if (insidePanel) this.#toggle?.focus();
+    // The toggle is hidden on wide headers and in the no-navigation
+    // fallback; move focus only when it has a rendered box.
+    if (insidePanel && (this.#toggle?.getClientRects().length ?? 0) > 0) {
+      this.#toggle.focus();
+    }
   }
 
   // Selecting a link closes the collapsed panel. The check walks the composed
