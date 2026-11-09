@@ -1440,6 +1440,13 @@ export const components = [
         description:
           'Boolean attribute that disables the button, like the native button disabled attribute.',
       },
+      {
+        name: 'block',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that stretches the host to the available width and makes the face fill it.',
+      },
     ],
   },
   {
@@ -1487,6 +1494,13 @@ export const components = [
         default: 'unset',
         description:
           'Tone of the face: primary, secondary, or danger. Without the attribute the face is the default light style.',
+      },
+      {
+        name: 'block',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that stretches the host to the available width and makes the face fill it.',
       },
     ],
   },

@@ -4,11 +4,12 @@
  *
  * Without a variant the face is a light bordered button like Bootstrap's
  * plain .btn; `variant` selects the solid secondary, primary, or danger
- * tone, and design tokens restyle it without class names. The face fills a
- * host that a parent stretches to full width; an inline host keeps the
- * label's width. Clicks on `type="submit"` submit the owning form through
- * ElementInternals; `disabled` — or a disabled form/fieldset ancestor —
- * disables the internal control natively.
+ * tone, and design tokens restyle it without class names. Set `block` to
+ * stretch the host to the available width and fill it with the face; without
+ * it the face keeps its content width even when a parent stretches the host.
+ * Clicks on `type="submit"` submit the owning form through ElementInternals;
+ * `disabled` — or a disabled form/fieldset ancestor — disables the internal
+ * control natively.
  *
  * Unlike a native submit button, yk-button never becomes the form's
  * default button, so implicit Enter-key submission does not fire it in
@@ -18,6 +19,7 @@
  * <script type="module" src="./index.js"></script>
  * <yk-button variant="primary" type="submit">Save</yk-button>
  * <yk-button variant="danger" disabled>Delete</yk-button>
+ * <yk-button block type="submit">Sign out</yk-button>
  * ```
  */
 import '../base.js';

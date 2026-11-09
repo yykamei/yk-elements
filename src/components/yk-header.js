@@ -15,10 +15,11 @@
  * The bar follows its own width through a container query: above 48rem it is
  * a single row, and below it the primary links and trailing actions move into
  * an inline panel under the bar that the hamburger opens. The actions follow
- * the links, so utilities such as a sign-out button become full-width rows in
- * the panel; without navigation, actions stay in the bar and the toggle is
- * hidden. `open` reflects that panel, so a server or framework can render it,
- * and the `menu-label` slot localizes the hamburger's accessible name.
+ * the links, so utilities such as a sign-out button join the panel; set
+ * `block` on a `yk-button` or `yk-link` to fill its row. Without navigation,
+ * actions stay in the bar and the toggle is hidden. `open` reflects that
+ * panel, so a server or framework can render it, and the `menu-label` slot
+ * localizes the hamburger's accessible name.
  *
  * Empty regions collapse, and the bar is capped at 64rem and centered while
  * its background spans the host, so placing the element outside a page

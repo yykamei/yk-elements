@@ -3,18 +3,20 @@
  *
  * The host renders its children inside a native `<a>` kept in Shadow DOM and
  * shares yk-button's face styles through button-core.css; `variant` selects
- * the tone and design tokens restyle it without class names. The face fills
- * a host that a parent stretches to full width; an inline host keeps the
- * label's width. Link attributes (href, target, rel, download) are mirrored
- * onto the internal anchor, so navigation stays entirely native. An href
- * whose scheme can run script (javascript:, data:, vbscript:) is not
- * mirrored, so a dynamically bound value cannot turn the link into a script
- * vector; the host attribute keeps the raw value.
+ * the tone and design tokens restyle it without class names. Set `block` to
+ * stretch the host to the available width and fill it with the face; without
+ * it the face keeps its content width even when a parent stretches the host.
+ * Link attributes (href, target, rel, download) are mirrored onto the
+ * internal anchor, so navigation stays entirely native. An href whose scheme
+ * can run script (javascript:, data:, vbscript:) is not mirrored, so a
+ * dynamically bound value cannot turn the link into a script vector; the host
+ * attribute keeps the raw value.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
  * <yk-link href="/pricing" variant="primary">See pricing</yk-link>
  * <yk-link href="https://example.com" target="_blank" rel="noopener">Docs</yk-link>
+ * <yk-link block href="/pricing">See pricing</yk-link>
  * ```
  */
 import '../base.js';
