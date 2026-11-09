@@ -1586,7 +1586,7 @@ export const components = [
     tag: 'yk-header',
     category: 'Components',
     description:
-      'Page header landmark that wraps a slotted logo in the home link named by brand-href, shows primary links and trailing actions in one bar, and collapses the links behind a hamburger below 48rem of its own width.',
+      'Page header landmark that wraps a slotted logo in the home link named by brand-href, shows primary links and trailing actions in one bar, and collapses the links and actions into an inline panel behind a hamburger below 48rem of its own width. Without navigation, actions stay in the bar and the toggle is hidden.',
     playground: {
       content:
         '  <svg slot="brand" viewBox="0 0 24 24" width="24" height="24"><title>Example</title><circle cx="12" cy="12" r="10" fill="currentColor" /></svg>\n  <a href="https://example.com/docs">Docs</a>\n  <a href="https://example.com/pricing">Pricing</a>\n  <yk-header-menu>\n    <span slot="summary">Products</span>\n    <a href="https://example.com/cloud">Cloud</a>\n    <a href="https://example.com/edge">Edge</a>\n  </yk-header-menu>\n  <yk-theme-switcher slot="actions"></yk-theme-switcher>',
@@ -1619,7 +1619,7 @@ export const components = [
         control: 'boolean',
         default: 'unset',
         description:
-          'Boolean attribute that opens the collapsed navigation panel on narrow headers.',
+          'Boolean attribute that opens the collapsed navigation and actions panel on narrow headers.',
       },
     ],
   },

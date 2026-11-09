@@ -120,8 +120,9 @@ slot:not([name])::slotted(a) {
 }
 
 @container (inline-size < 48rem) {
-  /* Brand, actions, and the toggle share the first row; the navigation takes
-     a full-width second row and stays hidden until the toggle opens it. */
+  /* Brand and the toggle share the first row. When navigation is present,
+     the links and actions take full-width rows below; without navigation,
+     actions stay in the bar and the toggle is hidden. */
   [part="brand"] {
     order: 1;
   }
@@ -133,6 +134,7 @@ slot:not([name])::slotted(a) {
   [part="toggle"] {
     order: 3;
     display: inline-flex;
+    margin-inline-start: auto;
   }
 
   [part="nav"] {
@@ -145,6 +147,34 @@ slot:not([name])::slotted(a) {
 
   :host([open]:not([empty-nav])) [part="nav"] {
     display: flex;
+  }
+
+  :host(:not([empty-nav])) [part="actions"] {
+    order: 5;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-inline-start: 0;
+    padding-block-start: var(--yk-space-sm, 0.5rem);
+    border-block-start: 1px solid var(--_header-border);
+  }
+
+  :host([open]:not([empty-nav]):not([empty-actions])) [part="actions"] {
+    display: flex;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(form) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+    margin-block: 0;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-button),
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-link) {
+    inline-size: 100%;
   }
 
   slot:not([name])::slotted(a) {
@@ -162,12 +192,6 @@ slot:not([name])::slotted(a) {
 
 :host([empty-nav]) [part="toggle"] {
   display: none;
-}
-
-/* With no actions, the toggle is the only trailing item and takes over the
-   push to the inline end. */
-:host([empty-actions]) [part="toggle"] {
-  margin-inline-start: auto;
 }
 
 /* An all-empty header keeps neither the band nor an empty banner landmark in

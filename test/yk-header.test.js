@@ -25,7 +25,7 @@ const partOf = (host, part) =>
   host.shadowRoot.querySelector(`[part="${part}"]`);
 
 const DSD_SHADOW =
-  '<template shadowrootmode="open"><style>:host{--dsd:1px}</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg></button><slot name="menu-label" hidden>Menu</slot><nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions"><slot name="actions"></slot></div></div></header></template>';
+  '<template shadowrootmode="open"><style>:host{--dsd:1px}</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav actions"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg></button><slot name="menu-label" hidden>Menu</slot><nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions" id="actions"><slot name="actions"></slot></div></div></header></template>';
 
 function makeDSDHeader(content = '') {
   const container = document.createElement('div');
@@ -63,6 +63,15 @@ test('renders the header landmark with four slot regions', () => {
   expect(partOf(host, 'actions')).not.toBeNull();
   expect(partOf(host, 'toggle')).not.toBeNull();
   expect(host.shadowRoot.querySelectorAll('slot').length).toBe(4);
+});
+
+test('exposes both panel regions through aria-controls', () => {
+  const host = makeHeader(NAV_LINKS);
+  const toggle = partOf(host, 'toggle');
+  const actions = partOf(host, 'actions');
+
+  expect(toggle.getAttribute('aria-controls')).toBe('nav actions');
+  expect(actions.id).toBe('actions');
 });
 
 test('assigns the brand, primary links, and actions', () => {
@@ -305,15 +314,61 @@ test('closes on Escape and returns focus to the toggle', () => {
   expect(host.shadowRoot.activeElement).toBe(toggle);
 });
 
-test('leaves focus alone when Escape closes the header from an action', () => {
+test('leaves focus alone at wide widths when Escape closes the header from an action', () => {
   const host = makeHeader(
     `${NAV_LINKS}<yk-button slot="actions">Save</yk-button>`,
   );
+  host.style.inlineSize = '800px';
   host.setAttribute('open', '');
   const button = host.querySelector('yk-button');
   button.focus();
   const inner = button.shadowRoot.activeElement ?? button;
 
+  inner.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      composed: true,
+    }),
+  );
+
+  expect(host.hasAttribute('open')).toBe(false);
+  expect(document.activeElement).toBe(button);
+});
+
+test('returns focus to the toggle when Escape closes the narrow panel from an action', async () => {
+  const host = makeHeader(
+    `${NAV_LINKS}<yk-button slot="actions">Save</yk-button>`,
+  );
+  host.style.inlineSize = '400px';
+  host.setAttribute('open', '');
+  await frame();
+  const button = host.querySelector('yk-button');
+  const toggle = partOf(host, 'toggle');
+
+  button.focus();
+  const inner = button.shadowRoot.activeElement ?? button;
+  inner.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      composed: true,
+    }),
+  );
+
+  expect(host.hasAttribute('open')).toBe(false);
+  expect(host.shadowRoot.activeElement).toBe(toggle);
+});
+
+test('leaves focus on the action in the narrow bar fallback', async () => {
+  const host = makeHeader('<yk-button slot="actions">Save</yk-button>');
+  host.style.inlineSize = '400px';
+  host.setAttribute('open', '');
+  await frame();
+  const button = host.querySelector('yk-button');
+
+  button.focus();
+  const inner = button.shadowRoot.activeElement ?? button;
   inner.dispatchEvent(
     new KeyboardEvent('keydown', {
       key: 'Escape',
@@ -387,18 +442,131 @@ test('names the toggle from the menu-label slot', async () => {
   expect(toggle.getAttribute('aria-label')).toBe('メニュー');
 });
 
-test('collapses the navigation at narrow widths and expands it when open', async () => {
-  const host = makeHeader(NAV_LINKS);
+test('moves the navigation and actions into the narrow panel when open', async () => {
+  const host = makeHeader(
+    `${NAV_LINKS}<yk-button slot="actions">Save</yk-button>`,
+  );
   host.style.inlineSize = '400px';
   await frame();
 
   expect(getComputedStyle(partOf(host, 'nav')).display).toBe('none');
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('none');
   expect(getComputedStyle(partOf(host, 'toggle')).display).toBe('flex');
 
   host.setAttribute('open', '');
   await frame();
 
   expect(getComputedStyle(partOf(host, 'nav')).display).toBe('flex');
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('flex');
+});
+
+test('keeps actions in the bar when there is no navigation to open', async () => {
+  const host = makeHeader('<yk-button slot="actions">Save</yk-button>');
+  host.style.inlineSize = '400px';
+  await frame();
+
+  expect(host.hasAttribute('empty-nav')).toBe(true);
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('flex');
+  expect(getComputedStyle(partOf(host, 'toggle')).display).toBe('none');
+});
+
+test('does not render an empty actions row in an open nav-only panel', async () => {
+  const host = makeHeader(NAV_LINKS);
+  host.style.inlineSize = '400px';
+  host.setAttribute('open', '');
+  await frame();
+
+  expect(host.hasAttribute('empty-actions')).toBe(true);
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('none');
+});
+
+test('keeps natural action sizes in the narrow bar fallback', async () => {
+  const host = makeHeader(
+    '<yk-link slot="actions" href="/login">Sign in</yk-link><yk-button slot="actions">Save</yk-button>',
+  );
+  const measure = () => {
+    const link = host.querySelector('yk-link');
+    const button = host.querySelector('yk-button');
+    const linkFace = link.shadowRoot.querySelector('a');
+    const buttonFace = button.shadowRoot.querySelector('button');
+    return {
+      link: link.getBoundingClientRect().width,
+      button: button.getBoundingClientRect().width,
+      linkFace: linkFace.getBoundingClientRect().width,
+      buttonFace: buttonFace.getBoundingClientRect().width,
+      linkHeight: link.getBoundingClientRect().height,
+      buttonHeight: button.getBoundingClientRect().height,
+    };
+  };
+
+  host.style.inlineSize = '800px';
+  await frame();
+  const wide = measure();
+  host.style.inlineSize = '400px';
+  await frame();
+  const narrow = measure();
+
+  expect(host.hasAttribute('empty-nav')).toBe(true);
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('flex');
+  for (const key of Object.keys(wide)) {
+    expect(narrow[key], key).toBeCloseTo(wide[key]);
+  }
+});
+
+test('keeps the toggle at the inline end when actions move into the panel', async () => {
+  const host = makeHeader(
+    `${NAV_LINKS}<yk-button slot="actions">Save</yk-button>`,
+  );
+  host.style.inlineSize = '400px';
+  await frame();
+  const bar = partOf(host, 'bar');
+  const toggle = partOf(host, 'toggle');
+  const contentRight =
+    bar.getBoundingClientRect().right -
+    Number.parseFloat(getComputedStyle(bar).paddingInlineEnd);
+
+  expect(toggle.getBoundingClientRect().right).toBeCloseTo(contentRight);
+
+  host.setAttribute('open', '');
+  await frame();
+
+  expect(toggle.getBoundingClientRect().right).toBeCloseTo(contentRight);
+});
+
+test('fills the panel width with a form action', async () => {
+  const host = makeHeader(`
+    ${NAV_LINKS}
+    <form slot="actions"><yk-button type="submit">Sign out</yk-button></form>
+  `);
+  host.style.inlineSize = '400px';
+  host.setAttribute('open', '');
+  await frame();
+
+  const actionsWidth = partOf(host, 'actions').getBoundingClientRect().width;
+  const formWidth = host.querySelector('form').getBoundingClientRect().width;
+  const button = host.querySelector('yk-button');
+  const buttonWidth = button.getBoundingClientRect().width;
+  const faceWidth = button.shadowRoot
+    .querySelector('button')
+    .getBoundingClientRect().width;
+
+  expect(formWidth).toBeCloseTo(actionsWidth);
+  expect(buttonWidth).toBeCloseTo(formWidth);
+  expect(faceWidth).toBeCloseTo(formWidth);
+});
+
+test('tabs from the links into the actions in the narrow panel', async () => {
+  const host = makeHeader(
+    `${NAV_LINKS}<yk-button slot="actions">Save</yk-button>`,
+  );
+  host.style.inlineSize = '400px';
+  host.setAttribute('open', '');
+  await frame();
+
+  host.querySelectorAll('a')[1].focus();
+  await userEvent.tab();
+
+  expect(document.activeElement).toBe(host.querySelector('yk-button'));
 });
 
 test('restores the row layout at wide widths', async () => {
@@ -409,6 +577,7 @@ test('restores the row layout at wide widths', async () => {
   await frame();
 
   expect(getComputedStyle(partOf(host, 'nav')).display).toBe('flex');
+  expect(getComputedStyle(partOf(host, 'actions')).display).toBe('flex');
   expect(getComputedStyle(partOf(host, 'toggle')).display).toBe('none');
 });
 
@@ -424,9 +593,13 @@ test('reuses a declarative shadow root and wires the toggle', async () => {
   expect(host.hasAttribute('empty-brand')).toBe(false);
   expect(host.hasAttribute('empty-nav')).toBe(false);
   expect(host.hasAttribute('empty-actions')).toBe(false);
+  expect(partOf(host, 'actions').id).toBe('actions');
   expect(getComputedStyle(partOf(host, 'nav')).display).not.toBe('none');
 
   partOf(host, 'toggle').click();
   expect(host.hasAttribute('open')).toBe(true);
   expect(partOf(host, 'toggle').getAttribute('aria-expanded')).toBe('true');
+  expect(partOf(host, 'toggle').getAttribute('aria-controls')).toBe(
+    'nav actions',
+  );
 });

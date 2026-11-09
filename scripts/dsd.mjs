@@ -156,12 +156,12 @@ const entries = [
       '<header part="header">' +
       '<div part="bar">' +
       '<div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div>' +
-      '<button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav">' +
+      '<button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav actions">' +
       menuSvg +
       '</button>' +
       '<slot name="menu-label" hidden>Menu</slot>' +
       '<nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav>' +
-      '<div part="actions"><slot name="actions"></slot></div>' +
+      '<div part="actions" id="actions"><slot name="actions"></slot></div>' +
       '</div>' +
       '</header>',
     attrs: 'sticky brand-href="https://example.com"',

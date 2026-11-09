@@ -1080,8 +1080,9 @@ slot:not([name])::slotted(a) {
 }
 
 @container (inline-size < 48rem) {
-  /* Brand, actions, and the toggle share the first row; the navigation takes
-     a full-width second row and stays hidden until the toggle opens it. */
+  /* Brand and the toggle share the first row. When navigation is present,
+     the links and actions take full-width rows below; without navigation,
+     actions stay in the bar and the toggle is hidden. */
   [part="brand"] {
     order: 1;
   }
@@ -1093,6 +1094,7 @@ slot:not([name])::slotted(a) {
   [part="toggle"] {
     order: 3;
     display: inline-flex;
+    margin-inline-start: auto;
   }
 
   [part="nav"] {
@@ -1105,6 +1107,34 @@ slot:not([name])::slotted(a) {
 
   :host([open]:not([empty-nav])) [part="nav"] {
     display: flex;
+  }
+
+  :host(:not([empty-nav])) [part="actions"] {
+    order: 5;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-inline-start: 0;
+    padding-block-start: var(--yk-space-sm, 0.5rem);
+    border-block-start: 1px solid var(--_header-border);
+  }
+
+  :host([open]:not([empty-nav]):not([empty-actions])) [part="actions"] {
+    display: flex;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(form) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+    margin-block: 0;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-button),
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-link) {
+    inline-size: 100%;
   }
 
   slot:not([name])::slotted(a) {
@@ -1124,12 +1154,6 @@ slot:not([name])::slotted(a) {
   display: none;
 }
 
-/* With no actions, the toggle is the only trailing item and takes over the
-   push to the inline end. */
-:host([empty-actions]) [part="toggle"] {
-  margin-inline-start: auto;
-}
-
 /* An all-empty header keeps neither the band nor an empty banner landmark in
    the accessibility tree. */
 :host([empty-brand][empty-nav][empty-actions]) {
@@ -1141,7 +1165,7 @@ slot:not([name])::slotted(a) {
     transition: none;
   }
 }
-</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg></button><slot name="menu-label" hidden>Menu</slot><nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions"><slot name="actions"></slot></div></div></header></template>
+</style><header part="header"><div part="bar"><div part="brand"><a part="brand-link"><slot name="brand"></slot></a></div><button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav actions"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" /></svg></button><slot name="menu-label" hidden>Menu</slot><nav part="nav" id="nav" aria-label="Main navigation"><slot></slot></nav><div part="actions" id="actions"><slot name="actions"></slot></div></div></header></template>
 <svg slot="brand" viewBox="0 0 24 24" width="24" height="24"><title>Example</title><circle cx="12" cy="12" r="10" fill="currentColor" /></svg><a href="https://example.com/docs">Docs</a><a href="https://example.com/pricing">Pricing</a><yk-button slot="actions">Sign in</yk-button>
 </yk-header>
 </div>
@@ -1335,8 +1359,9 @@ slot:not([name])::slotted(a) {
 }
 
 @container (inline-size &lt; 48rem) {
-  /* Brand, actions, and the toggle share the first row; the navigation takes
-     a full-width second row and stays hidden until the toggle opens it. */
+  /* Brand and the toggle share the first row. When navigation is present,
+     the links and actions take full-width rows below; without navigation,
+     actions stay in the bar and the toggle is hidden. */
   [part="brand"] {
     order: 1;
   }
@@ -1348,6 +1373,7 @@ slot:not([name])::slotted(a) {
   [part="toggle"] {
     order: 3;
     display: inline-flex;
+    margin-inline-start: auto;
   }
 
   [part="nav"] {
@@ -1360,6 +1386,34 @@ slot:not([name])::slotted(a) {
 
   :host([open]:not([empty-nav])) [part="nav"] {
     display: flex;
+  }
+
+  :host(:not([empty-nav])) [part="actions"] {
+    order: 5;
+    flex: 1 1 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-inline-start: 0;
+    padding-block-start: var(--yk-space-sm, 0.5rem);
+    border-block-start: 1px solid var(--_header-border);
+  }
+
+  :host([open]:not([empty-nav]):not([empty-actions])) [part="actions"] {
+    display: flex;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(form) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+    margin-block: 0;
+  }
+
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-button),
+  :host(:not([empty-nav])) slot[name="actions"]::slotted(yk-link) {
+    inline-size: 100%;
   }
 
   slot:not([name])::slotted(a) {
@@ -1379,12 +1433,6 @@ slot:not([name])::slotted(a) {
   display: none;
 }
 
-/* With no actions, the toggle is the only trailing item and takes over the
-   push to the inline end. */
-:host([empty-actions]) [part="toggle"] {
-  margin-inline-start: auto;
-}
-
 /* An all-empty header keeps neither the band nor an empty banner landmark in
    the accessibility tree. */
 :host([empty-brand][empty-nav][empty-actions]) {
@@ -1396,7 +1444,7 @@ slot:not([name])::slotted(a) {
     transition: none;
   }
 }
-&lt;/style&gt;&lt;header part="header"&gt;&lt;div part="bar"&gt;&lt;div part="brand"&gt;&lt;a part="brand-link"&gt;&lt;slot name="brand"&gt;&lt;/slot&gt;&lt;/a&gt;&lt;/div&gt;&lt;button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"&gt;&lt;svg viewBox="0 0 20 20" aria-hidden="true"&gt;&lt;path d="M3 5h14M3 10h14M3 15h14" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;slot name="menu-label" hidden&gt;Menu&lt;/slot&gt;&lt;nav part="nav" id="nav" aria-label="Main navigation"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/nav&gt;&lt;div part="actions"&gt;&lt;slot name="actions"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;&lt;/template&gt;
+&lt;/style&gt;&lt;header part="header"&gt;&lt;div part="bar"&gt;&lt;div part="brand"&gt;&lt;a part="brand-link"&gt;&lt;slot name="brand"&gt;&lt;/slot&gt;&lt;/a&gt;&lt;/div&gt;&lt;button part="toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav actions"&gt;&lt;svg viewBox="0 0 20 20" aria-hidden="true"&gt;&lt;path d="M3 5h14M3 10h14M3 15h14" /&gt;&lt;/svg&gt;&lt;/button&gt;&lt;slot name="menu-label" hidden&gt;Menu&lt;/slot&gt;&lt;nav part="nav" id="nav" aria-label="Main navigation"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/nav&gt;&lt;div part="actions" id="actions"&gt;&lt;slot name="actions"&gt;&lt;/slot&gt;&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;&lt;/template&gt;
 &lt;svg slot="brand" viewBox="0 0 24 24" width="24" height="24"&gt;&lt;title&gt;Example&lt;/title&gt;&lt;circle cx="12" cy="12" r="10" fill="currentColor" /&gt;&lt;/svg&gt;&lt;a href="https://example.com/docs"&gt;Docs&lt;/a&gt;&lt;a href="https://example.com/pricing"&gt;Pricing&lt;/a&gt;&lt;yk-button slot="actions"&gt;Sign in&lt;/yk-button&gt;
 &lt;/yk-header&gt;</code></pre>
 </section>

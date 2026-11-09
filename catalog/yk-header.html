@@ -98,7 +98,7 @@
           </figure>
 
           <figure>
-            <figcaption>Collapsed on a narrow header</figcaption>
+            <figcaption>Collapsed on a narrow header (actions join the panel when opened)</figcaption>
             <yk-pad style="--yk-pad-padding: var(--yk-space-lg)">
               <yk-header
                 brand-href="https://example.com"
@@ -150,6 +150,13 @@
                   <a href="https://example.com/cloud">Cloud</a>
                 </yk-header-menu>
                 <yk-theme-switcher slot="actions"></yk-theme-switcher>
+                <form
+                  slot="actions"
+                  action="https://example.com/sign-out"
+                  method="post"
+                >
+                  <yk-button type="submit">Sign out</yk-button>
+                </form>
               </yk-header>
             </yk-pad>
             <pre><code>&lt;yk-header brand-href="https://example.com" open style="inline-size: 24rem"&gt;
@@ -161,6 +168,9 @@
     &lt;a href="https://example.com/cloud"&gt;Cloud&lt;/a&gt;
   &lt;/yk-header-menu&gt;
   &lt;yk-theme-switcher slot="actions"&gt;&lt;/yk-theme-switcher&gt;
+  &lt;form slot="actions" action="https://example.com/sign-out" method="post"&gt;
+    &lt;yk-button type="submit"&gt;Sign out&lt;/yk-button&gt;
+  &lt;/form&gt;
 &lt;/yk-header&gt;</code></pre>
           </figure>
 
