@@ -63,8 +63,10 @@ test('prefers component-level justify and gap tokens over the global one', () =>
   document.body.appendChild(host);
 
   const style = getComputedStyle(host);
-  expect(style.justifyContent).toBe('flex-start');
-  expect(style.alignItems).toBe('flex-start');
+  // Playwright 1.65 ships Chromium 158, which serializes the flex-start
+  // alias as flow-start.
+  expect(style.justifyContent).toBe('flow-start');
+  expect(style.alignItems).toBe('flow-start');
   expect(style.gap).toBe('5px');
 });
 
