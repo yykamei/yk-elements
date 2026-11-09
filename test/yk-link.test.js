@@ -223,3 +223,35 @@ test('reuses a declarative shadow root and keeps the mirrored href', () => {
   );
   expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
 });
+
+test('fills a stretched host with the link face', async () => {
+  const wrap = document.createElement('div');
+  wrap.style.cssText =
+    'display: flex; flex-direction: column; align-items: stretch; inline-size: 300px';
+  const host = document.createElement('yk-link');
+  host.setAttribute('href', '/docs');
+  host.textContent = 'Docs';
+  wrap.append(host);
+  document.body.append(wrap);
+  await frame();
+
+  const face = host.shadowRoot.querySelector('a');
+  expect(host.getBoundingClientRect().width).toBe(300);
+  expect(face.getBoundingClientRect().width).toBe(300);
+});
+
+test('keeps the content width when the link host is not stretched', async () => {
+  const wrap = document.createElement('div');
+  wrap.style.inlineSize = '300px';
+  const host = document.createElement('yk-link');
+  host.setAttribute('href', '/docs');
+  host.textContent = 'Docs';
+  wrap.append(host);
+  document.body.append(wrap);
+  await frame();
+
+  const hostWidth = host.getBoundingClientRect().width;
+  const face = host.shadowRoot.querySelector('a');
+  expect(hostWidth).toBeLessThan(300);
+  expect(face.getBoundingClientRect().width).toBeCloseTo(hostWidth);
+});

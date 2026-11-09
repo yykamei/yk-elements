@@ -214,3 +214,33 @@ test('focuses the internal button when the host is focused', async () => {
     host.shadowRoot.querySelector('button'),
   );
 });
+
+test('fills a stretched host with the button face', async () => {
+  const wrap = document.createElement('div');
+  wrap.style.cssText =
+    'display: flex; flex-direction: column; align-items: stretch; inline-size: 300px';
+  const host = document.createElement('yk-button');
+  host.textContent = 'Save';
+  wrap.append(host);
+  document.body.append(wrap);
+  await frame();
+
+  const face = host.shadowRoot.querySelector('button');
+  expect(host.getBoundingClientRect().width).toBe(300);
+  expect(face.getBoundingClientRect().width).toBe(300);
+});
+
+test('keeps the content width when the host is not stretched', async () => {
+  const wrap = document.createElement('div');
+  wrap.style.inlineSize = '300px';
+  const host = document.createElement('yk-button');
+  host.textContent = 'Save';
+  wrap.append(host);
+  document.body.append(wrap);
+  await frame();
+
+  const hostWidth = host.getBoundingClientRect().width;
+  const face = host.shadowRoot.querySelector('button');
+  expect(hostWidth).toBeLessThan(300);
+  expect(face.getBoundingClientRect().width).toBeCloseTo(hostWidth);
+});
