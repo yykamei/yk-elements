@@ -224,7 +224,7 @@ test('reuses a declarative shadow root and keeps the mirrored href', () => {
   expect(host.shadowRoot.adoptedStyleSheets.length).toBe(2);
 });
 
-test('fills a stretched host with the link face', async () => {
+test('keeps the content width when a parent stretches the link host', async () => {
   const wrap = document.createElement('div');
   wrap.style.cssText =
     'display: flex; flex-direction: column; align-items: stretch; inline-size: 300px';
@@ -236,8 +236,15 @@ test('fills a stretched host with the link face', async () => {
   await frame();
 
   const face = host.shadowRoot.querySelector('a');
-  expect(host.getBoundingClientRect().width).toBe(300);
-  expect(face.getBoundingClientRect().width).toBe(300);
+  const stretchedHostWidth = host.getBoundingClientRect().width;
+  const stretchedFaceWidth = face.getBoundingClientRect().width;
+
+  wrap.style.cssText = 'inline-size: 300px';
+  await frame();
+
+  expect(stretchedHostWidth).toBe(300);
+  expect(stretchedFaceWidth).toBeLessThan(300);
+  expect(stretchedFaceWidth).toBeCloseTo(face.getBoundingClientRect().width);
 });
 
 test('keeps the content width when the link host is not stretched', async () => {
@@ -254,4 +261,21 @@ test('keeps the content width when the link host is not stretched', async () => 
   const face = host.shadowRoot.querySelector('a');
   expect(hostWidth).toBeLessThan(300);
   expect(face.getBoundingClientRect().width).toBeCloseTo(hostWidth);
+});
+
+test('fills the host when block is set', async () => {
+  const wrap = document.createElement('div');
+  wrap.style.cssText =
+    'display: flex; flex-direction: column; align-items: flex-start; inline-size: 300px';
+  const host = document.createElement('yk-link');
+  host.setAttribute('block', '');
+  host.setAttribute('href', '/docs');
+  host.textContent = 'Docs';
+  wrap.append(host);
+  document.body.append(wrap);
+  await frame();
+
+  const face = host.shadowRoot.querySelector('a');
+  expect(host.getBoundingClientRect().width).toBe(300);
+  expect(face.getBoundingClientRect().width).toBe(300);
 });

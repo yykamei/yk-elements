@@ -536,7 +536,7 @@ test('keeps the toggle at the inline end when actions move into the panel', asyn
 test('fills the panel width with a form action', async () => {
   const host = makeHeader(`
     ${NAV_LINKS}
-    <form slot="actions"><yk-button type="submit">Sign out</yk-button></form>
+    <form slot="actions"><yk-button type="submit" block>Sign out</yk-button></form>
   `);
   host.style.inlineSize = '400px';
   host.setAttribute('open', '');
