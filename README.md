@@ -88,6 +88,7 @@ upgrade as before.
 Declarative Shadow DOM is the only way to paint a fully styled shadow root
 before any script runs. When the markup cannot carry templates — for example,
 when it is created at runtime — two lighter options reduce the flash:
+
 - Put the entry point in `<head>` with `blocking="render"`, so the first paint
   waits for the module graph and its stylesheets. Chromium 105+ and Safari
   18.2+ honor the attribute; Firefox ignores it.
@@ -130,6 +131,7 @@ an unrelated undefined custom element leaves the page blank.
 
 Importing any component installs the design tokens and the page-level
 normalization automatically. The base styles:
+
 - remove the body margin and the user-agent block margins of headings,
   paragraphs, lists, figures, and other block elements;
 - set the token font family, font size, line height, text color, and page
@@ -241,6 +243,7 @@ Light, and Dark); the names are not configurable, so a site that needs other
 wording should build its own control on `theme.js`.
 
 Two attributes adjust where the choice lives:
+
 - `theme="light|dark|system"` names the theme explicitly, taking precedence
   over the stored preference. Selecting an option updates the attribute, so a
   framework can render the value and read the applied theme back from the DOM.
