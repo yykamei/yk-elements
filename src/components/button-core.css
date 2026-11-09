@@ -4,6 +4,12 @@
 
 :host button,
 :host a {
+  /* The face fills a host a parent stretches to full width because 100%
+     resolves against the host's content box; during shrink-to-fit the
+     percentage resolves as auto, so an inline host keeps its intrinsic
+     width. */
+  box-sizing: border-box;
+  inline-size: 100%;
   --face: var(--yk-button-bg, var(--yk-color-surface, #fff));
   --ink: var(--yk-button-color, var(--yk-color-text, oklch(26.2% 0.009 248.2)));
   --edge: var(

@@ -4,10 +4,11 @@
  *
  * Without a variant the face is a light bordered button like Bootstrap's
  * plain .btn; `variant` selects the solid secondary, primary, or danger
- * tone, and design tokens restyle it without class names. Clicks on
- * `type="submit"` submit the owning form through ElementInternals;
- * `disabled` — or a disabled form/fieldset ancestor — disables the
- * internal control natively.
+ * tone, and design tokens restyle it without class names. The face fills a
+ * host that a parent stretches to full width; an inline host keeps the
+ * label's width. Clicks on `type="submit"` submit the owning form through
+ * ElementInternals; `disabled` — or a disabled form/fieldset ancestor —
+ * disables the internal control natively.
  *
  * Unlike a native submit button, yk-button never becomes the form's
  * default button, so implicit Enter-key submission does not fire it in
