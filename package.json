@@ -36,7 +36,8 @@
     "fouc.css",
     "src",
     "dist",
-    "docs/dsd.html"
+    "docs/dsd.html",
+    "SECURITY.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",

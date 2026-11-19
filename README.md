@@ -304,6 +304,60 @@ above in both `read` and `write` to match, and serve per-cookie responses with
 The built-in store is the single `yk-theme` key scoped to the origin; on an
 origin shared with other apps, use a custom store or namespace it there.
 
+## Security
+
+### URLs and links
+
+`yk-link` mirrors `href` onto its internal anchor only when the parsed scheme
+is not `javascript:`, `data:`, or `vbscript:`. `yk-header` applies the same rule
+to `brand-href`. The host attribute keeps the raw value, and the internal
+anchor never receives an unsafe one, so a dynamically bound URL cannot turn
+either component into a script vector. Parsing normalizes case, tabs, newlines,
+and surrounding whitespace.
+
+The filter is a deny-list, not an allow-list: `blob:`, `file:`, and custom
+deep-link schemes pass through. If `href` can come from an untrusted source,
+validate it against an allow-list in your application as well.
+
+`yk-link` mirrors `rel` as given and does not add `noopener` or `noreferrer`.
+Modern browsers imply `noopener` for `target="_blank"`, but not for a named
+target. Set `rel="noopener noreferrer"` on external links where that is the
+intent, and configure a page-level `Referrer-Policy` when the destination must
+not receive the referring URL.
+
+### File uploads
+
+`<yk-input-file>` applies its `accept` filter to the native picker and to
+dropped files. That filter is a convenience for users, not a security control:
+a client can bypass it with developer tools or a direct request. Validate the
+file type, size, and content on the server before storing or serving an
+upload.
+
+### CSP and Trusted Types
+
+Component styles are constructed stylesheets adopted into Shadow DOM, so they
+do not require `style-src 'unsafe-inline'`. Components that use Declarative
+Shadow DOM templates still need a nonce or hash for the template's `<style>`
+block when `style-src` is strict.
+
+The runtime assigns its static shadow markup with `innerHTML`. It does not
+register a Trusted Types policy, so a page that enforces
+`require-trusted-types-for 'script'` blocks component initialization unless it
+installs a default policy. A blanket default defeats the purpose of Trusted
+Types, so treat this enforcement mode as unsupported for now.
+
+### CDN integrity
+
+Pin an exact version when loading from a CDN. `dist/index.js` imports sibling
+modules, and an `integrity` attribute on the entry point does not cover those
+imports. Where subresource integrity is required, self-host the package or
+publish a bundled build instead of loading the multi-file module graph.
+
+### Reporting a vulnerability
+
+Do not open a public issue for a suspected vulnerability. Use GitHub's private
+vulnerability reporting as described in [SECURITY.md](SECURITY.md).
+
 ## Component catalog
 
 Browse the component catalog at
