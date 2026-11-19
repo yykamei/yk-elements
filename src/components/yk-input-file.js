@@ -16,8 +16,9 @@
  * behaves like a native file input: it reports the fakepath string and
  * rejects non-empty assignments. The host is labelable, so `<label for>`
  * opens the picker. The `accept` filter applies to drops as well as to the
- * picker. On a single-select field a new selection or drop replaces the
- * previous files, like a native input.
+ * picker, but it is a convenience for users, not a security control: validate
+ * file type, size, and content on the server. On a single-select field a new
+ * selection or drop replaces the previous files, like a native input.
  *
  * Button, hint, and remove-verb labels localize through the `browse`, `hint`,
  * and `remove-label` slots.

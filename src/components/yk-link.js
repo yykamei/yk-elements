@@ -10,7 +10,11 @@
  * internal anchor, so navigation stays entirely native. An href whose scheme
  * can run script (javascript:, data:, vbscript:) is not mirrored, so a
  * dynamically bound value cannot turn the link into a script vector; the host
- * attribute keeps the raw value.
+ * attribute keeps the raw value. `rel` is mirrored as given, so set `noopener`
+ * or `noreferrer` yourself when an external destination opens a new context.
+ * The scheme filter is a deny-list, so `blob:`, `file:`, and custom schemes
+ * still pass through; validate untrusted values with an allow-list in the
+ * application.
  *
  * ```html
  * <script type="module" src="./index.js"></script>
