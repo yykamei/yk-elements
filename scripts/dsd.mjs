@@ -103,7 +103,8 @@ const entries = [
       'src/components/yk-button.css',
     ],
     delegates: true,
-    shadow: '<button part="button" type="button"><slot></slot></button>',
+    shadow:
+      '<button part="button" type="button"><slot></slot><span part="spinner" aria-hidden="true"></span></button>',
     attrs: 'variant="primary"',
     light: 'Save',
   },

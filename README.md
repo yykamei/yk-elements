@@ -64,7 +64,7 @@ and it paints styled before any script runs:
     <style>
       /* button-core.css + yk-button.css */
     </style>
-    <button part="button" type="button"><slot></slot></button>
+    <button part="button" type="button"><slot></slot><span part="spinner" aria-hidden="true"></span></button>
   </template>
   Save
 </yk-button>

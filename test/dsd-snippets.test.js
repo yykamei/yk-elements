@@ -40,6 +40,7 @@ const DEMOS = [
     controls: 'button[part="button"]',
     count: 1,
     delegatesFocus: true,
+    also: [['[part="spinner"]', 1]],
   },
   {
     tag: 'yk-link',

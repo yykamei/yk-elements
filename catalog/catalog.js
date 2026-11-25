@@ -1441,6 +1441,13 @@ export const components = [
           'Boolean attribute that disables the button, like the native button disabled attribute.',
       },
       {
+        name: 'loading',
+        control: 'boolean',
+        default: 'unset',
+        description:
+          'Boolean attribute that marks the button busy: shows a spinner, sets aria-busy on the internal button, and disables the internal button until removed.',
+      },
+      {
         name: 'block',
         control: 'boolean',
         default: 'unset',

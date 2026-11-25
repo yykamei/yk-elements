@@ -15,7 +15,7 @@ const VARIATIONS = {
   'yk-grid': 2,
   'yk-pad': 4,
   'yk-container': 3,
-  'yk-button': 7,
+  'yk-button': 8,
   'yk-link': 6,
   'yk-badge': 5,
   'yk-card': 4,
