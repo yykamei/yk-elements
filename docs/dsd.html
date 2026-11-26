@@ -306,7 +306,36 @@
   pointer-events: none;
   opacity: 0.65;
 }
-</style><button part="button" type="button"><slot></slot></button></template>
+
+[part="spinner"] {
+  display: none;
+}
+
+:host([loading]) [part="spinner"] {
+  display: inline-block;
+  box-sizing: border-box;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  margin-inline-start: var(--yk-space-sm, 0.5rem);
+  border: 2px solid currentColor;
+  border-block-end-color: transparent;
+  border-radius: 50%;
+  animation: yk-button-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([loading]) [part="spinner"] {
+    animation: none;
+  }
+}
+
+@keyframes yk-button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+</style><button part="button" type="button"><slot></slot><span part="spinner" aria-hidden="true"></span></button></template>
 Save
 </yk-button>
 </div>
@@ -419,7 +448,36 @@ Save
   pointer-events: none;
   opacity: 0.65;
 }
-&lt;/style&gt;&lt;button part="button" type="button"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/button&gt;&lt;/template&gt;
+
+[part="spinner"] {
+  display: none;
+}
+
+:host([loading]) [part="spinner"] {
+  display: inline-block;
+  box-sizing: border-box;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  margin-inline-start: var(--yk-space-sm, 0.5rem);
+  border: 2px solid currentColor;
+  border-block-end-color: transparent;
+  border-radius: 50%;
+  animation: yk-button-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([loading]) [part="spinner"] {
+    animation: none;
+  }
+}
+
+@keyframes yk-button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+&lt;/style&gt;&lt;button part="button" type="button"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;span part="spinner" aria-hidden="true"&gt;&lt;/span&gt;&lt;/button&gt;&lt;/template&gt;
 Save
 &lt;/yk-button&gt;</code></pre>
 </section>

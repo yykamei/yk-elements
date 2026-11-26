@@ -118,6 +118,100 @@ test('disables the internal button while a form or fieldset ancestor is disabled
   expect(host.shadowRoot.querySelector('button').disabled).toBe(false);
 });
 
+test('reflects the loading attribute as aria-busy and disables the internal button', async () => {
+  const host = document.createElement('yk-button');
+  host.setAttribute('loading', '');
+  document.body.appendChild(host);
+  await frame();
+
+  const button = host.shadowRoot.querySelector('button');
+  expect(host.loading).toBe(true);
+  expect(button.getAttribute('aria-busy')).toBe('true');
+  expect(button.disabled).toBe(true);
+
+  host.loading = false;
+  expect(host.hasAttribute('loading')).toBe(false);
+  expect(button.hasAttribute('aria-busy')).toBe(false);
+  expect(button.disabled).toBe(false);
+});
+
+test('shows the spinner only while loading', async () => {
+  const host = document.createElement('yk-button');
+  host.textContent = 'Save';
+  document.body.appendChild(host);
+  await frame();
+
+  const spinner = host.shadowRoot.querySelector('[part="spinner"]');
+  expect(spinner).not.toBeNull();
+  expect(spinner.getAttribute('aria-hidden')).toBe('true');
+  expect(getComputedStyle(spinner).display).toBe('none');
+
+  host.loading = true;
+  await frame();
+  expect(getComputedStyle(spinner).display).not.toBe('none');
+  expect(getComputedStyle(spinner).animationName).toBe('yk-button-spin');
+
+  host.loading = false;
+  await frame();
+  expect(getComputedStyle(spinner).display).toBe('none');
+});
+
+test('does not submit the owner form while loading', async () => {
+  const form = document.createElement('form');
+  const host = document.createElement('yk-button');
+  host.setAttribute('type', 'submit');
+  host.setAttribute('loading', '');
+  let submitted = false;
+  form.addEventListener('submit', (event) => {
+    submitted = true;
+    event.preventDefault();
+  });
+  form.append(host);
+  document.body.appendChild(form);
+  await frame();
+
+  host.shadowRoot.querySelector('button').click();
+  expect(submitted).toBe(false);
+
+  host.loading = false;
+  host.shadowRoot.querySelector('button').click();
+  expect(submitted).toBe(true);
+});
+
+test('keeps the loading and disabled states independent', async () => {
+  const host = document.createElement('yk-button');
+  host.setAttribute('disabled', '');
+  host.setAttribute('loading', '');
+  document.body.appendChild(host);
+  await frame();
+
+  const button = host.shadowRoot.querySelector('button');
+  expect(button.disabled).toBe(true);
+
+  host.disabled = false;
+  expect(button.disabled).toBe(true);
+
+  host.loading = false;
+  expect(button.disabled).toBe(false);
+
+  host.disabled = true;
+  host.loading = true;
+  host.loading = false;
+  expect(button.disabled).toBe(true);
+});
+
+test('stops the spinner animation under reduced motion', async () => {
+  const host = document.createElement('yk-button');
+  document.body.appendChild(host);
+  await frame();
+
+  const rules = host.shadowRoot.adoptedStyleSheets
+    .flatMap((sheet) => [...sheet.cssRules])
+    .map((rule) => rule.cssText)
+    .join('\n');
+  expect(rules).toContain('prefers-reduced-motion: reduce');
+});
+
 test('tints the button face per variant through the global color token', async () => {
   document.documentElement.style.setProperty(
     '--yk-color-primary',

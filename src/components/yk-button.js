@@ -11,6 +11,11 @@
  * `disabled` — or a disabled form/fieldset ancestor — disables the internal
  * control natively.
  *
+ * Set `loading` to mark the button busy: it shows a spinner after the label,
+ * sets `aria-busy` on the internal button, and disables it until the attribute
+ * is removed. `loading` is independent of `disabled`, so clearing it re-enables
+ * the button only when `disabled` is absent and the form is not disabled.
+ *
  * Unlike a native submit button, yk-button never becomes the form's
  * default button, so implicit Enter-key submission does not fire it in
  * multi-field forms.
@@ -20,6 +25,7 @@
  * <yk-button variant="primary" type="submit">Save</yk-button>
  * <yk-button variant="danger" disabled>Delete</yk-button>
  * <yk-button block type="submit">Sign out</yk-button>
+ * <yk-button variant="primary" loading>Save</yk-button>
  * ```
  */
 import '../base.js';
@@ -30,7 +36,7 @@ import sheet from './yk-button.css' with { type: 'css' };
 class YKButton extends HTMLElement {
   static formAssociated = true;
 
-  static observedAttributes = ['type', 'disabled'];
+  static observedAttributes = ['type', 'disabled', 'loading'];
 
   #button;
 
@@ -45,17 +51,19 @@ class YKButton extends HTMLElement {
       delegatesFocus: true,
       styles: [coreSheet, sheet],
       render: (root) => {
-        root.innerHTML = `<button part="button" type="button"><slot></slot></button>`;
+        root.innerHTML = `<button part="button" type="button"><slot></slot><span part="spinner" aria-hidden="true"></span></button>`;
       },
     });
     this.#button = shadowRoot.querySelector('button');
     this.#button.addEventListener('click', () => this.#submitOwningForm());
     this.#capturePreUpgradeWrite('type');
     this.#capturePreUpgradeWrite('disabled');
+    this.#capturePreUpgradeWrite('loading');
     // Attribute reactions do not fire for attributes set while the
     // constructor runs, so apply the transferred writes directly.
     this.#syncType();
     this.#syncDisabled();
+    this.#syncLoading();
   }
 
   attributeChangedCallback(name) {
@@ -63,6 +71,9 @@ class YKButton extends HTMLElement {
       this.#syncType();
     } else if (name === 'disabled') {
       this.#syncDisabled();
+    } else if (name === 'loading') {
+      this.#syncDisabled();
+      this.#syncLoading();
     }
   }
 
@@ -87,8 +98,27 @@ class YKButton extends HTMLElement {
     this.toggleAttribute('disabled', value);
   }
 
+  get loading() {
+    return this.hasAttribute('loading');
+  }
+
+  set loading(value) {
+    this.toggleAttribute('loading', value);
+  }
+
   #syncDisabled() {
-    this.#button.disabled = this.hasAttribute('disabled') || this.#formDisabled;
+    this.#button.disabled =
+      this.hasAttribute('disabled') ||
+      this.hasAttribute('loading') ||
+      this.#formDisabled;
+  }
+
+  #syncLoading() {
+    if (this.hasAttribute('loading')) {
+      this.#button.setAttribute('aria-busy', 'true');
+    } else {
+      this.#button.removeAttribute('aria-busy');
+    }
   }
 
   #syncType() {
